@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="694.0" prefWidth="1228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <SplitPane dividerPositions="0.7601156069364162" layoutY="-1.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <SplitPane dividerPositions="0.8251633986928104" layoutX="639.0" layoutY="153.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ScrollPane prefHeight="816.0" prefWidth="1578.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <content>
+                                        <AnchorPane maxHeight="1080.0" maxWidth="3997.0" minHeight="0.0" minWidth="0.0" prefHeight="1067.0" prefWidth="1920.0">
+                                             <stylesheets>
+                                                <URL value="@plateau.css" />
+                                                <URL value="@plateau.css" />
+                                             </stylesheets>
+                                             <styleClass>
+                                                <String fx:value="background" />
+                                                <String fx:value="background" />
+                                             </styleClass>
+                                             <children>
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#911fff" height="371.0" layoutX="566.0" layoutY="162.0" rotate="73.5" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="371.0" layoutX="566.0" layoutY="143.0" rotate="73.5" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#911fff" height="156.0" layoutX="277.0" layoutY="505.0" rotate="-72.9" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff2121" height="156.0" layoutX="269.0" layoutY="526.0" rotate="-71.6" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                                             </children></AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="1540.0" />
+              </items>
+            </SplitPane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
