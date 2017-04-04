@@ -1,8 +1,6 @@
 package vue;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,7 +43,7 @@ public class DeckController {
 	    this.HboxMain.getChildren().add(btn2);*/
 		
 		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream("../../../../files/carte/wagonviolet.PNG"));
+		Image image = new Image(getClass().getResourceAsStream("/images/wagonviolet.PNG"));
 	    lbl.setGraphic(new ImageView(image));
 	    this.HboxMain.getChildren().add(lbl);
 		
@@ -60,7 +58,7 @@ public class DeckController {
 	    this.HboxMain.getChildren().add(btn3);*/
 	    
 	    Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream("../../../../files/carte/wagonviolet.PNG"));
+		Image image = new Image(getClass().getResourceAsStream("/images/wagonviolet.PNG"));
 	    lbl.setGraphic(new ImageView(image));
 	    this.HboxMain.getChildren().add(lbl);
 	 }
