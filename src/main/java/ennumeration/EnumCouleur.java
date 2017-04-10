@@ -2,7 +2,7 @@ package ennumeration;
 
 public enum EnumCouleur {
 	JAUNE("jaune"),ROUGE("rouge"),VERT("vert"),NOIR("noir"),BLEU("bleu"), VIOLET("violet"),
-	BLANC("blanc"),GRIS("gris");
+	BLANC("blanc"),GRIS("gris"), JOKER("joker");
 	
 	
 	private String couleur;

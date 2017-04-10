@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import vue.DeckController;
+import vue.InterfaceController;
 
 public class Main extends Application{
 
@@ -30,9 +30,13 @@ public class Main extends Application{
 		this.primaryStage.setScene(scene);
 		this.primaryStage.show();
 		
-		DeckController deckControlle = new DeckController();
-		deckControlle.setMain(this);
+		InterfaceController interfaceController = new InterfaceController();
+		interfaceController.setMain(this);
 		
+	}
+	
+	public Stage getStage(){
+		return this.primaryStage;
 	}
 
 }
