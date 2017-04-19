@@ -13,7 +13,7 @@
    <children>
       <Pane prefHeight="694.0" prefWidth="1228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane dividerPositions="0.5269016697588126" layoutY="-1.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
+            <SplitPane dividerPositions="0.5862708719851577" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
@@ -40,9 +40,15 @@
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <Label fx:id="lblDeckBoat" layoutX="29.0" layoutY="77.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="203.0" style="-fx-border-style: solid; -fx-background-color: blue;" />
-                                    <Label fx:id="lblDeckWagon" layoutX="29.0" layoutY="288.0" onMouseClicked="#takeHideTrainCard" prefHeight="105.0" prefWidth="203.0" style="-fx-border-style: solid; -fx-background-color: grey;" />
-                                    <Label fx:id="lblDeckDestination" layoutX="29.0" layoutY="510.0" onMouseClicked="#takeHideDestinationCard" prefHeight="105.0" prefWidth="203.0" style="-fx-border-style: solid; -fx-background-color: green;" />
+                                    <Label fx:id="lblDeckBoat" layoutY="7.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: blue;" />
+                                    <Label fx:id="lblDeckWagon" layoutX="157.0" layoutY="7.0" onMouseClicked="#takeHideTrainCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: grey;" />
+                                    <Label fx:id="lblDeckDestination" layoutX="314.0" layoutY="7.0" onMouseClicked="#takeHideDestinationCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: green;" />
+                                    <Label id="lblP1" layoutX="25.0" layoutY="173.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label id="lblP2" layoutX="191.0" layoutY="173.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label id="lblP3" layoutX="25.0" layoutY="291.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label id="lblP4" layoutX="191.0" layoutY="291.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label id="lblP5" layoutX="25.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label id="lblP6" layoutX="191.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
                                  </children></AnchorPane>
                           </items>
                         </SplitPane>

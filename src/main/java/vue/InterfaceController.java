@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
 import main.Main;
 import metier.Boat;
 import metier.RouteMartime;
+import metier.RouteTerrestre;
+import metier.Ville;
 import metier.Wagon;
 
 public class InterfaceController {
@@ -132,7 +134,7 @@ public class InterfaceController {
 	 
 	 
 	 /**
-	  * Prendre une route. On vérifie si le joueur a mis assez de carte en jeu.
+	  * Prendre une route maritime. On vérifie si le joueur a mis assez de carte en jeu.
 	  * Si c'est le cas, la route est prise sinon les cartes retournent dans la main du joueur
 	  * @param e
 	  */
@@ -169,6 +171,108 @@ public class InterfaceController {
 				 //mettre carte bateau dans la défausse
 				 carteB.remove(lbl);
 			 }
+			 // s'il reste des cartes en trop
+			 deSelectionAllCard();
+		 }else{
+			 deSelectionAllCard(); 
+		 }
+	 }
+	 
+	 /**
+	  * Prendre une route terreste. On vérifie si le joueur a mis assez de carte en jeu.
+	  * Si c'est le cas, la route est prise sinon les cartes retournent dans la main du joueur
+	  * @param e
+	  */
+	 @FXML
+	 private void takeRoadWagonMap(MouseEvent e){
+		 RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
+		 int carte=0;
+		 int joker=0;
+		 
+		 int i=0;
+		 for(i=0;i<HboxSelect.getChildren().size();i++){
+			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
+				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+				 
+				 if(c.getCouleur()==r.getCouleur()){
+					 
+					 carte++;
+					 
+				 }else if(c.isJoker()){
+					 joker++;
+				 }
+			 }
+		 }
+		 
+		 if((joker+carte)>=r.getNbPion()){
+			 for(i=r.getNbPion()-1;i>=0;i--){
+				 Label lbl = (Label) HboxSelect.getChildren().get(i);
+				 HboxSelect.getChildren().remove(lbl);
+				 Wagon c = carteW.get(lbl);
+				 //mettre carte wagon dans la défausse
+				 carteW.remove(lbl);
+			 }
+			 // s'il reste des cartes en trop
+			 deSelectionAllCard();
+		 }else{
+			 deSelectionAllCard(); 
+		 }
+	 }
+	 
+	 /**
+	  * Construction d'un port
+	  * Il faut 2 cartes bateau et 2 cartes wagon avec le sigle port
+	  * Une ou plusieurs cartes joker peuvent remplacer une carte bateau ou wagon (ou plusieurs)
+	  * @param e
+	  */
+	 @FXML
+	 private void buildPort(MouseEvent e){
+		 Ville v = new Ville("Marseille", true);
+		 int carteBoat=0;
+		 int carteWagon=0;
+		 int jokerBoat=0;
+		 int jokerWagon=0;
+		 
+		 int i=0;
+		 for(i=0;i<HboxSelect.getChildren().size();i++){
+			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
+				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+				 
+				 if(c.isPort()){
+					 
+					 carteWagon++;
+					 
+				 }else if(c.isJoker()){
+					 jokerWagon++;
+				 }
+			 }else if(carteB.containsKey(HboxSelect.getChildren().get(i))){
+				 	Boat b = carteB.get(HboxSelect.getChildren().get(i));
+				 
+				 	if(b.isJoker()){
+				 		carteBoat++;
+					 }else if(b.isJoker()){
+						 jokerBoat++;
+					 }
+			 }
+		 }
+		 
+		 if((carteBoat+carteWagon+jokerWagon+jokerBoat>=4)&&(carteWagon<=2)&&(carteBoat<=2)&&(jokerWagon+jokerBoat<=4)){
+			 for(i=4;i>=0;i--){
+				 Label lbl = (Label) HboxSelect.getChildren().get(i);
+				 HboxSelect.getChildren().remove(lbl);
+				 
+				 if(carteW.containsKey(lbl)){
+					 Wagon b = carteW.get(lbl);
+				 	//mettre carte wagon dans la défausse
+					 carteW.remove(lbl);
+				 }else if(carteB.containsKey(lbl)){
+					 Boat b  = carteB.get(lbl);
+					 
+					 carteB.remove(lbl);
+				 }
+			 }
+			 
+			 
 			 // s'il reste des cartes en trop
 			 deSelectionAllCard();
 		 }else{
