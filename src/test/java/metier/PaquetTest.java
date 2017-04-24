@@ -20,7 +20,7 @@ public class PaquetTest {
 		System.out.println("Verification si contient train");
 		
 		Wagon wagon = new Wagon(EnumCouleur.BLEU, false, false);
-		Boat boat = new Boat(EnumCouleur.BLEU, false, false, false);
+		Boat boat = new Boat(EnumCouleur.BLEU, false, false);
 		
 		//p.addBoat(boat);
 		p.addWagon(wagon);
@@ -34,7 +34,7 @@ public class PaquetTest {
 	public void testAddBoat(){
 		System.out.println("Verification si contient bateau");
 		
-		Boat boat = new Boat(EnumCouleur.BLEU, false, false, false);
+		Boat boat = new Boat(EnumCouleur.BLEU, false, false);
 		
 		p.addBoat(boat);
 		
@@ -59,7 +59,7 @@ public class PaquetTest {
 	public void testPiocheBoat(){
 		System.out.println("Verification si on pioche bateau");
 		
-		Boat boat = new Boat(EnumCouleur.BLEU, false, false, false);
+		Boat boat = new Boat(EnumCouleur.BLEU, false, false);
 		
 		p.addBoat(boat);
 		

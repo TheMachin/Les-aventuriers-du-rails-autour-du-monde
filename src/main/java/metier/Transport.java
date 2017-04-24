@@ -7,22 +7,16 @@ public abstract class Transport extends Carte{
 
 	private EnumCouleur couleur;
 	private boolean port;
-	private boolean joker;
 	
 	/**
 	 * @param name
 	 * @param couleur : couleur de la carte
 	 * @param port : specifie si la carte contient le single port
-	 * @param joker : specifie si la cartr est un joker ou pas
 	 */
-	public Transport(EnumCarte name, EnumCouleur couleur, boolean port, boolean joker) {
+	public Transport(EnumCarte name, EnumCouleur couleur, boolean port) {
 		super(name);
 		this.couleur = couleur;
 		this.port = port;
-		this.joker = joker;
-		if(this.joker){
-			this.port=true;
-		}
 	}
 
 	public Transport(EnumCarte name) {
@@ -36,10 +30,6 @@ public abstract class Transport extends Carte{
 
 	public boolean isPort() {
 		return port;
-	}
-
-	public boolean isJoker() {
-		return joker;
 	}
 	
 	

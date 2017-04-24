@@ -1,6 +1,8 @@
 package vue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ennumeration.EnumCouleur;
@@ -60,7 +62,7 @@ public class InterfaceController {
 	    lbl.setGraphic(new ImageView(image));
 	    lbl.setOnMouseClicked(this::selectionCard);
 	    this.HboxMain.getChildren().add(lbl);
-	    this.carteB.put(lbl, new Boat(EnumCouleur.VIOLET, false, false, false));
+	    this.carteB.put(lbl, new Boat(EnumCouleur.VIOLET, false, false));
 	    System.out.println(this.carteB.size());
 		
 	 }
@@ -131,7 +133,22 @@ public class InterfaceController {
 		 }
 	 }
 	 
-	 
+	 private void mettreCarteDansDefausse(int nb,List<Label> listLbl){
+		 int i;
+		 for(i=nb;i>=0;i--){
+			 Label lbl = listLbl.get(i);
+			 HboxSelect.getChildren().remove(lbl);
+			 if(carteW.containsKey(lbl)){
+				 Wagon b = carteW.get(lbl);
+			 	//mettre carte wagon dans la défausse
+				 carteW.remove(lbl);
+			 }else if(carteB.containsKey(lbl)){
+				 Boat b  = carteB.get(lbl);
+				 //mettre carte bateau dans la défausse
+				 carteB.remove(lbl);
+			 }
+		 }
+	 }
 	 
 	 /**
 	  * Prendre une route maritime. On vérifie si le joueur a mis assez de carte en jeu.
@@ -144,6 +161,8 @@ public class InterfaceController {
 		 int carte=0;
 		 int joker=0;
 		 
+		 List<Label> listLbl = new ArrayList<Label>();
+		 
 		 int i=0;
 		 for(i=0;i<HboxSelect.getChildren().size();i++){
 			 if(carteB.containsKey(HboxSelect.getChildren().get(i))){
@@ -152,30 +171,40 @@ public class InterfaceController {
 				 if(b.getCouleur()==r.getCouleur()){
 					 
 					 carte++;
-					 
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 					 if(b.isDoubleBoat()){
 						 carte++;
 					 }
 					 
-				 }else if(b.isJoker()){
+				 }
+			 }else if(carteW.containsKey(HboxSelect.getChildren().get(i))){
+				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+				 if(c.isJoker()){
 					 joker++;
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 				 }
 			 }
 		 }
 		 
 		 if((joker+carte)>=r.getNbPion()){
-			 for(i=r.getNbPion()-1;i>=0;i--){
-				 Label lbl = (Label) HboxSelect.getChildren().get(i);
+			 /*for(i=r.getNbPion()-1;i>=0;i--){
+				 Label lbl = listLbl.get(i);
 				 HboxSelect.getChildren().remove(lbl);
-				 Boat b = carteB.get(lbl);
-				 //mettre carte bateau dans la défausse
-				 carteB.remove(lbl);
-			 }
-			 // s'il reste des cartes en trop
-			 deSelectionAllCard();
-		 }else{
-			 deSelectionAllCard(); 
+				 if(carteW.containsKey(lbl)){
+					 Wagon b = carteW.get(lbl);
+				 	//mettre carte wagon dans la défausse
+					 carteW.remove(lbl);
+				 }else if(carteB.containsKey(lbl)){
+					 Boat b  = carteB.get(lbl);
+					 //mettre carte bateau dans la défausse
+					 carteB.remove(lbl);
+				 }
+			 }*/
+			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
+			 
 		 }
+		 // s'il reste des cartes en trop
+		 deSelectionAllCard(); 
 	 }
 	 
 	 /**
@@ -189,34 +218,36 @@ public class InterfaceController {
 		 int carte=0;
 		 int joker=0;
 		 
+		 List<Label> listLbl = new ArrayList<Label>();
+		 
 		 int i=0;
 		 for(i=0;i<HboxSelect.getChildren().size();i++){
 			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
 				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
 				 
 				 if(c.getCouleur()==r.getCouleur()){
-					 
 					 carte++;
-					 
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 				 }else if(c.isJoker()){
 					 joker++;
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 				 }
 			 }
 		 }
 		 
 		 if((joker+carte)>=r.getNbPion()){
-			 for(i=r.getNbPion()-1;i>=0;i--){
-				 Label lbl = (Label) HboxSelect.getChildren().get(i);
+			 /*for(i=r.getNbPion()-1;i>=0;i--){
+				 Label lbl = listLbl.get(i);
 				 HboxSelect.getChildren().remove(lbl);
 				 Wagon c = carteW.get(lbl);
 				 //mettre carte wagon dans la défausse
 				 carteW.remove(lbl);
-			 }
-			 // s'il reste des cartes en trop
-			 deSelectionAllCard();
-		 }else{
-			 deSelectionAllCard(); 
+			 }*/
+			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
+			 
 		 }
+		 // s'il reste des cartes en trop
+		 deSelectionAllCard(); 
 	 }
 	 
 	 /**
@@ -233,6 +264,8 @@ public class InterfaceController {
 		 int jokerBoat=0;
 		 int jokerWagon=0;
 		 
+		 List<Label> listLbl = new ArrayList<Label>();
+		 
 		 int i=0;
 		 for(i=0;i<HboxSelect.getChildren().size();i++){
 			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
@@ -241,24 +274,29 @@ public class InterfaceController {
 				 if(c.isPort()){
 					 
 					 carteWagon++;
-					 
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 				 }else if(c.isJoker()){
 					 jokerWagon++;
+					 listLbl.add((Label) HboxSelect.getChildren().get(i));
 				 }
 			 }else if(carteB.containsKey(HboxSelect.getChildren().get(i))){
 				 	Boat b = carteB.get(HboxSelect.getChildren().get(i));
 				 
-				 	if(b.isJoker()){
+				 	/**
+				 	 * Pas de double bateau pour construire un port
+				 	 * La carte doit être siglé port
+				 	 */
+				 	if(!b.isDoubleBoat()&&b.isPort()){
 				 		carteBoat++;
-					 }else if(b.isJoker()){
-						 jokerBoat++;
+				 		listLbl.add((Label) HboxSelect.getChildren().get(i));
 					 }
+				 	
 			 }
 		 }
 		 
 		 if((carteBoat+carteWagon+jokerWagon+jokerBoat>=4)&&(carteWagon<=2)&&(carteBoat<=2)&&(jokerWagon+jokerBoat<=4)){
-			 for(i=4;i>=0;i--){
-				 Label lbl = (Label) HboxSelect.getChildren().get(i);
+			 /*for(i=4;i>=0;i--){
+				 Label lbl = listLbl.get(i);
 				 HboxSelect.getChildren().remove(lbl);
 				 
 				 if(carteW.containsKey(lbl)){
@@ -270,14 +308,12 @@ public class InterfaceController {
 					 
 					 carteB.remove(lbl);
 				 }
-			 }
+			 }*/
+		 	mettreCarteDansDefausse(4,listLbl);
 			 
-			 
-			 // s'il reste des cartes en trop
-			 deSelectionAllCard();
-		 }else{
-			 deSelectionAllCard(); 
 		 }
+		 // s'il reste des cartes en trop
+		 deSelectionAllCard(); 
 	 }
 	 
 	 public void setMain(Main main){
