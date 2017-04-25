@@ -19,7 +19,7 @@ import metier.RouteTerrestre;
 import metier.Ville;
 import metier.Wagon;
 
-public class InterfaceController {
+public class Plateau implements InterfacePlateau{
 
 	
 	@FXML 
@@ -45,7 +45,7 @@ public class InterfaceController {
 	/**
 	 * 
 	 */
-	public InterfaceController() {
+	public Plateau() {
 		super();
 	}
 	
@@ -126,14 +126,14 @@ public class InterfaceController {
 	 }
 	 
 	 
-	 private void deSelectionAllCard(){
+	 public void deSelectionAllCard(){
 		 int i =0;
 		 for(i=HboxSelect.getChildren().size()-1;i>=0;i--){
 			 deSelectionCard((Label) HboxSelect.getChildren().get(i));
 		 }
 	 }
 	 
-	 private void mettreCarteDansDefausse(int nb,List<Label> listLbl){
+	 public void mettreCarteDansDefausse(int nb,List<Label> listLbl){
 		 int i;
 		 for(i=nb;i>=0;i--){
 			 Label lbl = listLbl.get(i);
