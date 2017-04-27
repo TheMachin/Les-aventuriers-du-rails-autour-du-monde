@@ -5,26 +5,38 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import controlor.MenuController;
 
 public class Server implements Runnable{
 	private ServerSocket serverSocket;
 	private int port;
 	private String ip;
-	private List<Thread> threads;
+	private Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
+	private MenuController menu;
+	
 	int nbClientMax=5;
 	static int nbClient=1;
 	
-	public Server(int port) {
+	public Server(int port,MenuController menu) {
 		super();
 		this.port=port;
+		this.menu=menu;
 	}
 	
 	public void etablirConnexionServer(int port){
@@ -38,35 +50,84 @@ public class Server implements Runnable{
 		}
 	}
 	
+	public void getIpAdress(){
+		InetAddress ipAddr = null;
+		try {
+			ipAddr = Inet4Address.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.out.println(ipAddr.getHostAddress());
+	}
+	
 	public void accept() throws IOException{
 		
-		threads = new ArrayList<Thread>();
-		
-		int i=0;
 		while(true){
 			Socket socket = serverSocket.accept();
-			Runnable r = new MyThreadHandler(socket);
+			MyThreadHandler r = new MyThreadHandler(socket,menu);
 			Thread t=new Thread(r);
 			System.out.println("lancement");
+			t.setDaemon(true);
 			t.start();
-			threads.add(t);
 			
+			menu.addNewPlayer(nbClient, r);
+			System.out.println("id mit");
+			threads.put(nbClient, t);
 		}
 	}
 	
+	public void sendMessage(MyThreadHandler t, JSONObject json) throws IOException{
+		t.sendJSON(json);
+	}
 	
+	public void Broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
+		Set cles = listClient.keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next(); // tu peux typer plus finement ici
+		   System.out.println(cle+" braodcast");
+		   listClient.get(cle).sendJSON(json);
+		}
+	}
 	
-	private static class MyThreadHandler implements Runnable {
+	public void closeAllSocket(Map<Integer,MyThreadHandler> listClient) throws IOException{
+		Set cles = listClient.keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next(); // tu peux typer plus finement ici
+		   listClient.get(cle).closeSocket(); // tu peux typer plus finement ici
+		}
+	}
+	
+	public void closeAllThread() throws InterruptedException{
+		Set cles = threads.keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next(); 
+		   if(!threads.get(cle).isInterrupted()){
+			   threads.get(cle).interrupt();
+			   threads.get(cle).join();
+		   }
+		   
+		}
+	}
+	
+	public static class MyThreadHandler implements Runnable {
         private Socket socket;
-
-        MyThreadHandler(Socket socket) {
+        private MenuController menu;
+        private int no;
+        
+        MyThreadHandler(Socket socket, MenuController menu) {
             this.socket = socket;
+            this.menu=menu;
         }
         
         @Override
         public void run() {
+        	no=nbClient;
             nbClient++;
-            System.out.println(nbClient + " JSONClient(s) connected on port: " + socket.getPort());
+            System.out.println(no + " JSONClient(s) connected on port: " + socket.getPort());
             if(nbClient>5){
             	try {
 					closeSocket();
@@ -77,9 +138,20 @@ public class Server implements Runnable{
             }
             try {
                 // For JSON Protocol
-                JSONObject jsonObject = receiveJSON();
-                sendJSON(jsonObject);
-
+            	JSONObject json = new JSONObject();
+            	try {
+					json.put("id", no);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                sendJSON(json);
+                while(true){
+                	JSONObject jsonFromClient = receiveJSON();
+                	JSONObject jsonSendAtClient = menu.getJSONFromClient(jsonFromClient);
+                	sendJSON(jsonSendAtClient);
+                }
+                
             } catch (IOException e) {
 
             } finally {
@@ -112,7 +184,6 @@ public class Server implements Runnable{
             JSONObject jsonObject =null;
             try {
             	jsonObject = new JSONObject(line);
-				System.out.println("Got from client on port " + socket.getPort() + " " + jsonObject.get("key").toString());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -127,7 +198,7 @@ public class Server implements Runnable{
               ObjectOutputStream o = new ObjectOutputStream(out);
              o.writeObject(jsonObject.toString());
               out.flush();
-              System.out.println("Sent to server: " + " " + jsonObject.toString());
+              System.out.println("Sent to client: " + " " + jsonObject.toString());
         }
     }
 

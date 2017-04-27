@@ -1,15 +1,17 @@
 package metier;
 
+import java.io.Serializable;
+
 import ennumeration.EnumCouleur;
 
-public class Joueur {
+public class Joueur implements Serializable{
 	private String name;
 	private EnumCouleur couleur;
 	private int score;
 	private int bonus;
 	private int malus;
 	private Pions pions;
-	
+	private boolean start;
 	/**
 	 * @param name
 	 * @param couleur
@@ -27,6 +29,17 @@ public class Joueur {
 		this.bonus = bonus;
 		this.malus = malus;
 	}
+	
+	public Joueur(String name, EnumCouleur couleur, int score, int bonus, int malus,boolean start) {
+		super();
+		this.name = name;
+		this.couleur = couleur;
+		this.score = score;
+		this.bonus = bonus;
+		this.malus = malus;
+		this.start=start;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -59,6 +72,24 @@ public class Joueur {
 	}
 	public void setPions(Pions pions) {
 		this.pions = pions;
+	}
+
+	public boolean isStart() {
+		return start;
+	}
+
+	public void setStart(boolean start) {
+		this.start = start;
+	}
+
+	public void setCouleur(EnumCouleur couleur) {
+		this.couleur = couleur;
+	}
+
+	@Override
+	public String toString() {
+		return "Joueur [name=" + name + ", couleur=" + couleur + ", score=" + score + ", bonus=" + bonus + ", malus="
+				+ malus + ", pions=" + pions + ", start=" + start + "]";
 	}
 	
 	

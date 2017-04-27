@@ -8,18 +8,31 @@ import java.io.OutputStream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.net.Socket;
 
-public class Client {
+import controlor.MenuController;
+
+import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Client extends Thread{
 	private String ip;
     private int port;
     private Socket socket;
+    private MenuController menu; 
+    private Timer t;
+    private TimerTask tt;
+    private boolean timerEnd;
+    ExecutorService executorService;
 	
     
-    public Client(String ip, int port) {
+    public Client(String ip, int port, MenuController menu) {
 		super();
 		this.ip = ip;
 		this.port = port;
+		this.menu=menu;
 	}
     
     public boolean connexion(){
@@ -33,7 +46,7 @@ public class Client {
 		}
     }
     
-    public JSONObject receiveJSON() throws IOException {
+    public synchronized JSONObject receiveJSON() throws IOException {
         InputStream in = socket.getInputStream();
         ObjectInputStream i = new ObjectInputStream(in);
         String line = null;
@@ -58,12 +71,83 @@ public class Client {
 
     }
 
-
+    public void waitTimer(){
+    	synchronized (t) {
+    		try {
+				t.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
+    
+    public void notifyTimer(){
+    	t.notify();
+    }
+    
+    public void cancelTimer(){
+    	t.cancel();
+    	System.out.println("stop");
+    	tt.cancel();
+    	System.out.println("stop");
+    	t.cancel();
+    	System.out.println("stop");
+    	t=null;
+    }
+    
+    public void shutDownExecutor(){
+    	executorService.shutdown();
+    }
+    
+    
     public void sendJSON(JSONObject jsonObject) throws IOException {
     	OutputStream out = socket.getOutputStream();
         ObjectOutputStream o = new ObjectOutputStream(out);
         o.writeObject(jsonObject.toString());
         out.flush();
+    }
+    
+    public void timer(){
+    	t = new Timer();
+    	/*executorService = Executors.newFixedThreadPool(port);
+    	
+    	executorService.execute(new Runnable() {
+    	    public void run() {
+    	    	try {
+    				timerEnd=false;
+    				System.out.println("broadcast");
+    				JSONObject json = receiveJSON();
+    				System.out.println("broadcast2");
+    				menu.getJSONFromServer(json);
+    				System.out.println("broadcast3");
+    				timerEnd=true;
+    			} catch (IOException | JSONException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    	    }
+    	});*/
+    	
+    	tt = new TimerTask() {
+    		int i = 0;
+   		 
+    		public void run() {
+    			try {
+    				timerEnd=false;
+    				System.out.println("broadcast");
+    				JSONObject json = receiveJSON();
+    				System.out.println("broadcast2");
+    				menu.getJSONFromServer(json);
+    				System.out.println("broadcast3");
+    				timerEnd=true;
+    			} catch (IOException | JSONException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    		}
+    	};
+		t.schedule(tt, 0, 3000);
     }
 
 }

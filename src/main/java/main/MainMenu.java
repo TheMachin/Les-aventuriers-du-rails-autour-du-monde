@@ -2,7 +2,6 @@ package main;
 
 import java.io.IOException;
 
-import controlor.MenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,14 +26,11 @@ public class MainMenu extends Application{
 		
 		
         Parent root = FXMLLoader.load(getClass().getResource("../vue/Menu.fxml"));
-        
-        MenuController menuController = new MenuController();
-        
+                
         Menu menuView = new Menu();
         
         menuView.setMain(this);
 		Scene scene = new Scene(root);
-		
 		
 		this.primaryStage.setScene(scene);
 		this.primaryStage.show();

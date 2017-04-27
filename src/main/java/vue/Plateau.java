@@ -19,7 +19,7 @@ import metier.RouteTerrestre;
 import metier.Ville;
 import metier.Wagon;
 
-public class Plateau implements InterfacePlateau{
+public class Plateau {
 
 	
 	@FXML 
