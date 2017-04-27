@@ -3,10 +3,12 @@ package vue;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.json.JSONException;
 
 import controlor.MenuController;
+import controlor.PlateauController;
 import ennumeration.EnumCouleur;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,8 +24,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import main.Main;
 import main.MainMenu;
+import metier.Joueur;
+import server.Client;
+import server.Server;
+import server.Server.MyThreadHandler;
 
 public class Menu{
 
@@ -31,7 +36,7 @@ public class Menu{
 	private MenuController menuController = new MenuController(this);
     
 	@FXML
-	private Label lblMsgError;
+	private Label lblMsgError, lblMsgIp;
 	
 	@FXML
 	private Pane menu;
@@ -225,13 +230,16 @@ public class Menu{
 	private void handleButtonJoinGameFromMenu(ActionEvent e){
 		
 		String ip = txtAdressIP.getText();
-		try {
+		lblMsgIp.setText("");
+		if(ip!=""){
 			this.menuController.clientJoinServer(ip);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			System.out.println("Echec");
+		}else{
+			lblMsgIp.setText("Veuillez saisir une adresse IP.");
 		}
+	}
+	
+	public void setMsgAdressIp(String msg){
+		lblMsgIp.setText(msg);
 	}
 	
 	@FXML
@@ -265,23 +273,29 @@ public class Menu{
 	@FXML 
 	private void handleTxtFieldPseudoAction(ActionEvent event){
 		TextField txt=(TextField) event.getSource();
-		System.out.println(txt.getText());
-		try {
-			menuController.createPseudo(txt.getText());
-		} catch (JSONException | IOException e) {
-			// TODO Auto-generated catch block
-			lblMsgPseudo.setText("La connexion avec le serveur a été perdu. Veuillez relancer le jeu.");
+		if(txt.getText()!=""){
+			try {
+				menuController.createPseudo(txt.getText());
+			} catch (JSONException | IOException e) {
+				// TODO Auto-generated catch block
+				lblMsgPseudo.setText("La connexion avec le serveur a été perdu. Veuillez relancer le jeu.");
+			}
+		}else{
+			lblMsgPseudo.setText("Veuillez saisir un pseudo.");
 		}
 	}
 	
 	@FXML 
 	private void handleButtonPseudoAction(ActionEvent event){
-		System.out.println(txtFieldPseudo.getText());
-		try {
-			menuController.createPseudo(txtFieldPseudo.getText());
-		} catch (JSONException | IOException e) {
-			// TODO Auto-generated catch block
-			lblMsgPseudo.setText("La connexion avec le serveur a été perdu. Veuillez relancer le jeu.");
+		if(txtFieldPseudo.getText()!=""){
+			try {
+				menuController.createPseudo(txtFieldPseudo.getText());
+			} catch (JSONException | IOException e) {
+				// TODO Auto-generated catch block
+				lblMsgPseudo.setText("La connexion avec le serveur a été perdu. Veuillez relancer le jeu.");
+			}
+		}else{
+			lblMsgPseudo.setText("Veuillez saisir un pseudo.");
 		}
 	}
 	
@@ -289,19 +303,49 @@ public class Menu{
 		lblMsgPseudo.setText(msg);
 	}
 	
+	public void setVisibleButtunStartGame(){
+		Platform.runLater(() -> {
+			btnStart.setVisible(true);
+			btnStart.setDisable(false);
+		});
+	}
+	
 	@FXML
 	private void handleButtonStartGame(ActionEvent e) throws IOException{
 		
-		Button btn=(Button) e.getSource();
+		menuController.commencerLaPartie();
+		
+		/*Button btn=(Button) e.getSource();
 		Stage stage = (Stage) btn.getScene().getWindow();
 		
 		Parent root = FXMLLoader.load(getClass().getResource("plateau.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
-		stage.show();
+		stage.show();*/
 		
 		//Plateau interfaceController = new Plateau();
 		//interfaceController.setMain(this);
+	}
+	
+	public Plateau changerPlateau(){//(Server server, Client client, Map<Integer, MyThreadHandler> listClientsServer, Map<Integer, Joueur> joueurs, int id){
+		
+		Stage stage = (Stage) lblMsgError.getScene().getWindow();
+		
+		Parent root;
+		try {
+			
+			Plateau plateau = new Plateau();
+			plateau.setMain(main);
+			root = FXMLLoader.load(getClass().getResource("plateau.fxml"));
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			return plateau;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

@@ -10,22 +10,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import controlor.MenuController;
+import controlor.PlateauController;
+import vue.Plateau;
 
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Client extends Thread{
 	private String ip;
     private int port;
     private Socket socket;
     private MenuController menu; 
+    private PlateauController plateau; 
     private Timer t;
     private TimerTask tt;
-    private boolean timerEnd;
-    ExecutorService executorService;
+    private boolean menuBoolean;
 	
     
     public Client(String ip, int port, MenuController menu) {
@@ -33,7 +33,13 @@ public class Client extends Thread{
 		this.ip = ip;
 		this.port = port;
 		this.menu=menu;
+		this.menuBoolean=true;
 	}
+    
+    public void setPlateauController(PlateauController plateau){
+    	menuBoolean=false;
+    	this.plateau=plateau;
+    }
     
     public boolean connexion(){
     	try {
@@ -69,6 +75,22 @@ public class Client extends Thread{
 
         return json;
 
+    }    
+    
+    public void sendJSON(JSONObject jsonObject) throws IOException {
+    	OutputStream out = socket.getOutputStream();
+        ObjectOutputStream o = new ObjectOutputStream(out);
+        o.writeObject(jsonObject.toString());
+        out.flush();
+    }
+    
+
+    public void sendJsonAtController(JSONObject json) throws JSONException{
+    	if(menuBoolean){
+    		menu.getJSONFromServer(json);
+    	}else{
+    		plateau.getJSONFromServer(json);
+    	}
     }
 
     public void waitTimer(){
@@ -96,51 +118,19 @@ public class Client extends Thread{
     	t=null;
     }
     
-    public void shutDownExecutor(){
-    	executorService.shutdown();
-    }
-    
-    
-    public void sendJSON(JSONObject jsonObject) throws IOException {
-    	OutputStream out = socket.getOutputStream();
-        ObjectOutputStream o = new ObjectOutputStream(out);
-        o.writeObject(jsonObject.toString());
-        out.flush();
-    }
     
     public void timer(){
     	t = new Timer();
-    	/*executorService = Executors.newFixedThreadPool(port);
-    	
-    	executorService.execute(new Runnable() {
-    	    public void run() {
-    	    	try {
-    				timerEnd=false;
-    				System.out.println("broadcast");
-    				JSONObject json = receiveJSON();
-    				System.out.println("broadcast2");
-    				menu.getJSONFromServer(json);
-    				System.out.println("broadcast3");
-    				timerEnd=true;
-    			} catch (IOException | JSONException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    	    }
-    	});*/
     	
     	tt = new TimerTask() {
-    		int i = 0;
    		 
     		public void run() {
     			try {
-    				timerEnd=false;
     				System.out.println("broadcast");
     				JSONObject json = receiveJSON();
     				System.out.println("broadcast2");
-    				menu.getJSONFromServer(json);
+    				sendJsonAtController(json);
     				System.out.println("broadcast3");
-    				timerEnd=true;
     			} catch (IOException | JSONException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
