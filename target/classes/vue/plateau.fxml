@@ -4,10 +4,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.Plateau">
    <children>
@@ -40,7 +43,10 @@
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <Label fx:id="lblDeckBoat" layoutY="7.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: blue;" />
+                                    <Label fx:id="lblDeckBoat" layoutY="7.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: blue;" textFill="WHITE">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font></Label>
                                     <Label fx:id="lblDeckWagon" layoutX="157.0" layoutY="7.0" onMouseClicked="#takeHideTrainCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: grey;" />
                                     <Label fx:id="lblDeckDestination" layoutX="314.0" layoutY="7.0" onMouseClicked="#takeHideDestinationCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: green;" />
                                     <Label id="lblP1" layoutX="25.0" layoutY="173.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
@@ -49,6 +55,36 @@
                                     <Label id="lblP4" layoutX="191.0" layoutY="291.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
                                     <Label id="lblP5" layoutX="25.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
                                     <Label id="lblP6" layoutX="191.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" text="Label" />
+                                    <Label layoutX="22.0" layoutY="86.0" text="Tirer Carte Wagon">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="180.0" layoutY="86.0" text="Tirer Carte Bateau">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="331.0" layoutY="86.0" text="Tirer Carte Itinéraire">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="47.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/wagon.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="204.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/bateau.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="361.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/itineraire.png" />
+                                       </image>
+                                    </ImageView>
                                  </children></AnchorPane>
                           </items>
                         </SplitPane>
