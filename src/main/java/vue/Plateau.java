@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import controlor.PlateauController;
 import ennumeration.EnumCouleur;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,8 +13,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import main.Main;
+import javafx.scene.shape.Rectangle;
+import main.MainMenu;
 import metier.Boat;
+import metier.Joueur;
 import metier.RouteMartime;
 import metier.RouteTerrestre;
 import metier.Ville;
@@ -38,7 +41,11 @@ public class Plateau {
 	private HBox HboxSelect;
 
 	
-	private Main main;
+	private PlateauController plateauControlle;
+	
+
+
+	private MainMenu main;
 	
 	private Map<Label,Wagon> carteW = new HashMap<Label,Wagon>();
 	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
@@ -47,7 +54,10 @@ public class Plateau {
 	 */
 	public Plateau() {
 		super();
+		plateauControlle = new PlateauController();
 	}
+	
+	
 	
 	 /**
 	  * Permet de piocher une carte bateau
@@ -62,7 +72,7 @@ public class Plateau {
 	    lbl.setGraphic(new ImageView(image));
 	    lbl.setOnMouseClicked(this::selectionCard);
 	    this.HboxMain.getChildren().add(lbl);
-	    this.carteB.put(lbl, new Boat(EnumCouleur.VIOLET, false, false));
+	    this.carteB.put(lbl, new Boat(EnumCouleur.VIOLET, false, false, null));
 	    System.out.println(this.carteB.size());
 		
 	 }
@@ -80,7 +90,7 @@ public class Plateau {
 	    lbl.setGraphic(new ImageView(image));
 	    lbl.setOnMouseClicked(this::selectionCard);
 	    this.HboxMain.getChildren().add(lbl);
-	    this.carteW.put(lbl, new Wagon(EnumCouleur.VIOLET, false, false));
+	    this.carteW.put(lbl, new Wagon(EnumCouleur.VIOLET, false, false, null));
 	    System.out.println(this.carteW.size());
 	 }
 	 
@@ -97,7 +107,7 @@ public class Plateau {
 	  */
 	 @FXML
 	 private void selectionCard(MouseEvent e){
-		 
+		 plateauControlle.test();
 		 Label lbl = (Label) e.getSource();
 		 HboxMain.getChildren().remove(lbl);
 		 lbl.setOnMouseClicked(this::deSelectionCard);
@@ -157,6 +167,8 @@ public class Plateau {
 	  */
 	 @FXML
 	 private void takeRoadBoatMap(MouseEvent e){
+		 
+		 Rectangle rect= (Rectangle) e.getSource();
 		 RouteMartime r = new RouteMartime(7, EnumCouleur.VIOLET, null, null);
 		 int carte=0;
 		 int joker=0;
@@ -187,20 +199,8 @@ public class Plateau {
 		 }
 		 
 		 if((joker+carte)>=r.getNbPion()){
-			 /*for(i=r.getNbPion()-1;i>=0;i--){
-				 Label lbl = listLbl.get(i);
-				 HboxSelect.getChildren().remove(lbl);
-				 if(carteW.containsKey(lbl)){
-					 Wagon b = carteW.get(lbl);
-				 	//mettre carte wagon dans la défausse
-					 carteW.remove(lbl);
-				 }else if(carteB.containsKey(lbl)){
-					 Boat b  = carteB.get(lbl);
-					 //mettre carte bateau dans la défausse
-					 carteB.remove(lbl);
-				 }
-			 }*/
 			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
+			 rect.setOpacity(100);
 			 
 		 }
 		 // s'il reste des cartes en trop
@@ -295,20 +295,6 @@ public class Plateau {
 		 }
 		 
 		 if((carteBoat+carteWagon+jokerWagon+jokerBoat>=4)&&(carteWagon<=2)&&(carteBoat<=2)&&(jokerWagon+jokerBoat<=4)){
-			 /*for(i=4;i>=0;i--){
-				 Label lbl = listLbl.get(i);
-				 HboxSelect.getChildren().remove(lbl);
-				 
-				 if(carteW.containsKey(lbl)){
-					 Wagon b = carteW.get(lbl);
-				 	//mettre carte wagon dans la défausse
-					 carteW.remove(lbl);
-				 }else if(carteB.containsKey(lbl)){
-					 Boat b  = carteB.get(lbl);
-					 
-					 carteB.remove(lbl);
-				 }
-			 }*/
 		 	mettreCarteDansDefausse(4,listLbl);
 			 
 		 }
@@ -316,7 +302,15 @@ public class Plateau {
 		 deSelectionAllCard(); 
 	 }
 	 
-	 public void setMain(Main main){
+	 public void setMain(MainMenu main){
 		 this.main=main;
 	 }
+	
+	 public void setPlateauControlle(PlateauController plateauControlle) {
+		this.plateauControlle = plateauControlle;
+	 }
+	 
+	 public PlateauController getPlateauControlle() {
+			return plateauControlle;
+		}
 }
