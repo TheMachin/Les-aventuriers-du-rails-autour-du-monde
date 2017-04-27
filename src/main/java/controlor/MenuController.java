@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,16 +20,18 @@ import server.Client;
 import server.Server;
 import server.Server.MyThreadHandler;
 import vue.Menu;
+import vue.Plateau;
 
 public class MenuController {
 
 	private Menu menuView;
-	Server server=null;
-	Client client=null;
+	private Server server=null;
+	private Client client=null;
 	private Map<Integer,MyThreadHandler> listClientsServer = new HashMap<Integer,MyThreadHandler>();
 	private Map<Integer,Joueur> joueurs = new HashMap<Integer,Joueur>();
 	private int id;
 	private Thread t;
+	final String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 	
 
 	
@@ -60,30 +64,104 @@ public class MenuController {
 		menuView.setCombobox(id);
 	}
 	
+	public void clientDeconnecter(int no){
+		if(joueurs.containsKey(no)){
+			joueurs.remove(no);
+			listClientsServer.remove(no);
+		}
+	}
+	
 	/**
 	 * Le client se connecte au serveur
 	 * @param ip
 	 * @throws IOException
 	 */
-	public void clientJoinServer(String ip) throws IOException{
-		client = new Client(ip, 7777,this);
-		t = new Thread(client);
-		t.start();
-		if(client.connexion()){
-			System.out.println("Client connecté !");
-			
-			//le premier json qu'il reçoit est : id joueur
-			JSONObject json = client.receiveJSON();
-			try {
-				id=json.getInt("id");
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void clientJoinServer(String ip){
+		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
+		if(matcher.find()||ip.equals(new String("localhost"))){
+			client = new Client(ip, 7777,this);
+			t = new Thread(client);
+			t.start();
+			if(client.connexion()){
+				System.out.println("Client connecté !");
+				
+				//le premier json qu'il reçoit est : id joueur
+				JSONObject json = null;
+				try {
+					json = client.receiveJSON();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					menuView.setMsgAdressIp("Problème de connexion avec le serveur.");
+				}
+				if(json!=null){
+					try {
+						id=json.getInt("id");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						menuView.setMsgAdressIp("Le transfert de donnée a échouée");
+					}
+					System.out.println(json.toString());
+					menuView.setPanePseudo();
+					menuView.setCombobox(id);
+				}else{
+					
+				}
+			}else{
+				menuView.setMsgAdressIp("La connexion au serveur a échouée");
 			}
-			System.out.println(json.toString());
-			menuView.setPanePseudo();
-			menuView.setCombobox(id);
+		}else{
+			menuView.setMsgAdressIp("Veuillez saisir une adresse IP valide.");
 		}
+	}
+	
+	
+	public void commencerLaPartie(){
+		if(server==null){
+			playerGoGame();
+		}else{
+			serverGoGame();
+		}
+	}
+	
+	public void serverGoGame(){
+		
+		Plateau plateau = menuView.changerPlateau();
+		
+		PlateauController plateauController = plateau.getPlateauControlle();
+		plateauController.setId(id);
+		plateauController.setJoueurs(joueurs);
+		plateauController.setListClientsServer(listClientsServer);
+		plateauController.setServer(server);
+		
+		
+		plateauController.setPlateauView(plateau);
+		
+		JSONObject json = new JSONObject();
+		try {
+			json.put("plateau", true);
+			server.Broadcast(listClientsServer, json);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void playerGoGame(){
+		
+		Plateau plateau = menuView.changerPlateau();
+		
+		PlateauController plateauController = plateau.getPlateauControlle();
+		plateauController.setId(id);
+		plateauController.setJoueurs(joueurs);
+		plateauController.setListClientsServer(listClientsServer);
+		plateauController.setClient(client);
+		plateauController.setPlateauView(plateau);
+		
+		client.setPlateauController(plateauController);
 	}
 	
 	/**
@@ -106,6 +184,9 @@ public class MenuController {
 		if(json.has("error")){
 			jsonGetMsgError(json);
 			System.out.println(json.getString("error"));
+		}else if(json.has("plateau")){
+			client.cancelTimer();
+			menuView.setVisibleButtunStartGame();
 		}else{
 			jsonInformationGame(json);
 		}
@@ -466,7 +547,9 @@ public class MenuController {
 		   }
 		   if(cle!=0){
 			   System.out.println("cle : "+cle+ " "+joueurs.get(cle).isStart());
-			   menuView.setSelectedCheckBox(joueurs.get(cle).isStart());
+			   if(cle==id){
+				   menuView.setSelectedCheckBox(joueurs.get(cle).isStart());
+			   }
 		   }
 		}
 	}
