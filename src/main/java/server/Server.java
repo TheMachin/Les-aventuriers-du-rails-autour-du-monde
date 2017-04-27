@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import controlor.MenuController;
+import controlor.PlateauController;
 
 public class Server implements Runnable{
 	private ServerSocket serverSocket;
@@ -29,14 +30,20 @@ public class Server implements Runnable{
 	private String ip;
 	private Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
 	private MenuController menu;
+	private PlateauController plateau;
 	
 	int nbClientMax=5;
+	static List<Integer> noDispo = new ArrayList<Integer>();
 	static int nbClient=1;
 	
 	public Server(int port,MenuController menu) {
 		super();
 		this.port=port;
 		this.menu=menu;
+		noDispo.add(1);
+		noDispo.add(2);
+		noDispo.add(3);
+		noDispo.add(4);
 	}
 	
 	public void etablirConnexionServer(int port){
@@ -116,7 +123,7 @@ public class Server implements Runnable{
 	public static class MyThreadHandler implements Runnable {
         private Socket socket;
         private MenuController menu;
-        private int no;
+        private int no=0;
         
         MyThreadHandler(Socket socket, MenuController menu) {
             this.socket = socket;
@@ -125,10 +132,14 @@ public class Server implements Runnable{
         
         @Override
         public void run() {
-        	no=nbClient;
+        	
             nbClient++;
-            System.out.println(no + " JSONClient(s) connected on port: " + socket.getPort());
-            if(nbClient>5){
+            System.out.println(no + " JSONClient(s) connected on port: " + socket.getPort()+ " "+nbClient);
+            System.out.println(noDispo.toString());
+            if(noDispo.size()>=1){
+        		no=noDispo.get(0);
+        		noDispo.remove(noDispo.get(0));
+        	}else{
             	try {
 					closeSocket();
 				} catch (IOException e) {
@@ -165,6 +176,12 @@ public class Server implements Runnable{
 
         public void closeSocket() throws IOException {
         	System.out.println("socket fermé");
+        	if(no!=0){
+        		System.out.println(noDispo.toString());
+        		menu.clientDeconnecter(no);
+        		noDispo.add(no);
+        		System.out.println(noDispo.toString());
+        	}
             socket.close();
         }
 

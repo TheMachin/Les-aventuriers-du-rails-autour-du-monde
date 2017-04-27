@@ -7,8 +7,8 @@ public class Boat extends Transport{
 
 	private boolean doubleBoat;
 	
-	public Boat(EnumCouleur couleur, boolean port, boolean doubleBoat) {
-		super(EnumCarte.BOAT, couleur, port);
+	public Boat(EnumCouleur couleur, boolean port, boolean doubleBoat,String lienImage) {
+		super(EnumCarte.BOAT, couleur, port, lienImage);
 		// TODO Auto-generated constructor stub
 		this.doubleBoat=doubleBoat;
 	}

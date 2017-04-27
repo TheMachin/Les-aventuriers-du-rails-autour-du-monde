@@ -11,8 +11,8 @@ public class Iteneraire extends Carte{
 	private int malus;
 	private Map<Integer,Ville> iteneraire; 
 	
-	public Iteneraire(EnumCarte name) {
-		super(name);
+	public Iteneraire(EnumCarte name, String lienImage) {
+		super(name, lienImage);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,8 +23,8 @@ public class Iteneraire extends Carte{
 	 * @param malus
 	 * @param iteneraire
 	 */
-	public Iteneraire(EnumCarte name, int pointMax, int point, int malus, Map<Integer, Ville> iteneraire) {
-		super(name);
+	public Iteneraire(EnumCarte name, int pointMax, int point, int malus, Map<Integer, Ville> iteneraire, String lienImage) {
+		super(name, lienImage);
 		this.pointMax = pointMax;
 		this.point = point;
 		this.malus = malus;
