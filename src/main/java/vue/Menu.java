@@ -314,38 +314,27 @@ public class Menu{
 	private void handleButtonStartGame(ActionEvent e) throws IOException{
 		
 		menuController.commencerLaPartie();
-		
-		/*Button btn=(Button) e.getSource();
-		Stage stage = (Stage) btn.getScene().getWindow();
-		
-		Parent root = FXMLLoader.load(getClass().getResource("plateau.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();*/
-		
-		//Plateau interfaceController = new Plateau();
-		//interfaceController.setMain(this);
 	}
 	
-	public Plateau changerPlateau(){//(Server server, Client client, Map<Integer, MyThreadHandler> listClientsServer, Map<Integer, Joueur> joueurs, int id){
+	public Plateau changerPlateau(PlateauController plateauController){
 		
 		Stage stage = (Stage) lblMsgError.getScene().getWindow();
 		
-		Parent root;
+		Parent root = null;
+		Plateau plateau = new Plateau(plateauController);
+		plateau.setMain(main);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("plateau.fxml"));
+		loader.setController(plateau);
 		try {
-			
-			Plateau plateau = new Plateau();
-			plateau.setMain(main);
-			root = FXMLLoader.load(getClass().getResource("plateau.fxml"));
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-			return plateau;
+			root = loader.load();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+		return plateau;
 	}
 	
 	
@@ -386,6 +375,9 @@ public class Menu{
 	
 	public void setMain(MainMenu main){
 		 this.main=main;
+		 if(main==null){
+			 System.out.println("le main est nulle");
+		 }
 	 }
 	
 	public void setMenuController(MenuController main){
