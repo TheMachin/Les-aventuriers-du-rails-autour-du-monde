@@ -7,6 +7,8 @@ import java.util.Map;
 
 import controlor.PlateauController;
 import ennumeration.EnumCouleur;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -41,7 +43,7 @@ public class Plateau {
 	private HBox HboxSelect;
 
 	
-	private PlateauController plateauControlle;
+	private PlateauController plateauControlle = new PlateauController();
 	
 
 
@@ -50,13 +52,37 @@ public class Plateau {
 	private Map<Label,Wagon> carteW = new HashMap<Label,Wagon>();
 	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
 	/**
+	 * @param plateauController 
 	 * 
 	 */
-	public Plateau() {
+	public Plateau(PlateauController plateauController) {
 		super();
-		plateauControlle = new PlateauController();
+		this.plateauControlle=plateauController;
+		HboxMain = new HBox();
+		HboxSelect = new HBox();
 	}
 	
+	public void setCardsWagonInMainOfPlayer(Wagon w){
+		Label lbl = new Label();
+		System.out.println(w.getLienImage());
+		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+	    lbl.setGraphic(new ImageView(image));
+	    lbl.setOnMouseClicked(this::selectionCard);
+	    this.HboxMain.getChildren().add(lbl);
+	    this.carteW.put(lbl, w);
+	    System.out.println(this.carteW.size());
+	}
+	
+	public void setCardsBoatInMainOfPlayer(Boat b){
+		Label lbl = new Label();
+		System.out.println(b.getLienImage());
+		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+	    lbl.setGraphic(new ImageView(image));
+	    lbl.setOnMouseClicked(this::selectionCard);
+	    this.HboxMain.getChildren().add(lbl);
+	    this.carteB.put(lbl, b);
+	    System.out.println(this.carteB.size());
+	}
 	
 	
 	 /**
@@ -236,13 +262,6 @@ public class Plateau {
 		 }
 		 
 		 if((joker+carte)>=r.getNbPion()){
-			 /*for(i=r.getNbPion()-1;i>=0;i--){
-				 Label lbl = listLbl.get(i);
-				 HboxSelect.getChildren().remove(lbl);
-				 Wagon c = carteW.get(lbl);
-				 //mettre carte wagon dans la défausse
-				 carteW.remove(lbl);
-			 }*/
 			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
 			 
 		 }
@@ -306,7 +325,7 @@ public class Plateau {
 		 this.main=main;
 	 }
 	
-	 public void setPlateauControlle(PlateauController plateauControlle) {
+	 public void setPlateauController(PlateauController plateauControlle) {
 		this.plateauControlle = plateauControlle;
 	 }
 	 
