@@ -159,8 +159,8 @@ public class Server implements Runnable{
                 sendJSON(json);
                 while(true){
                 	JSONObject jsonFromClient = receiveJSON();
-                	JSONObject jsonSendAtClient = menu.getJSONFromClient(jsonFromClient);
-                	sendJSON(jsonSendAtClient);
+                	menu.getJSONFromClient(jsonFromClient, this);
+                	
                 }
                 
             } catch (IOException e) {

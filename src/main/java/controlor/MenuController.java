@@ -31,7 +31,6 @@ public class MenuController {
 	private Map<Integer,Joueur> joueurs = new HashMap<Integer,Joueur>();
 	private int id;
 	private Thread t;
-	final String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 	
 
 	
@@ -77,6 +76,7 @@ public class MenuController {
 	 * @throws IOException
 	 */
 	public void clientJoinServer(String ip){
+		String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
 		if(matcher.find()||ip.equals(new String("localhost"))){
 			client = new Client(ip, 7777,this);
@@ -124,17 +124,14 @@ public class MenuController {
 	}
 	
 	public void serverGoGame(){
-		
-		Plateau plateau = menuView.changerPlateau();
-		
-		PlateauController plateauController = plateau.getPlateauControlle();
+				
+		PlateauController plateauController =new PlateauController();
 		plateauController.setId(id);
 		plateauController.setJoueurs(joueurs);
 		plateauController.setListClientsServer(listClientsServer);
 		plateauController.setServer(server);
 		
-		
-		plateauController.setPlateauView(plateau);
+		plateauController.setPlateauView(menuView.changerPlateau(plateauController));
 		
 		JSONObject json = new JSONObject();
 		try {
@@ -148,20 +145,19 @@ public class MenuController {
 			e.printStackTrace();
 		}
 		
+		plateauController.sendFirstCards();
+		
 	}
 	
 	public void playerGoGame(){
-		
-		Plateau plateau = menuView.changerPlateau();
-		
-		PlateauController plateauController = plateau.getPlateauControlle();
+				
+		PlateauController plateauController = new PlateauController();
 		plateauController.setId(id);
 		plateauController.setJoueurs(joueurs);
-		plateauController.setListClientsServer(listClientsServer);
 		plateauController.setClient(client);
-		plateauController.setPlateauView(plateau);
-		
+		plateauController.setPlateauView(menuView.changerPlateau(plateauController));
 		client.setPlateauController(plateauController);
+		plateauController.waitServerMsg();
 	}
 	
 	/**
@@ -198,7 +194,7 @@ public class MenuController {
 	 * @return un json au client
 	 * @throws IOException
 	 */
-	public synchronized JSONObject getJSONFromClient(JSONObject json) throws IOException{
+	public synchronized void getJSONFromClient(JSONObject json, MyThreadHandler t) throws IOException{
 		//le client a envoyé son pseudo pour l'enregistrement
 		if(json.has("pseudo")){
 			try {
@@ -209,7 +205,7 @@ public class MenuController {
 	    			System.out.println("existe");
 	    			json=new JSONObject();
 	    			json.put("error", "Le pseudo existe déjà, veuillez saisir un autre.");
-	    			return json;
+	    			t.sendJSON(json);
 	    		}else{
 	    			System.out.println("existe pas");
 	    			joueurs.replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
@@ -217,7 +213,6 @@ public class MenuController {
 	    			putAllPseudoInView();
 	    			server.Broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
-	    			return json; 
 	    		}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -232,7 +227,7 @@ public class MenuController {
 					if(checkColorExists(colorEnum)){
 						json=new JSONObject();
 		    			json.put("error", "La couleur a déjà été choisi.");
-		    			return json;
+		    			t.sendJSON(json);
 					}else{
 						System.out.println("existe pas");
 						Joueur joueur = joueurs.get(no);
@@ -242,7 +237,7 @@ public class MenuController {
 		    			putAllPseudoInView();
 		    			server.Broadcast(listClientsServer, json);
 		    			System.out.println("fin broascast");
-		    			return json; 
+		    			
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -258,14 +253,14 @@ public class MenuController {
 				if(joueur==null){
 					json=new JSONObject();
 	    			json.put("error", "Une erreur est survenue, Veuillez relancer le jeu.");
-	    			return json;
+	    			t.sendJSON(json);
 				}
 				
 				if(joueur.getCouleur()==null&&selected==true){
 					json=new JSONObject();
 	    			json.put("error", "La couleur n'a pas été choisie.");
 	    			json.put("start", false);
-	    			return json;
+	    			t.sendJSON(json);
 				}else{
 					joueur.setStart(selected);
 	    			joueurs.replace(no, joueur);
@@ -278,7 +273,6 @@ public class MenuController {
 	    			}else{
 	    				menuView.setButtonStart(true);
 	    			}
-	    			return json; 
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -292,7 +286,6 @@ public class MenuController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return json;
 	}
 	
 	/**

@@ -153,12 +153,12 @@ public class Paquet {
 			pWagon.add(new Wagon(EnumCouleur.ROUGE, true, false,"/images/wagon/wagonsRougePort.png"));
 			pWagon.add(new Wagon(EnumCouleur.NOIR, true, false,"/images/wagon/wagonsNoirPort.png"));
 			
-			pBoat.add(new Boat(EnumCouleur.BLANC, true, false, "/images/bateau/simple/bateauBlanc"));
-			pBoat.add(new Boat(EnumCouleur.JAUNE, true, false, "/images/bateau/simple/bateauJaune"));
-			pBoat.add(new Boat(EnumCouleur.VIOLET, true, false, "/images/bateau/simple/bateauViolet"));
-			pBoat.add(new Boat(EnumCouleur.VERT, true, false, "/images/bateau/simple/bateauVert"));
-			pBoat.add(new Boat(EnumCouleur.ROUGE, true, false, "/images/bateau/simple/bateauRouge"));
-			pBoat.add(new Boat(EnumCouleur.NOIR, true, false, "/images/bateau/simple/bateauNoir"));
+			pBoat.add(new Boat(EnumCouleur.BLANC, true, false, "/images/bateau/simple/bateauBlanc.png"));
+			pBoat.add(new Boat(EnumCouleur.JAUNE, true, false, "/images/bateau/simple/bateauJaune.png"));
+			pBoat.add(new Boat(EnumCouleur.VIOLET, true, false, "/images/bateau/simple/bateauViolet.png"));
+			pBoat.add(new Boat(EnumCouleur.VERT, true, false, "/images/bateau/simple/bateauVert.png"));
+			pBoat.add(new Boat(EnumCouleur.ROUGE, true, false, "/images/bateau/simple/bateauRouge.png"));
+			pBoat.add(new Boat(EnumCouleur.NOIR, true, false, "/images/bateau/simple/bateauNoir.png"));
 		}
 		
 		//carte wagon non siglé port
@@ -167,7 +167,7 @@ public class Paquet {
 			pWagon.add(new Wagon(EnumCouleur.JAUNE, false, false,"/images/wagon/wagonsJaune.png"));
 			pWagon.add(new Wagon(EnumCouleur.VIOLET, false, false,"/images/wagon/wagonsViolet.png"));
 			pWagon.add(new Wagon(EnumCouleur.VERT, false, false,"/images/wagon/wagonsVert.png"));
-			pWagon.add(new Wagon(EnumCouleur.ROUGE, false, false,"/images/wagon/wagonsRoug.png"));
+			pWagon.add(new Wagon(EnumCouleur.ROUGE, false, false,"/images/wagon/wagonsRouge.png"));
 			pWagon.add(new Wagon(EnumCouleur.NOIR, false, false,"/images/wagon/wagonsNoire.png"));
 		}
 		
@@ -179,12 +179,12 @@ public class Paquet {
 		//double bateau
 		for(i=0;i<6;i++){
 			
-			pBoat.add(new Boat(EnumCouleur.BLANC, false, true, "/images/bateau/simple/bateauBlanc"));
-			pBoat.add(new Boat(EnumCouleur.JAUNE, false, true, "/images/bateau/simple/bateauJaune"));
-			pBoat.add(new Boat(EnumCouleur.VIOLET, false, true, "/images/bateau/simple/bateauViolet"));
-			pBoat.add(new Boat(EnumCouleur.VERT, false, true, "/images/bateau/simple/bateauVert"));
-			pBoat.add(new Boat(EnumCouleur.ROUGE, false, true, "/images/bateau/simple/bateauRouge"));
-			pBoat.add(new Boat(EnumCouleur.NOIR, false, true, "/images/bateau/simple/bateauNoir"));
+			pBoat.add(new Boat(EnumCouleur.BLANC, false, true, "/images/bateau/simple/bateauBlanc.png"));
+			pBoat.add(new Boat(EnumCouleur.JAUNE, false, true, "/images/bateau/simple/bateauJaune.png"));
+			pBoat.add(new Boat(EnumCouleur.VIOLET, false, true, "/images/bateau/simple/bateauViolet.png"));
+			pBoat.add(new Boat(EnumCouleur.VERT, false, true, "/images/bateau/simple/bateauVert.png"));
+			pBoat.add(new Boat(EnumCouleur.ROUGE, false, true, "/images/bateau/simple/bateauRouge.png"));
+			pBoat.add(new Boat(EnumCouleur.NOIR, false, true, "/images/bateau/simple/bateauNoir.png"));
 		}
 		
 		//destination iténéraire
@@ -375,6 +375,8 @@ public class Paquet {
 		map.put(3, bangkok);
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 13, 9, 19, map, "/images/destination/TeheranLahoreMumbaiBangkok.png");
+		
+		dDestination.add(ite);
 		
 	}
 	
