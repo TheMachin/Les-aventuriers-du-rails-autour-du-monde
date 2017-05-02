@@ -3,16 +3,18 @@ package metier;
 import java.util.Map;
 
 import ennumeration.EnumCarte;
+import visitor.Visitable;
+import visitor.Visitor;
 
-public class Iteneraire extends Carte{
+public class Iteneraire extends Carte implements Visitable{
 
 	private int pointMax;
 	private int point;
 	private int malus;
 	private Map<Integer,Ville> iteneraire; 
 	
-	public Iteneraire(EnumCarte name) {
-		super(name);
+	public Iteneraire(EnumCarte name, String lienImage) {
+		super(name, lienImage);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,8 +25,8 @@ public class Iteneraire extends Carte{
 	 * @param malus
 	 * @param iteneraire
 	 */
-	public Iteneraire(EnumCarte name, int pointMax, int point, int malus, Map<Integer, Ville> iteneraire) {
-		super(name);
+	public Iteneraire(EnumCarte name, int pointMax, int point, int malus, Map<Integer, Ville> iteneraire, String lienImage) {
+		super(name, lienImage);
 		this.pointMax = pointMax;
 		this.point = point;
 		this.malus = malus;
@@ -59,6 +61,10 @@ public class Iteneraire extends Carte{
 		}
 	}
 
-	
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
+	}
 	
 }

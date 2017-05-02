@@ -10,4 +10,13 @@ public enum EnumCouleur {
 	private EnumCouleur(String couleur) {
 		this.couleur=couleur;
 	}
+	
+	public boolean equalsName(String otherName) {
+        // (otherName == null) check is not needed because name.equals(null) returns false 
+        return couleur.equals(otherName);
+    }
+
+    public String toString() {
+       return this.couleur;
+    }
 }

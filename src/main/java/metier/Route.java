@@ -11,6 +11,7 @@ public abstract class Route {
 	 * @param nbPion
 	 * @param couleur
 	 */
+
 	public Route(int nbPion, EnumCouleur couleur, Ville v1, Ville v2) {
 		super();
 		this.nbPion = nbPion;
@@ -24,7 +25,7 @@ public abstract class Route {
 	public EnumCouleur getCouleur() {
 		return couleur;
 	}
-	
+
 	public Ville getV1(){
 		return v1;
 	}

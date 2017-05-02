@@ -1,6 +1,9 @@
 package metier;
 
-public class Ville {
+import visitor.Visitable;
+import visitor.Visitor;
+
+public class Ville implements Visitable{
 	private String name;
 	private boolean port;
 	/**
@@ -25,5 +28,9 @@ public class Ville {
 		this.port = port;
 	}
 	
-	
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
+	}
 }
