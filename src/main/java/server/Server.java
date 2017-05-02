@@ -36,6 +36,7 @@ public class Server implements Runnable{
 	static List<Integer> noDispo = new ArrayList<Integer>();
 	static int nbClient=1;
 	
+	
 	public Server(int port,MenuController menu) {
 		super();
 		this.port=port;
@@ -46,6 +47,29 @@ public class Server implements Runnable{
 		noDispo.add(4);
 	}
 	
+	
+	
+	public PlateauController getPlateau() {
+		return plateau;
+	}
+
+
+
+	public void setPlateau(PlateauController plateau) {
+		this.plateau = plateau;
+	}
+	
+	public void setPlateauControllerAtThread(Map<Integer,MyThreadHandler> listClient, PlateauController plateau){
+		Set cles = listClient.keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next(); // tu peux typer plus finement ici
+		   listClient.get(cle).setPlateau(plateau);
+		}
+	}
+
+
+
 	public void etablirConnexionServer(int port){
 		try {
 			serverSocket = new ServerSocket(port);
@@ -123,14 +147,25 @@ public class Server implements Runnable{
 	public static class MyThreadHandler implements Runnable {
         private Socket socket;
         private MenuController menu;
+        private PlateauController plateau;
         private int no=0;
+        private boolean menuBoolean=true;
         
         MyThreadHandler(Socket socket, MenuController menu) {
             this.socket = socket;
             this.menu=menu;
         }
         
-        @Override
+        
+        
+        public void setPlateau(PlateauController plateau) {
+			this.plateau = plateau;
+			menuBoolean=false;
+		}
+
+
+
+		@Override
         public void run() {
         	
             nbClient++;
@@ -159,7 +194,12 @@ public class Server implements Runnable{
                 sendJSON(json);
                 while(true){
                 	JSONObject jsonFromClient = receiveJSON();
-                	menu.getJSONFromClient(jsonFromClient, this);
+                	if(menuBoolean){
+                		menu.getJSONFromClient(jsonFromClient, this);
+                	}else{
+                		jsonFromClient = plateau.getJSONFromClient(jsonFromClient);
+                		sendJSON(jsonFromClient);
+                	}
                 	
                 }
                 

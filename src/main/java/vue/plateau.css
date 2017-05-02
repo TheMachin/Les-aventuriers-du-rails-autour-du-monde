@@ -2,3 +2,12 @@
 	-fx-background-image: url('../../../files/les_aventuriers_du_rail_autour_du_monde_0010.jpeg');
 	-fx-background-position: 100% 100%;
 }
+
+.lblCadre{
+	-fx-border-style: solid;
+	-fx-border-width: 5px;
+}
+
+.lblNoCadre{
+	-fx-border-style: none;
+}

@@ -15,9 +15,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import main.MainMenu;
 import metier.Boat;
+import metier.Carte;
+import metier.Destination;
+import metier.Iteneraire;
 import metier.Joueur;
 import metier.RouteMartime;
 import metier.RouteTerrestre;
@@ -31,17 +35,21 @@ public class Plateau {
 	private Label lblDeckBoat;
 	
 	@FXML 
-	private Label lblDeckWagon;
+	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore;
 	
 	@FXML 
-	private Label lblDeckDestination;
+	private Label lblDeckDestination, lblSelectDestination;
 
 	@FXML 
-	private HBox HboxMain;
+	private HBox HboxMain, hboxDestination, hboxDestinationSelect;
 	
 	@FXML 
 	private HBox HboxSelect;
 
+	@FXML
+	private Pane paneDestination, panePion;
+	
+	
 	
 	private PlateauController plateauControlle = new PlateauController();
 	
@@ -51,10 +59,11 @@ public class Plateau {
 	
 	private Map<Label,Wagon> carteW = new HashMap<Label,Wagon>();
 	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
-	/**
-	 * @param plateauController 
-	 * 
-	 */
+	private Map<Label,Destination> carteD = new HashMap<Label,Destination>();
+	private Map<Label,Iteneraire> carteI = new HashMap<Label,Iteneraire>();
+	private List<Label> carteCSelect = new ArrayList<Label>();
+	private String themeUrl = getClass().getResource("plateau.css").toExternalForm();
+	
 	public Plateau(PlateauController plateauController) {
 		super();
 		this.plateauControlle=plateauController;
@@ -84,6 +93,32 @@ public class Plateau {
 	    System.out.println(this.carteB.size());
 	}
 	
+	public void setCardsDestinationForChoice(Destination destination){
+		paneDestination.toFront();
+		System.out.println("destination");
+		Label lbl = new Label();
+		lbl.getStylesheets().add(themeUrl);
+		Image image = new Image(getClass().getResourceAsStream(destination.getLienImage()));
+	    lbl.setGraphic(new ImageView(image));
+	    lbl.setOnMouseClicked(this::selectionCardDestination);
+	    carteD.put(lbl, destination);
+		hboxDestinationSelect.getChildren().add(lbl);
+		
+	}
+	
+	public void setCardsIteneraireForChoice(Iteneraire ite){
+		paneDestination.toFront();
+		System.out.println("iteneraire");
+		Label lbl = new Label();
+		lbl.getStylesheets().add(themeUrl);
+		Image image = new Image(getClass().getResourceAsStream(ite.getLienImage()));
+	    lbl.setGraphic(new ImageView(image));
+	    lbl.setOnMouseClicked(this::selectionCardDestination);
+	    carteI.put(lbl, ite);
+		hboxDestinationSelect.getChildren().add(lbl);
+		
+	}
+	
 	
 	 /**
 	  * Permet de piocher une carte bateau
@@ -92,16 +127,9 @@ public class Plateau {
 	 @FXML
 	 private void takeHideBoatCard(MouseEvent e) {
 		System.out.println("clicked boat");
-		//Appel fonction pioche dans metier
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream("/images/wagonviolet.PNG"));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCard);
-	    this.HboxMain.getChildren().add(lbl);
-	    this.carteB.put(lbl, new Boat(EnumCouleur.VIOLET, false, false, null));
-	    System.out.println(this.carteB.size());
-		
+		plateauControlle.piocheCards("bateau");		
 	 }
+	 
 	 
 	 /**
 	  * Permet de piocher une carte train
@@ -109,22 +137,14 @@ public class Plateau {
 	  */
 	 @FXML
 	 private void takeHideTrainCard(MouseEvent e) {
-		 System.out.println("clicked train");
-		//Appel fonction pioche dans metier
-	    Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream("/images/wagonviolet.PNG"));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCard);
-	    this.HboxMain.getChildren().add(lbl);
-	    this.carteW.put(lbl, new Wagon(EnumCouleur.VIOLET, false, false, null));
-	    System.out.println(this.carteW.size());
+		 plateauControlle.piocheCards("wagon");		
 	 }
 	 
 	 
 	 @FXML
 	 private void takeHideDestinationCard(MouseEvent e) {
 		//Appel fonction pioche dans metier
-		 System.out.println("clicked destination");
+		 plateauControlle.piocheCards("destination");		
 	 }
 	
 	 /**
@@ -133,7 +153,6 @@ public class Plateau {
 	  */
 	 @FXML
 	 private void selectionCard(MouseEvent e){
-		 plateauControlle.test();
 		 Label lbl = (Label) e.getSource();
 		 HboxMain.getChildren().remove(lbl);
 		 lbl.setOnMouseClicked(this::deSelectionCard);
@@ -141,14 +160,93 @@ public class Plateau {
 		 
 	 }
 	 
+	 @FXML
+	 private void selectionCardDestination(MouseEvent e){
+		 Label lbl = (Label) e.getSource();
+		 carteCSelect.add(lbl);
+		 lbl.setOnMouseClicked(this::deSelectionCardDestination);
+		 lbl.getStyleClass().clear();
+		 lbl.getStyleClass().add("lblCadre");
+	 }
+	 
+	 @FXML
+	 private void confirmeChoiceDestination(ActionEvent e){
+		 List<Iteneraire> iteSelect = new ArrayList<Iteneraire>();
+		 List<Destination> desSelect = new ArrayList<Destination>();
+		 List<Iteneraire> iteNonSelect = new ArrayList<Iteneraire>();
+		 List<Destination> desNonSelect = new ArrayList<Destination>();
+		 Map<Label,Destination> carteD2 = carteD;
+		 Map<Label,Iteneraire> carteI2 = carteI;
+		 
+		 int i=0;
+		 int j=0;
+		 for(i=0;i<carteCSelect.size();i++){
+			 if(carteD.containsKey(carteCSelect.get(i))){
+				 Destination d = carteD.get(carteCSelect.get(i));
+				 desSelect.add(d);
+				 carteD2.remove(carteCSelect.get(i));
+			 }else if(carteI.containsKey(carteCSelect.get(i))){
+				 Iteneraire ite = carteI.get(carteCSelect.get(i));
+				 iteSelect.add(ite);
+				 carteI2.remove(carteCSelect.get(i));
+			 }
+		 }
+		 for(i=0;i<carteD2.size();i++){
+			 desNonSelect.add(carteD2.get(i));
+		 }
+		 for(i=0;i<carteI2.size();i++){
+			 iteNonSelect.add(carteI2.get(i));
+		 }
+		 
+		 
+		 System.out.println("go controller "+desSelect.size()+" "+iteSelect.size());
+		 plateauControlle.takeCardsDestination(desSelect, desNonSelect, iteSelect, iteNonSelect);
+	 }
+	 
+	 public void putDestinationInMainOfPlayer(List<Destination>  listDes, List<Iteneraire> listIte){
+		 int i;
+		 Label lbl;
+		 Image image;
+		 for(i=0;i<listDes.size();i++){
+			 lbl = new Label();
+			 image = new Image(getClass().getResourceAsStream(listDes.get(i).getLienImage()));
+			 lbl.setGraphic(new ImageView(image));
+			 hboxDestination.getChildren().add(lbl);
+		 }
+		 for(i=0;i<listIte.size();i++){
+			 lbl = new Label();
+			 image = new Image(getClass().getResourceAsStream(listIte.get(i).getLienImage()));
+			 lbl.setGraphic(new ImageView(image));
+			 hboxDestination.getChildren().add(lbl);
+		 }
+		 hboxDestinationSelect.getChildren().clear();
+		 carteI.clear();
+		 carteD.clear();
+		 carteCSelect.clear();
+		 paneDestination.toBack();
+	 }
+	 
+	 public void printMsgDestination(String msg){
+		 lblSelectDestination.setText(msg);
+	 }
+	 
 	 /**
 	  * Remettre la carte dans la main du joueur à partir de la carte sélectionnée par la souris
 	  */
 	 @FXML
 	 private void deSelectionCard(MouseEvent e){
-		 
 		 Label lbl = (Label) e.getSource();
 		 deSelectionCard(lbl);
+	 }
+	 
+	 @FXML
+	 private void deSelectionCardDestination(MouseEvent e){
+		 Label lbl = (Label) e.getSource();
+		 if(carteCSelect.contains(lbl)){
+			 carteCSelect.remove(lbl);
+		 }
+		 lbl.setOnMouseClicked(this::selectionCardDestination);
+		 lbl.getStyleClass().clear();
 	 }
 	 
 	 /**
@@ -331,5 +429,68 @@ public class Plateau {
 	 
 	 public PlateauController getPlateauControlle() {
 			return plateauControlle;
-		}
+	 }
+	 
+	 public void pionChoix(){
+		 panePion.toFront();
+		 lblSelectNbBoat.setText("35");
+		 lblSelectNbWagon.setText("25");
+	 }
+	 
+	 @FXML
+	 private void addPionWagon(ActionEvent e){
+		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		 if(wagon>=0&&boat>0){
+			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
+			 lblSelectNbBoat.setText(String.valueOf(boat-1));
+		 }
+	 }
+	 
+	 @FXML
+	 private void removePionWagon(ActionEvent e){
+		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		 if(wagon>0&&boat>=0){
+			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
+			 lblSelectNbBoat.setText(String.valueOf(boat+1));
+		 }
+	 }
+	 
+	 @FXML
+	 private void addPionWBoat(ActionEvent e){
+		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		 if(wagon>0&&boat>=0){
+			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
+			 lblSelectNbBoat.setText(String.valueOf(boat+1));
+		 }
+	 }
+	 
+	 @FXML
+	 private void removePionBoat(ActionEvent e){
+		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		 if(wagon>=0&&boat>0){
+			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
+			 lblSelectNbBoat.setText(String.valueOf(boat-1));
+		 }
+	 }
+	 
+	 @FXML
+	 private void confirmPion(ActionEvent e){
+		 panePion.toBack();
+		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		 
+		 plateauControlle.setPion(wagon, boat);
+		 lblPionWagon.setText(String.valueOf(wagon));
+		 lblPionBoat.setText(String.valueOf(boat));
+		 
+	 }
+	 
+	 public void printScore(int score){
+		 lblScore.setText(String.valueOf(score));
+	 }
+
 }

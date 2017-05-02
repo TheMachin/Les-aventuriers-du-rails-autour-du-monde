@@ -1,8 +1,10 @@
 package metier;
 
 import ennumeration.EnumCarte;
+import visitor.Visitable;
+import visitor.Visitor;
 
-public class Destination extends Carte{
+public class Destination extends Carte implements Visitable{
 
 	private int point;
 	private Ville v1;
@@ -38,6 +40,16 @@ public class Destination extends Carte{
 		return v2;
 	}
 
+	@Override
+	public String toString() {
+		return "Destination [point=" + point + ", v1=" + v1 + ", v2=" + v2 + "]";
+	}
+
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
+	}
 	
 	
 }

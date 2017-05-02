@@ -3,8 +3,10 @@ package metier;
 import java.util.Map;
 
 import ennumeration.EnumCarte;
+import visitor.Visitable;
+import visitor.Visitor;
 
-public class Iteneraire extends Carte{
+public class Iteneraire extends Carte implements Visitable{
 
 	private int pointMax;
 	private int point;
@@ -59,6 +61,10 @@ public class Iteneraire extends Carte{
 		}
 	}
 
-	
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
+	}
 	
 }

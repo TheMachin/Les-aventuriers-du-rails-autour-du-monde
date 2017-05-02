@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -10,9 +11,67 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Pane fx:id="panePion" layoutX="10.0" layoutY="10.0" prefHeight="358.0" prefWidth="634.0" style="-fx-background-color: LightGray; -fx-border-color: black;" AnchorPane.leftAnchor="700.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <Label layoutX="150.0" layoutY="28.0" prefHeight="17.0" prefWidth="309.0" text="Veuillez sélectionner des pions (60 pions au total)" />
+            <Button layoutX="457.0" layoutY="300.0" mnemonicParsing="false" onAction="#confirmPion" prefHeight="25.0" prefWidth="133.0" text="Valider" />
+            <ImageView fitHeight="91.0" fitWidth="91.0" layoutX="96.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/wagon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="91.0" fitWidth="91.0" layoutX="96.0" layoutY="182.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/bateau.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lblSelectNbWagon" layoutX="304.0" layoutY="95.0" text="25">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblSelectNbBoat" layoutX="304.0" layoutY="210.0" text="35">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button layoutX="262.0" layoutY="93.0" mnemonicParsing="false" onAction="#removePionWagon" text="-">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="262.0" layoutY="208.0" mnemonicParsing="false" onAction="#removePionBoat" text="-">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="343.0" layoutY="93.0" mnemonicParsing="false" onAction="#addPionWagon" text="+">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="343.0" layoutY="208.0" mnemonicParsing="false" onAction="#addPionWBoat" text="+">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <Pane fx:id="paneDestination" prefHeight="409.0" prefWidth="860.0" style="-fx-background-color: LightGray; -fx-border-color: black;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <ScrollPane layoutX="27.0" layoutY="61.0" prefHeight="319.0" prefWidth="804.0">
+               <content>
+                  <HBox fx:id="hboxDestinationSelect" prefHeight="317.0" prefWidth="801.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: black;" />
+               </content>
+            </ScrollPane>
+            <Label fx:id="lblSelectDestination" layoutX="35.0" layoutY="26.0" text="Veuillez sélectionner au moins 1 carte destination/iténéraire" />
+            <Button layoutX="687.0" layoutY="22.0" mnemonicParsing="false" onAction="#confirmeChoiceDestination" prefHeight="25.0" prefWidth="133.0" text="Valider" />
+         </children>
+      </Pane>
       <Pane prefHeight="694.0" prefWidth="1228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <SplitPane dividerPositions="0.5862708719851577" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
@@ -85,6 +144,57 @@
                            </content>
                         </ScrollPane>
                         <Label layoutX="29.0" layoutY="14.0" text="Carte(s) sélectionnée(s)" />
+                        <ScrollPane layoutX="959.0" layoutY="41.0" prefHeight="291.0" prefWidth="618.0">
+                           <content>
+                              <HBox fx:id="hboxDestination" prefHeight="289.0" prefWidth="616.0" style="-fx-border-style: solid;" />
+                           </content>
+                        </ScrollPane>
+                        <Label layoutX="959.0" layoutY="14.0" text="Cartes destination/iténéraire" />
+                        <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="1638.0" layoutY="123.0" onMouseClicked="#takeHideBoatCard" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/bateau.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="1638.0" layoutY="201.0" onMouseClicked="#takeHideTrainCard" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/wagon.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="1638.0" layoutY="87.0" prefHeight="33.0" prefWidth="199.0" text="Pion restant : ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblPionWagon" layoutX="1744.0" layoutY="215.0" text="0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="1638.0" layoutY="285.0" onMouseClicked="#takeHideTrainCard" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/portIcone.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lblPionPort" layoutX="1744.0" layoutY="299.0" prefHeight="35.0" prefWidth="78.0" text="3">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="1631.0" layoutY="24.0" text="Score : ">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblScore" layoutX="1731.0" layoutY="24.0" prefHeight="35.0" prefWidth="97.0" text="0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblPionBoat" layoutX="1744.0" layoutY="137.0" prefHeight="35.0" prefWidth="97.0" text="0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
               </items>
             </SplitPane>

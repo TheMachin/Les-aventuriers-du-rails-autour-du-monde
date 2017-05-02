@@ -2,8 +2,10 @@ package metier;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
+import visitor.Visitable;
+import visitor.Visitor;
 
-public class Wagon extends Transport{
+public class Wagon extends Transport implements Visitable{
 
 	private boolean joker;
 	
@@ -16,6 +18,12 @@ public class Wagon extends Transport{
 	
 	public boolean isJoker(){
 		return this.joker;
+	}
+	
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
 	}
 
 }
