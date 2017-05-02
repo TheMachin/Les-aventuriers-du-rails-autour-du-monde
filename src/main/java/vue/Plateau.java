@@ -487,6 +487,7 @@ public class Plateau {
 		 lblPionWagon.setText(String.valueOf(wagon));
 		 lblPionBoat.setText(String.valueOf(boat));
 		 
+		
 	 }
 	 
 	 public void printScore(int score){

@@ -21,7 +21,6 @@ import server.Server;
 import server.Server.MyThreadHandler;
 import vue.Menu;
 import metier.PlateauJeu;
-import vue.Plateau;
 
 public class MenuController {
 
@@ -206,7 +205,7 @@ public class MenuController {
 				int no = json.getInt("id");
 				String pseudo = json.getString("pseudo");
 				
-	    		if(checkPseudoExists(pseudo)){
+	    		if(plateauJeu.checkPseudoExists(pseudo)){
 	    			System.out.println("existe");
 	    			json=new JSONObject();
 	    			json.put("error", "Le pseudo existe déjà, veuillez saisir un autre.");
@@ -229,7 +228,7 @@ public class MenuController {
 					int no = json.getInt("id");
 					String color = json.getString("color");
 					EnumCouleur colorEnum = EnumCouleur.valueOf(color);
-					if(checkColorExists(colorEnum)){
+					if(plateauJeu.checkColorExists(colorEnum)){
 						json=new JSONObject();
 		    			json.put("error", "La couleur a déjà été choisi.");
 		    			t.sendJSON(json);
@@ -293,25 +292,6 @@ public class MenuController {
 		}
 	}
 	
-	/**
-	 * Permet de vérifier si le pseudo est unique
-	 * @param pseudo : pseudo d'un joueur
-	 * @return vrai s'il est unique et faux sinon.
-	 */
-	public boolean checkPseudoExists(String pseudo){
-		Set cles = plateauJeu.getListJoueur().keySet();
-		Iterator it = cles.iterator();
-		boolean exists=false ;
-		while (it.hasNext()&&!exists){
-		   int cle = (int) it.next();
-		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
-		   if(joueur.getName().equals(pseudo)){
-			   return true;
-		   }
-		}
-		return false;
-	}	
-	
 	
 	/**
 	 * Permet de créer le pseudo d'un joueur
@@ -335,7 +315,7 @@ public class MenuController {
 				client.timer();
 			}
 		}else{
-			if(checkPseudoExists(pseudo)){
+			if(plateauJeu.checkPseudoExists(pseudo)){
 				menuView.setMsgLblPseudo("error");
 			}else{
 				plateauJeu.getListJoueur().replace(id, new Joueur(pseudo, null, 0, 0, 0,false));
@@ -344,27 +324,6 @@ public class MenuController {
 				putAllPseudoInView();
 			}
 		}
-	}
-	
-	/**
-	 * Vérifie la couleur n'a pas été déjà utilisé par un autre joueur
-	 * @param color
-	 * @return
-	 */
-	public boolean checkColorExists(EnumCouleur color){
-		Set cles = plateauJeu.getListJoueur().keySet();
-		Iterator it = cles.iterator();
-		boolean exists=false ;
-		while (it.hasNext()&&!exists){
-		   int cle = (int) it.next();
-		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
-		   if(joueur.getCouleur()!=null){
-			   if(joueur.getCouleur().equals(color)){
-				   return true;
-			   }
-		   }
-		}
-		return false;
 	}
 	
 	/**
@@ -387,7 +346,7 @@ public class MenuController {
 			client.sendJSON(json);
 			
 		}else{
-			if(checkColorExists(EnumCouleur.valueOf(color))){
+			if(plateauJeu.checkColorExists(EnumCouleur.valueOf(color))){
 				menuView.setMsgError("La couleur a déjà été sélectionné par un autre joueur.");
 			}else{
 				//Si la couleur n'a pas été utilisé, on affecte la couleur au joueur concerné et on met à jour la liste des joueurs

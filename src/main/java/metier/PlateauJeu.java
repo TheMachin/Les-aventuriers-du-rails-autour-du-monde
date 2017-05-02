@@ -5,12 +5,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import ennumeration.EnumCouleur;
 import visitor.Visitable;
 import visitor.Visitor;
 
 public class PlateauJeu implements Visitable{
 	private Paquet paquet= new Paquet();
 	private int nbMaxJoueur=5;
+	private int tour=0;
+	
 	private Map<Integer,Joueur> listJoueur=new HashMap<Integer,Joueur>();
 	
 	public PlateauJeu(int nbMaxJoueur) {
@@ -75,6 +78,46 @@ public class PlateauJeu implements Visitable{
 		return true;
 	}
 	
+	/**
+	 * Permet de vérifier si le pseudo est unique
+	 * @param pseudo : pseudo d'un joueur
+	 * @return vrai s'il est unique et faux sinon.
+	 */
+	public boolean checkPseudoExists(String pseudo){
+		Set cles = getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		boolean exists=false ;
+		while (it.hasNext()&&!exists){
+		   int cle = (int) it.next();
+		   Joueur joueur = getListJoueur().get(cle);
+		   if(joueur.getName().equals(pseudo)){
+			   return true;
+		   }
+		}
+		return false;
+	}	
+	
+	/**
+	 * Vérifie la couleur n'a pas été déjà utilisé par un autre joueur
+	 * @param color
+	 * @return
+	 */
+	public boolean checkColorExists(EnumCouleur color){
+		Set cles = getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		boolean exists=false ;
+		while (it.hasNext()&&!exists){
+		   int cle = (int) it.next();
+		   Joueur joueur = getListJoueur().get(cle);
+		   if(joueur.getCouleur()!=null){
+			   if(joueur.getCouleur().equals(color)){
+				   return true;
+			   }
+		   }
+		}
+		return false;
+	}
+	
 	public void setAllPlayerNotReady(){
 		Set cles = this.getListJoueur().keySet();
 		Iterator it = cles.iterator();
@@ -100,6 +143,17 @@ public class PlateauJeu implements Visitable{
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
 		visitor.visit(this);
+	}
+	
+	public int whoIsNext(){
+		return this.tour;
+	}
+	
+	public void endOfPlayerTurn(){
+		tour++;
+		if(tour>=listJoueur.size()){
+			tour=0;
+		}
 	}
 	
 }

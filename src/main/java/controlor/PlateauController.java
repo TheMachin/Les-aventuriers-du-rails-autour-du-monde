@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import ennumeration.EnumCarte;
+import javafx.application.Platform;
 import metier.Boat;
 import metier.Carte;
 import metier.Destination;
@@ -33,7 +34,7 @@ import server.Server.MyThreadHandler;
 import visitor.SaveJsonVisitor;
 import vue.Plateau;
 
-public class PlateauController {
+public class PlateauController extends Thread{
 
 	private Server server=null;
 	private Client client=null;
@@ -44,11 +45,11 @@ public class PlateauController {
 	
 	private boolean initGame = true;
 	private boolean tour=false;
-	private int idTour=0;
 	private int nbCartes=0;
 	private boolean carteTransport=false;
 	private boolean routePort=false;
 	private boolean carteDestination=false;
+	private boolean choixCarteDestination=false;
 	
 	
 	
@@ -375,10 +376,13 @@ public class PlateauController {
 				plateauJeu.getListJoueur().get(no).getPions().setNbWagon(wagon);
 				json = new JSONObject();
 				json.put("pion", true);
+				plateauJeu.getListJoueur().get(no).setStart(true);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}else if(json.has("finTour")){
+			endTurn();
 		}
 		
 		return json;
@@ -387,19 +391,16 @@ public class PlateauController {
 	public void piocheCards(String card){
 		if(tour){
 			choixCartes(card);
-			JSONObject json = new JSONObject();
-			try {
-				json.put("pioche", card);
-				json.put("id", id);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			if(server==null){
+				JSONObject json = new JSONObject();
 				try {
+					json.put("pioche", card);
+					json.put("id", id);
 					client.sendJSON(json);
 					waitServerMsg();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -439,6 +440,9 @@ public class PlateauController {
 						break;
 				}
 			}
+			if(checkEndOfTurn()){
+				endTurn();
+			}
 		}else{
 			// ce n'est pas votre tour
 		}
@@ -460,16 +464,85 @@ public class PlateauController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			waitStartGame();
 		}else{
 			plateauJeu.getListJoueur().get(id).getPions().setNbBoat(boat);
 			plateauJeu.getListJoueur().get(id).getPions().setNbWagon(wagon);
+			plateauJeu.getListJoueur().get(id).setStart(true);
 			
-			SaveJsonVisitor sv = new SaveJsonVisitor();
-			plateauJeu.accept(sv);
+			waitStartGame();
+			
+			/*SaveJsonVisitor sv = new SaveJsonVisitor();
+			plateauJeu.accept(sv);*/
 			
 		}
 		
+	}
+	
+	public void waitStartGame(){
+		initGame=false;
+		Platform.runLater(() -> {
+			if(server!=null){
+				while(plateauJeu.checkIfAllPlayerAreReady()==false){
+
+				}
+				
+				beginTurn();
+			}else{
+				waitServerMsg();
+			}
+        });
+		
+	}
+	
+	public void beginTurn(){
+		tour=true;
+		carteDestination=false;
+		carteTransport=false;
+		choixCarteDestination=false;
+		nbCartes=0;
+		routePort=false;
+	}
+	
+	public boolean checkEndOfTurn(){
+		if(choixCarteDestination||routePort||(carteTransport&&nbCartes>=2)){
+			tour=false;
+			return true;
+		}
+		return false;
+	}
+	
+	public void endTurn(){
+		if(server!=null){
+			plateauJeu.endOfPlayerTurn();
+			int no = plateauJeu.whoIsNext();
+			if(no==id){
+				beginTurn();
+			}
+			JSONObject json = new JSONObject();
+			try {
+				json.put("tour", no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				server.Broadcast(listClientsServer, json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			JSONObject json = new JSONObject();
+			try {
+				json.put("finTour", true);
+				client.sendJSON(json);
+			} catch (JSONException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			waitServerMsg();
+		}
 	}
 	
 	public void choixCartes(String card){
@@ -485,10 +558,9 @@ public class PlateauController {
 					carteDestination=true;
 					break;
 			}
-		}else{
-			if(carteTransport){
-				nbCartes++;
-			}
+		}
+		if(carteTransport){
+			nbCartes++;
 		}
 	}
 	
@@ -604,6 +676,10 @@ public class PlateauController {
 			}
 		}else if((destSelect.size()+iteSelectm.size())>=1){
 			traitementCartesDestination(destSelect, destNoSelect, iteSelectm, iteNoSelect);
+			choixCarteDestination=true;
+			if(checkEndOfTurn()){
+				endTurn();
+			}
 		}else{
 			plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
 		}
@@ -653,7 +729,6 @@ public class PlateauController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			initGame=false;
 		}else{
 			for(i=0;i<destNoSelect.size();i++){
 				plateauJeu.getPaquet().addDestinationDefausse(destNoSelect.get(i));
@@ -671,8 +746,9 @@ public class PlateauController {
 		
 		plateauView.putDestinationInMainOfPlayer(destSelect, iteSelectm);
 		plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
-		plateauView.pionChoix();
-		
+		if(initGame){
+			plateauView.pionChoix();
+		}
 	}
 	
 	public void waitServerMsg(){
@@ -736,6 +812,17 @@ public class PlateauController {
 				} catch (JsonSyntaxException | JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}
+			}else if(json.has("tour")){
+				int no = 0;
+				try {
+					no = json.getInt("tour");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(no==id){
+					beginTurn();
 				}
 			}
 		}
