@@ -7,8 +7,10 @@ import java.util.Random;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
+import visitor.Visitable;
+import visitor.Visitor;
 
-public class Paquet {
+public class Paquet implements Visitable{
 	private ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
 	private ArrayList<Boat> pBoat = new ArrayList<Boat>();
 	private ArrayList<Wagon> defausseWagon = new ArrayList<Wagon>();
@@ -378,6 +380,12 @@ public class Paquet {
 		
 		dDestination.add(ite);
 		
+	}
+	
+	@Override
+	public void accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		visitor.visit(this);
 	}
 	
 }

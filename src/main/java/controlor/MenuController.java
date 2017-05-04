@@ -20,6 +20,7 @@ import server.Client;
 import server.Server;
 import server.Server.MyThreadHandler;
 import vue.Menu;
+import metier.PlateauJeu;
 import vue.Plateau;
 
 public class MenuController {
@@ -28,6 +29,7 @@ public class MenuController {
 	private Server server=null;
 	private Client client=null;
 	private Map<Integer,MyThreadHandler> listClientsServer = new HashMap<Integer,MyThreadHandler>();
+	private PlateauJeu plateauJeu = new PlateauJeu(5);
 	private Map<Integer,Joueur> joueurs = new HashMap<Integer,Joueur>();
 	private int id;
 	private Thread t;
@@ -52,21 +54,24 @@ public class MenuController {
 	 * Un joueur a créé la partie, on créé un serveur
 	 */
 	public void createServer(){
-		server = new Server(7777,this);
+		server = new Server(42000,this);
 		System.out.println("Lancement");
 		t = new Thread(server);
 		t.start();
 		System.out.println("Lancé");
 		id=0;
 		joueurs.put(id, new Joueur(String.valueOf(id), null, 0, 0, 0, false));
+		plateauJeu.setListJoueur(joueurs);
 		menuView.setPanePseudo();
 		menuView.setCombobox(id);
 	}
 	
 	public void clientDeconnecter(int no){
+		joueurs = plateauJeu.getListJoueur();
 		if(joueurs.containsKey(no)){
 			joueurs.remove(no);
 			listClientsServer.remove(no);
+			plateauJeu.setListJoueur(joueurs);
 		}
 	}
 	
@@ -79,7 +84,7 @@ public class MenuController {
 		String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
 		if(matcher.find()||ip.equals(new String("localhost"))){
-			client = new Client(ip, 7777,this);
+			client = new Client(ip, 42000,this);
 			t = new Thread(client);
 			t.start();
 			if(client.connexion()){
@@ -127,7 +132,7 @@ public class MenuController {
 				
 		PlateauController plateauController =new PlateauController();
 		plateauController.setId(id);
-		plateauController.setJoueurs(joueurs);
+		plateauController.setPlateauJeu(plateauJeu);
 		plateauController.setListClientsServer(listClientsServer);
 		plateauController.setServer(server);
 		
@@ -153,7 +158,7 @@ public class MenuController {
 				
 		PlateauController plateauController = new PlateauController();
 		plateauController.setId(id);
-		plateauController.setJoueurs(joueurs);
+		plateauController.setPlateauJeu(plateauJeu);
 		plateauController.setClient(client);
 		plateauController.setPlateauView(menuView.changerPlateau(plateauController));
 		client.setPlateauController(plateauController);
@@ -167,7 +172,7 @@ public class MenuController {
 	 */
 	public void addNewPlayer(int nb, MyThreadHandler t){
 		listClientsServer.put(nb, t);
-		joueurs.put(nb, new Joueur(String.valueOf(nb), null, 0, 0, 0, false));
+		plateauJeu.getListJoueur().put(nb, new Joueur(String.valueOf(nb), null, 0, 0, 0, false));
 		menuView.setButtonStart(true);
 	}
 	
@@ -208,7 +213,7 @@ public class MenuController {
 	    			t.sendJSON(json);
 	    		}else{
 	    			System.out.println("existe pas");
-	    			joueurs.replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
+	    			plateauJeu.getListJoueur().replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
 	    			server.Broadcast(listClientsServer, json);
@@ -230,9 +235,9 @@ public class MenuController {
 		    			t.sendJSON(json);
 					}else{
 						System.out.println("existe pas");
-						Joueur joueur = joueurs.get(no);
+						Joueur joueur = plateauJeu.getListJoueur().get(no);
 						joueur.setCouleur(colorEnum);
-		    			joueurs.replace(no, joueur);
+		    			plateauJeu.getListJoueur().replace(no, joueur);
 		    			json = getInformationGame();
 		    			putAllPseudoInView();
 		    			server.Broadcast(listClientsServer, json);
@@ -248,7 +253,7 @@ public class MenuController {
 			try {
 				int no = json.getInt("id");
 				boolean selected = json.getBoolean("start");
-				Joueur joueur = joueurs.get(no);
+				Joueur joueur = plateauJeu.getListJoueur().get(no);
 				
 				if(joueur==null){
 					json=new JSONObject();
@@ -263,12 +268,12 @@ public class MenuController {
 	    			t.sendJSON(json);
 				}else{
 					joueur.setStart(selected);
-	    			joueurs.replace(no, joueur);
+	    			plateauJeu.getListJoueur().replace(no, joueur);
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
 	    			server.Broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
-	    			if(checkIfAllPLayerAreReady()){
+	    			if(plateauJeu.checkIfAllPlayerAreReady()){
 	    				menuView.setButtonStart(false);
 	    			}else{
 	    				menuView.setButtonStart(true);
@@ -289,45 +294,17 @@ public class MenuController {
 	}
 	
 	/**
-	 * Permet de vérifier si la partie peut être commencé
-	 * Pour cela, on vérifie si il y a au moins 2 joueurs
-	 * Si tous les joueurs sauf le joueur hébergeur a coché la case "Start" et a sélectionné une couleur
-	 * On vérifie si le joueur qui héberge le jeu a bien sélectionné une couleur. 
-	 * @return vrai si tous les conditions sont réunies, faux sinon.
-	 */
-	public boolean checkIfAllPLayerAreReady(){
-		if(joueurs.size()<=1){
-			return false;
-		}
-		Set cles = joueurs.keySet();
-		Iterator it = cles.iterator();
-		while (it.hasNext()){
-		   int cle = (int) it.next();
-		   Joueur joueur = joueurs.get(cle);
-		   if(cle!=0){
-			   if(joueur.isStart()==false){
-				   return false;
-			   }
-		   }
-		   if(joueur.getCouleur()==null){
-			   return false;
-		   }
-		}
-		return true;
-	}
-	
-	/**
 	 * Permet de vérifier si le pseudo est unique
 	 * @param pseudo : pseudo d'un joueur
 	 * @return vrai s'il est unique et faux sinon.
 	 */
 	public boolean checkPseudoExists(String pseudo){
-		Set cles = joueurs.keySet();
+		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
 		boolean exists=false ;
 		while (it.hasNext()&&!exists){
 		   int cle = (int) it.next();
-		   Joueur joueur = joueurs.get(cle);
+		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
 		   if(joueur.getName().equals(pseudo)){
 			   return true;
 		   }
@@ -361,7 +338,7 @@ public class MenuController {
 			if(checkPseudoExists(pseudo)){
 				menuView.setMsgLblPseudo("error");
 			}else{
-				joueurs.replace(id, new Joueur(pseudo, null, 0, 0, 0,false));
+				plateauJeu.getListJoueur().replace(id, new Joueur(pseudo, null, 0, 0, 0,false));
 				menuView.setMsgLblPseudo("success");
 				menuView.setPaneCreatGame();
 				putAllPseudoInView();
@@ -375,12 +352,12 @@ public class MenuController {
 	 * @return
 	 */
 	public boolean checkColorExists(EnumCouleur color){
-		Set cles = joueurs.keySet();
+		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
 		boolean exists=false ;
 		while (it.hasNext()&&!exists){
 		   int cle = (int) it.next();
-		   Joueur joueur = joueurs.get(cle);
+		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
 		   if(joueur.getCouleur()!=null){
 			   if(joueur.getCouleur().equals(color)){
 				   return true;
@@ -414,13 +391,13 @@ public class MenuController {
 				menuView.setMsgError("La couleur a déjà été sélectionné par un autre joueur.");
 			}else{
 				//Si la couleur n'a pas été utilisé, on affecte la couleur au joueur concerné et on met à jour la liste des joueurs
-				Joueur joueur = joueurs.get(id);
+				Joueur joueur = plateauJeu.getListJoueur().get(id);
 				joueur.setCouleur(EnumCouleur.valueOf(color));
-				joueurs.replace(id, joueur);
+				plateauJeu.getListJoueur().replace(id, joueur);
 				
 				server.Broadcast(listClientsServer, getInformationGame());
 				putAllPseudoInView();
-				if(checkIfAllPLayerAreReady()){
+				if(plateauJeu.checkIfAllPlayerAreReady()){
     				menuView.setButtonStart(false);
     			}else{
     				menuView.setButtonStart(true);
@@ -468,14 +445,14 @@ public class MenuController {
 		//permet de sérializer une classe
 		Gson gson;
         try {
-        	Set cles = joueurs.keySet();
+        	Set cles = plateauJeu.getListJoueur().keySet();
     		Iterator it = cles.iterator();
     		while (it.hasNext()){
     		   int cle = (int) it.next();
     		   gson = new Gson();
     		   listId.put(cle);
     		   //sérialization
-    		   listJoueur.put(gson.toJson(joueurs.get(cle)));
+    		   listJoueur.put(gson.toJson(plateauJeu.getListJoueur().get(cle)));
     		}
     		json.put("ids", listId);
 			json.put("joueurs", listJoueur);
@@ -519,6 +496,7 @@ public class MenuController {
 			for(i=0;i<jsonArrayI.length();i++){
 				joueurs.put(jsonArrayI.getInt(i), gson.fromJson(jsonArrayJ.get(i).toString(), Joueur.class));
 			}
+			plateauJeu.setListJoueur(joueurs);
 			putAllPseudoInView();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -530,18 +508,18 @@ public class MenuController {
 	 * Mettre à jour la vue
 	 */
 	public void putAllPseudoInView(){
-		Set cles = joueurs.keySet();
+		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
 		   int cle = (int) it.next();
-		   menuView.setTxtInTextField(cle, joueurs.get(cle).getName());
-		   if((joueurs.get(cle).getCouleur()!=null)&&(cle!=id)){
-			   menuView.setSelectedElementCombobox(cle, joueurs.get(cle).getCouleur().name());
+		   menuView.setTxtInTextField(cle, plateauJeu.getListJoueur().get(cle).getName());
+		   if((plateauJeu.getListJoueur().get(cle).getCouleur()!=null)&&(cle!=id)){
+			   menuView.setSelectedElementCombobox(cle, plateauJeu.getListJoueur().get(cle).getCouleur().name());
 		   }
 		   if(cle!=0){
-			   System.out.println("cle : "+cle+ " "+joueurs.get(cle).isStart());
+			   System.out.println("cle : "+cle+ " "+plateauJeu.getListJoueur().get(cle).isStart());
 			   if(cle==id){
-				   menuView.setSelectedCheckBox(joueurs.get(cle).isStart());
+				   menuView.setSelectedCheckBox(plateauJeu.getListJoueur().get(cle).isStart());
 			   }
 		   }
 		}

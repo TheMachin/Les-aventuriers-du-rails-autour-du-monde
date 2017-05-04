@@ -88,8 +88,6 @@ public class Client extends Thread{
     public void sendJsonAtController(JSONObject json) throws JSONException{
     	if(menuBoolean){
     		menu.getJSONFromServer(json);
-    	}else{
-    		plateau.getJSONFromServer(json);
     	}
     }
 
