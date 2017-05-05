@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.engine.execution.NamespaceAwareStore;
+
 import controlor.PlateauController;
 import ennumeration.EnumCouleur;
 import javafx.application.Platform;
@@ -118,7 +120,7 @@ public class Plateau {
 	Ville darEsSalaam = new Ville("Dar Es Salaam", true);
 	Ville djibouti = new Ville("Djibouti", false);
 	Ville lahore = new Ville("Lahore", false);
-	Ville edimburg = new Ville("Edimburg", true);
+	Ville edinburgh = new Ville("Edinburgh", true);
 	Ville luanda = new Ville("Luanda", true);
 	Ville hongkong = new Ville("Hong Kong", true);
 	Ville hamburg = new Ville("Hamburg", true);
@@ -376,95 +378,159 @@ public class Plateau {
 	}
 
 	/**
-	  * Prendre une route maritime. On vérifie si le joueur a mis assez de carte en jeu.
-	  * Si c'est le cas, la route est prise sinon les cartes retournent dans la main du joueur
-	  * @param e
-	  */
-	 @FXML
-	 private void takeRoadBoatMap(MouseEvent e){
-		 Rectangle rect = (Rectangle) e.getSource();
-		 RouteMartime r = null;
-		 switch (rect.getId())
-		 {
-		 case "vnyedin":   
-			 r = new RouteMartime(7, EnumCouleur.VIOLET, ny, edimburg);
-			 break;
-		 case "rnyedin":   
-			 r = new RouteMartime(7, EnumCouleur.ROUGE, ny, edimburg);
-			 break;
-		 case "nacb":  
-			 r = new RouteMartime(6, EnumCouleur.NOIR, anchorage, cambridgeBay);
-			 break;
-		 case "bcbr":  
-			 r = new RouteMartime(6, EnumCouleur.BLANC, cambridgeBay, reykjavik);
-			 break;
-		 case "jnyr":  
-			 r = new RouteMartime(6, EnumCouleur.JAUNE, ny, reykjavik);
-			 break;
-		 case "vmc":  
-			 r = new RouteMartime(7, EnumCouleur.VERT, miami, casablanca);
-			 break;
-		 case "bmc":  
-			 r = new RouteMartime(2, EnumCouleur.BLANC, miami, caracas);
-			 break;
-		 case "rcl":  
-			 r = new RouteMartime(7, EnumCouleur.ROUGE, caracas, lagos);
-			 break;
-		 case "grdjl":  
-			 r = new RouteMartime(6, EnumCouleur.GRIS, rio, luanda);
-			 break;
-		 case "nrdjct":  
-			 r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
-			 break;
-		 case "brdjct":  
-			 r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
-			 break;
-		 case "vbact":  
-			 r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
-			 break;
-		 case "jbact":  
-			 r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
-			 break;
-		 
-		 }
-		  
-		 
-		 int carte=0;
-		 int joker=0;
-		 
-		 List<Label> listLbl = new ArrayList<Label>();
-		 
-		 int i=0;
-		 for(i=0;i<HboxSelect.getChildren().size();i++){
-			 if(carteB.containsKey(HboxSelect.getChildren().get(i))){
-				 Boat b = carteB.get(HboxSelect.getChildren().get(i));
-				 
-				 if(b.getCouleur()==r.getCouleur()){
-					 
-					 carte++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-					 if(b.isDoubleBoat()){
-						 carte++;
-					 }
-					 
-				 }
-			 }else if(carteW.containsKey(HboxSelect.getChildren().get(i))){
-				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-				 if(c.isJoker()){
-					 joker++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }
-			 }
-		 }
-		 
-		 if((joker+carte)>=r.getNbPion()){
-			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
-			 rect.setOpacity(100);
-			 
-		 }
-		 // s'il reste des cartes en trop
-		 deSelectionAllCard(); 
-	 }
+	 * Prendre une route maritime. On vérifie si le joueur a mis assez de carte
+	 * en jeu. Si c'est le cas, la route est prise sinon les cartes retournent
+	 * dans la main du joueur
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void takeRoadBoatMap(MouseEvent e) {
+		Rectangle rect = (Rectangle) e.getSource();
+		RouteMartime r = null;
+		switch (rect.getId()) {
+		case "vnyedin":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, ny, edinburgh);
+			break;
+		case "rnyedin":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, ny, edinburgh);
+			break;
+		case "nacb":
+			r = new RouteMartime(6, EnumCouleur.NOIR, anchorage, cambridgeBay);
+			break;
+		case "bcbr":
+			r = new RouteMartime(6, EnumCouleur.BLANC, cambridgeBay, reykjavik);
+			break;
+		case "jnyr":
+			r = new RouteMartime(6, EnumCouleur.JAUNE, ny, reykjavik);
+			break;
+		case "vmc":
+			r = new RouteMartime(7, EnumCouleur.VERT, miami, casablanca);
+			break;
+		case "bmc":
+			r = new RouteMartime(2, EnumCouleur.BLANC, miami, caracas);
+			break;
+		case "rcl":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, caracas, lagos);
+			break;
+		case "grdjl":
+			r = new RouteMartime(6, EnumCouleur.GRIS, rio, luanda);
+			break;
+		case "nrdjct":
+			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
+			break;
+		case "brdjct":
+			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
+			break;
+		case "vbact":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
+			break;
+		case "jbact":
+			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
+			break;
+		case "bedinm":
+			r = new RouteMartime(1, EnumCouleur.BLANC, edinburgh, marseille);
+			break;
+		case "vedinm":
+			r = new RouteMartime(1, EnumCouleur.VERT, edinburgh, marseille);
+			break;
+		case "rma":
+			r = new RouteMartime(2, EnumCouleur.ROUGE, marseille, athina);
+			break;
+		case "vrm":
+			r = new RouteMartime(4, EnumCouleur.VERT, reykjavik, murmansk);
+			break;
+		case "rmt":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, murmansk, tiksi);
+			break;
+		case "jta1":
+		case "jta2":
+			r = new RouteMartime(8, EnumCouleur.JAUNE, tiksi, anchorage);
+			break;
+		case "ntp1":
+		case "ntp2":
+		case "ntp3":
+			r = new RouteMartime(7, EnumCouleur.NOIR, tiksi, petropavlovsk);
+			break;
+		case "vpa":
+			r = new RouteMartime(3, EnumCouleur.VIOLET, petropavlovsk, anchorage);
+			break;
+		case "gtp":
+			r = new RouteMartime(2, EnumCouleur.GRIS, tokyo, petropavlovsk);
+			break;
+		case "gjm":
+			r = new RouteMartime(2, EnumCouleur.GRIS, jakarta, manila);
+			break;
+		case "vaalq":
+			r = new RouteMartime(1, EnumCouleur.VERT, athina, alqahira);
+			break;
+		case "rdpm":
+			r = new RouteMartime(1, EnumCouleur.ROUGE, darwin, portMoresby);
+			break;
+		case "njd":
+			r = new RouteMartime(2, EnumCouleur.NOIR, jakarta, darwin);
+			break;
+		case "videsj":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, darEsSalaam, jakarta);
+			break;
+		case "vedesj":
+			r = new RouteMartime(7, EnumCouleur.VERT, darEsSalaam, jakarta);
+			break;
+		case "neh":
+			r = new RouteMartime(1, EnumCouleur.NOIR, edinburgh, hamburg);
+			break;
+		case "jeh":
+			r = new RouteMartime(1, EnumCouleur.JAUNE, edinburgh, hamburg);
+			break;
+		case "jmt":
+			r = new RouteMartime(2, EnumCouleur.JAUNE, manila, tokyo);
+			break;
+		case "gre1":
+		case "gre2":
+			r = new RouteMartime(2, EnumCouleur.GRIS, reykjavik, edinburgh);
+			break;
+		case "bbj1":
+		case "bbj2":
+			r = new RouteMartime(2, EnumCouleur.BLANC, bangkok, jakarta);
+			break;
+		}
+
+		int carte = 0;
+		int joker = 0;
+
+		List<Label> listLbl = new ArrayList<Label>();
+
+		int i = 0;
+		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+			if (carteB.containsKey(HboxSelect.getChildren().get(i))) {
+				Boat b = carteB.get(HboxSelect.getChildren().get(i));
+
+				if (b.getCouleur() == r.getCouleur()) {
+
+					carte++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+					if (b.isDoubleBoat()) {
+						carte++;
+					}
+
+				}
+			} else if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+				if (c.isJoker()) {
+					joker++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+				}
+			}
+		}
+
+		if ((joker + carte) >= r.getNbPion()) {
+			mettreCarteDansDefausse(r.getNbPion() - 1, listLbl);
+			rect.setOpacity(100);
+
+		}
+		// s'il reste des cartes en trop
+		deSelectionAllCard();
+	}
 
 	/**
 	 * Prendre une route terreste. On vérifie si le joueur a mis assez de carte
@@ -633,4 +699,4 @@ public class Plateau {
 	}
 
 }
-/*test*/
+/* test */
