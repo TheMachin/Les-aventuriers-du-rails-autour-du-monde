@@ -49,6 +49,101 @@ public class Plateau {
 	@FXML
 	private Pane paneDestination, panePion;
 	
+	// rectangles des routes maritimes
+		@FXML
+		private Rectangle vnyedin;
+		@FXML
+		private Rectangle rnyedin;
+		@FXML
+		private Rectangle nacb;
+		@FXML
+		private Rectangle bcbr;
+		@FXML
+		private Rectangle jnyr;
+		@FXML
+		private Rectangle bvt;
+		@FXML
+		private Rectangle nlat;
+		@FXML
+		private Rectangle vlat;
+		@FXML
+		private Rectangle jlah;
+		@FXML
+		private Rectangle glh;
+		@FXML
+		private Rectangle vls;
+		@FXML
+		private Rectangle nls;
+		@FXML
+		private Rectangle jvc;
+		@FXML
+		private Rectangle vvba;
+		@FXML
+		private Rectangle bmc;
+		@FXML
+		private Rectangle vmc;
+		@FXML
+		private Rectangle rcl;
+		@FXML
+		private Rectangle grdjl;
+		@FXML
+		private Rectangle nrdjct;
+		@FXML
+		private Rectangle brdjct;
+		@FXML
+		private Rectangle vbact;
+		@FXML
+		private Rectangle jbact;
+
+		// villes
+		Ville anchorage = new Ville("Anchorage", true);
+		Ville cambridgeBay = new Ville("Cambridge Bay", true);
+		Ville murmansk = new Ville("Murmansk", true);
+		Ville tiksi = new Ville("Tiksi", true);
+		Ville alqahira = new Ville("Al Qahira", true);
+		Ville portMoresby = new Ville("Port Moresby", true);
+		Ville alZahira = new Ville("Al Zahira", true);
+		Ville sydney = new Ville("Sydney", true);
+		Ville athina = new Ville("Athina", true);
+		Ville manila = new Ville("Manila", true);
+		Ville bangkok = new Ville("Bangkok", true);
+		Ville tokyo = new Ville("Tokyo", true);
+		Ville buenos = new Ville("Buenos Aires", true);
+		Ville marseille = new Ville("Marseille", true);
+		Ville capTown = new Ville("Cape Town", true);
+		Ville caracas = new Ville("Caracas", true);
+		Ville casablanca = new Ville("Casablanca", true);
+		Ville jakarta = new Ville("Jakarta", true);
+		Ville honolulu = new Ville("Honolulu", true);
+		Ville vakutsk = new Ville("Vakutsk", false);
+		Ville darEsSalaam = new Ville("Dar Es Salaam", true);
+		Ville djibouti = new Ville("Djibouti", false);
+		Ville lahore = new Ville("Lahore", false);
+		Ville edinburgh = new Ville("Edinburgh", true);
+		Ville luanda = new Ville("Luanda", true);
+		Ville hongkong = new Ville("Hong Kong", true);
+		Ville hamburg = new Ville("Hamburg", true);
+		Ville beijing = new Ville("Beijing", false);
+		Ville lagos = new Ville("Lagos", true);
+		Ville lima = new Ville("Lima", true);
+		Ville tehran = new Ville("Tehran", false);
+		Ville losAngelos = new Ville("Los Angeles", true);
+		Ville rio = new Ville("Rio De Janeiro", true);
+		Ville mexico = new Ville("Mexico", false);
+		Ville christchurch = new Ville("Christchurch", true);
+		Ville mumbai = new Ville("Mumbai", true);
+		Ville ny = new Ville("New York", true);
+		Ville miami = new Ville("Miami", true);
+		Ville moskva = new Ville("Moskva", false);
+		Ville petropavlovsk = new Ville("Petropavlovsk", true);
+		Ville toamasina = new Ville("Toamasina", true);
+		Ville novosibirsk = new Ville("Novosibirsk", true);
+		Ville darwin = new Ville("Darwin", false);
+		Ville reykjavik = new Ville("Reykjavik", true);
+		Ville perth = new Ville("Perth", true);
+		Ville valparaiso = new Ville("Valparaiso", true);
+		Ville vancouver = new Ville("Vancouver", true);
+		Ville winnipeg = new Ville("Winnipeg", false);
 	
 	
 	private PlateauController plateauControlle = new PlateauController();
@@ -203,32 +298,6 @@ public class Plateau {
 		 plateauControlle.takeCardsDestination(desSelect, desNonSelect, iteSelect, iteNonSelect);
 	 }
 	 
-	 public void putDestinationInMainOfPlayer(List<Destination>  listDes, List<Iteneraire> listIte){
-		 int i;
-		 Label lbl;
-		 Image image;
-		 for(i=0;i<listDes.size();i++){
-			 lbl = new Label();
-			 image = new Image(getClass().getResourceAsStream(listDes.get(i).getLienImage()));
-			 lbl.setGraphic(new ImageView(image));
-			 hboxDestination.getChildren().add(lbl);
-		 }
-		 for(i=0;i<listIte.size();i++){
-			 lbl = new Label();
-			 image = new Image(getClass().getResourceAsStream(listIte.get(i).getLienImage()));
-			 lbl.setGraphic(new ImageView(image));
-			 hboxDestination.getChildren().add(lbl);
-		 }
-		 hboxDestinationSelect.getChildren().clear();
-		 carteI.clear();
-		 carteD.clear();
-		 carteCSelect.clear();
-		 paneDestination.toBack();
-	 }
-	 
-	 public void printMsgDestination(String msg){
-		 lblSelectDestination.setText(msg);
-	 }
 	 
 	 /**
 	  * Remettre la carte dans la main du joueur à partir de la carte sélectionnée par la souris
@@ -249,123 +318,6 @@ public class Plateau {
 		 lbl.getStyleClass().clear();
 	 }
 	 
-	 /**
-	  * Action pour remettre la carte dans la main du joueur
-	  * @param lbl
-	  */
-	 private void deSelectionCard(Label lbl){
-		 HboxSelect.getChildren().remove(lbl);
-		 lbl.setOnMouseClicked(this::selectionCard);
-		 HboxMain.getChildren().add(lbl);
-	 }
-	 
-	 
-	 public void deSelectionAllCard(){
-		 int i =0;
-		 for(i=HboxSelect.getChildren().size()-1;i>=0;i--){
-			 deSelectionCard((Label) HboxSelect.getChildren().get(i));
-		 }
-	 }
-	 
-	 public void mettreCarteDansDefausse(int nb,List<Label> listLbl){
-		 int i;
-		 for(i=nb;i>=0;i--){
-			 Label lbl = listLbl.get(i);
-			 HboxSelect.getChildren().remove(lbl);
-			 if(carteW.containsKey(lbl)){
-				 Wagon b = carteW.get(lbl);
-			 	//mettre carte wagon dans la défausse
-				 carteW.remove(lbl);
-			 }else if(carteB.containsKey(lbl)){
-				 Boat b  = carteB.get(lbl);
-				 //mettre carte bateau dans la défausse
-				 carteB.remove(lbl);
-			 }
-		 }
-	 }
-	 
-	 /**
-	  * Prendre une route maritime. On vérifie si le joueur a mis assez de carte en jeu.
-	  * Si c'est le cas, la route est prise sinon les cartes retournent dans la main du joueur
-	  * @param e
-	  */
-	 @FXML
-	 private void takeRoadBoatMap(MouseEvent e){
-		 
-		 Rectangle rect= (Rectangle) e.getSource();
-		 RouteMartime r = new RouteMartime(7, EnumCouleur.VIOLET, null, null);
-		 int carte=0;
-		 int joker=0;
-		 
-		 List<Label> listLbl = new ArrayList<Label>();
-		 
-		 int i=0;
-		 for(i=0;i<HboxSelect.getChildren().size();i++){
-			 if(carteB.containsKey(HboxSelect.getChildren().get(i))){
-				 Boat b = carteB.get(HboxSelect.getChildren().get(i));
-				 
-				 if(b.getCouleur()==r.getCouleur()){
-					 
-					 carte++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-					 if(b.isDoubleBoat()){
-						 carte++;
-					 }
-					 
-				 }
-			 }else if(carteW.containsKey(HboxSelect.getChildren().get(i))){
-				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-				 if(c.isJoker()){
-					 joker++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }
-			 }
-		 }
-		 
-		 if((joker+carte)>=r.getNbPion()){
-			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
-			 rect.setOpacity(100);
-			 
-		 }
-		 // s'il reste des cartes en trop
-		 deSelectionAllCard(); 
-	 }
-	 
-	 /**
-	  * Prendre une route terreste. On vérifie si le joueur a mis assez de carte en jeu.
-	  * Si c'est le cas, la route est prise sinon les cartes retournent dans la main du joueur
-	  * @param e
-	  */
-	 @FXML
-	 private void takeRoadWagonMap(MouseEvent e){
-		 RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
-		 int carte=0;
-		 int joker=0;
-		 
-		 List<Label> listLbl = new ArrayList<Label>();
-		 
-		 int i=0;
-		 for(i=0;i<HboxSelect.getChildren().size();i++){
-			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
-				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-				 
-				 if(c.getCouleur()==r.getCouleur()){
-					 carte++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }else if(c.isJoker()){
-					 joker++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }
-			 }
-		 }
-		 
-		 if((joker+carte)>=r.getNbPion()){
-			 mettreCarteDansDefausse(r.getNbPion()-1,listLbl);
-			 
-		 }
-		 // s'il reste des cartes en trop
-		 deSelectionAllCard(); 
-	 }
 	 
 	 /**
 	  * Construction d'un port
@@ -418,12 +370,293 @@ public class Plateau {
 		 // s'il reste des cartes en trop
 		 deSelectionAllCard(); 
 	 }
-	 
-	 public void setMain(MainMenu main){
-		 this.main=main;
-	 }
-	
-	 public void setPlateauController(PlateauController plateauControlle) {
+
+	public void putDestinationInMainOfPlayer(List<Destination> listDes, List<Iteneraire> listIte) {
+		int i;
+		Label lbl;
+		Image image;
+		for (i = 0; i < listDes.size(); i++) {
+			lbl = new Label();
+			image = new Image(getClass().getResourceAsStream(listDes.get(i).getLienImage()));
+			lbl.setGraphic(new ImageView(image));
+			hboxDestination.getChildren().add(lbl);
+		}
+		for (i = 0; i < listIte.size(); i++) {
+			lbl = new Label();
+			image = new Image(getClass().getResourceAsStream(listIte.get(i).getLienImage()));
+			lbl.setGraphic(new ImageView(image));
+			hboxDestination.getChildren().add(lbl);
+		}
+		hboxDestinationSelect.getChildren().clear();
+		carteI.clear();
+		carteD.clear();
+		carteCSelect.clear();
+		paneDestination.toBack();
+	}
+
+	public void printMsgDestination(String msg) {
+		lblSelectDestination.setText(msg);
+	}
+
+	/**
+	 * Action pour remettre la carte dans la main du joueur
+	 * 
+	 * @param lbl
+	 */
+	private void deSelectionCard(Label lbl) {
+		HboxSelect.getChildren().remove(lbl);
+		lbl.setOnMouseClicked(this::selectionCard);
+		HboxMain.getChildren().add(lbl);
+	}
+
+	public void deSelectionAllCard() {
+		int i = 0;
+		for (i = HboxSelect.getChildren().size() - 1; i >= 0; i--) {
+			deSelectionCard((Label) HboxSelect.getChildren().get(i));
+		}
+	}
+
+	public void mettreCarteDansDefausse(int nb, List<Label> listLbl) {
+		int i;
+		for (i = nb; i >= 0; i--) {
+			Label lbl = listLbl.get(i);
+			HboxSelect.getChildren().remove(lbl);
+			if (carteW.containsKey(lbl)) {
+				Wagon b = carteW.get(lbl);
+				// mettre carte wagon dans la défausse
+				carteW.remove(lbl);
+			} else if (carteB.containsKey(lbl)) {
+				Boat b = carteB.get(lbl);
+				// mettre carte bateau dans la défausse
+				carteB.remove(lbl);
+			}
+		}
+	}
+
+	/**
+	 * Prendre une route maritime. On vérifie si le joueur a mis assez de carte
+	 * en jeu. Si c'est le cas, la route est prise sinon les cartes retournent
+	 * dans la main du joueur
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void takeRoadBoatMap(MouseEvent e) {
+		Rectangle rect = (Rectangle) e.getSource();
+		RouteMartime r = null;
+		switch (rect.getId()) {
+		case "vnyedin":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, ny, edinburgh);
+			break;
+		case "rnyedin":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, ny, edinburgh);
+			break;
+		case "nacb":
+			r = new RouteMartime(6, EnumCouleur.NOIR, anchorage, cambridgeBay);
+			break;
+		case "bcbr":
+			r = new RouteMartime(6, EnumCouleur.BLANC, cambridgeBay, reykjavik);
+			break;
+		case "jnyr":
+			r = new RouteMartime(6, EnumCouleur.JAUNE, ny, reykjavik);
+			break;
+		case "vmc":
+			r = new RouteMartime(7, EnumCouleur.VERT, miami, casablanca);
+			break;
+		case "bmc":
+			r = new RouteMartime(2, EnumCouleur.BLANC, miami, caracas);
+			break;
+		case "rcl":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, caracas, lagos);
+			break;
+		case "grdjl":
+			r = new RouteMartime(6, EnumCouleur.GRIS, rio, luanda);
+			break;
+		case "nrdjct":
+			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
+			break;
+		case "brdjct":
+			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
+			break;
+		case "vbact":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
+			break;
+		case "jbact":
+			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
+			break;
+		case "bedinm":
+			r = new RouteMartime(1, EnumCouleur.BLANC, edinburgh, marseille);
+			break;
+		case "vedinm":
+			r = new RouteMartime(1, EnumCouleur.VERT, edinburgh, marseille);
+			break;
+		case "rma":
+			r = new RouteMartime(2, EnumCouleur.ROUGE, marseille, athina);
+			break;
+		case "vrm":
+			r = new RouteMartime(4, EnumCouleur.VERT, reykjavik, murmansk);
+			break;
+		case "rmt":
+			r = new RouteMartime(7, EnumCouleur.ROUGE, murmansk, tiksi);
+			break;
+		case "jta1":
+		case "jta2":
+			r = new RouteMartime(8, EnumCouleur.JAUNE, tiksi, anchorage);
+			break;
+		case "ntp1":
+		case "ntp2":
+		case "ntp3":
+			r = new RouteMartime(7, EnumCouleur.NOIR, tiksi, petropavlovsk);
+			break;
+		case "vpa":
+			r = new RouteMartime(3, EnumCouleur.VIOLET, petropavlovsk, anchorage);
+			break;
+		case "gtp":
+			r = new RouteMartime(2, EnumCouleur.GRIS, tokyo, petropavlovsk);
+			break;
+		case "gjm":
+			r = new RouteMartime(2, EnumCouleur.GRIS, jakarta, manila);
+			break;
+		case "vaalq":
+			r = new RouteMartime(1, EnumCouleur.VERT, athina, alqahira);
+			break;
+		case "rdpm":
+			r = new RouteMartime(1, EnumCouleur.ROUGE, darwin, portMoresby);
+			break;
+		case "njd":
+			r = new RouteMartime(2, EnumCouleur.NOIR, jakarta, darwin);
+			break;
+		case "videsj":
+			r = new RouteMartime(7, EnumCouleur.VIOLET, darEsSalaam, jakarta);
+			break;
+		case "vedesj":
+			r = new RouteMartime(7, EnumCouleur.VERT, darEsSalaam, jakarta);
+			break;
+		case "neh":
+			r = new RouteMartime(1, EnumCouleur.NOIR, edinburgh, hamburg);
+			break;
+		case "jeh":
+			r = new RouteMartime(1, EnumCouleur.JAUNE, edinburgh, hamburg);
+			break;
+		case "jmt":
+			r = new RouteMartime(2, EnumCouleur.JAUNE, manila, tokyo);
+			break;
+		case "gre1":
+		case "gre2":
+			r = new RouteMartime(2, EnumCouleur.GRIS, reykjavik, edinburgh);
+			break;
+		case "bbj1":
+		case "bbj2":
+			r = new RouteMartime(2, EnumCouleur.BLANC, bangkok, jakarta);
+			break;
+		case "bdesm1":
+		case "bdesm2":
+			r = new RouteMartime(4, EnumCouleur.BLANC, darEsSalaam, mumbai);
+			break;
+		case "ghkt1":
+		case "ghkt2":
+			r = new RouteMartime(3, EnumCouleur.GRIS, hongkong, tokyo);
+			break;
+		case "bmh1":
+		case "bmh2":
+			r = new RouteMartime(5, EnumCouleur.BLANC, manila, honolulu);
+			break;
+		case "vpmh1":
+		case "vpmh2":
+			r = new RouteMartime(3, EnumCouleur.VERT, portMoresby, honolulu);
+			break;
+		case "gjp1":
+		case "gjp2":
+			r = new RouteMartime(3, EnumCouleur.GRIS, jakarta, perth);
+			break;
+		case "jpms1":
+		case "jpms2":
+			r = new RouteMartime(3, EnumCouleur.JAUNE, portMoresby, sydney);
+			break;
+		}
+
+		int carte = 0;
+		int joker = 0;
+
+		List<Label> listLbl = new ArrayList<Label>();
+
+		int i = 0;
+		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+			if (carteB.containsKey(HboxSelect.getChildren().get(i))) {
+				Boat b = carteB.get(HboxSelect.getChildren().get(i));
+
+				if (b.getCouleur() == r.getCouleur()) {
+
+					carte++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+					if (b.isDoubleBoat()) {
+						carte++;
+					}
+
+				}
+			} else if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+				if (c.isJoker()) {
+					joker++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+				}
+			}
+		}
+
+		if ((joker + carte) >= r.getNbPion()) {
+			mettreCarteDansDefausse(r.getNbPion() - 1, listLbl);
+			rect.setOpacity(100);
+
+		}
+		// s'il reste des cartes en trop
+		deSelectionAllCard();
+	}
+
+	/**
+	 * Prendre une route terreste. On vérifie si le joueur a mis assez de carte
+	 * en jeu. Si c'est le cas, la route est prise sinon les cartes retournent
+	 * dans la main du joueur
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void takeRoadWagonMap(MouseEvent e) {
+		RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
+		int carte = 0;
+		int joker = 0;
+
+		List<Label> listLbl = new ArrayList<Label>();
+
+		int i = 0;
+		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+			if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+
+				if (c.getCouleur() == r.getCouleur()) {
+					carte++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+				} else if (c.isJoker()) {
+					joker++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+				}
+			}
+		}
+
+		if ((joker + carte) >= r.getNbPion()) {
+			mettreCarteDansDefausse(r.getNbPion() - 1, listLbl);
+
+		}
+		// s'il reste des cartes en trop
+		deSelectionAllCard();
+	}
+
+
+
+	public void setMain(MainMenu main) {
+		this.main = main;
+	}
+
+	public void setPlateauController(PlateauController plateauControlle) {
 		this.plateauControlle = plateauControlle;
 	 }
 	 
