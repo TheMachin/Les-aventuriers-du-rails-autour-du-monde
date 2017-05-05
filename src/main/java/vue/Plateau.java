@@ -493,6 +493,30 @@ public class Plateau {
 		case "bbj2":
 			r = new RouteMartime(2, EnumCouleur.BLANC, bangkok, jakarta);
 			break;
+		case "bdesm1":
+		case "bdesm2":
+			r = new RouteMartime(4, EnumCouleur.BLANC, darEsSalaam, mumbai);
+			break;
+		case "ghkt1":
+		case "ghkt2":
+			r = new RouteMartime(3, EnumCouleur.GRIS, hongkong, tokyo);
+			break;
+		case "bmh1":
+		case "bmh2":
+			r = new RouteMartime(5, EnumCouleur.BLANC, manila, honolulu);
+			break;
+		case "vpmh1":
+		case "vpmh2":
+			r = new RouteMartime(3, EnumCouleur.VERT, portMoresby, honolulu);
+			break;
+		case "gjp1":
+		case "gjp2":
+			r = new RouteMartime(3, EnumCouleur.GRIS, jakarta, perth);
+			break;
+		case "jpms1":
+		case "jpms2":
+			r = new RouteMartime(3, EnumCouleur.JAUNE, portMoresby, sydney);
+			break;
 		}
 
 		int carte = 0;

@@ -73,11 +73,11 @@
       </Pane>
       <Pane prefHeight="694.0" prefWidth="1228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane dividerPositions="0.5862708719851577" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
+            <SplitPane dividerPositions="0.6790352504638218" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <SplitPane dividerPositions="0.7562630480167014" layoutX="639.0" layoutY="153.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.7745302713987474" layoutX="639.0" layoutY="153.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
@@ -103,8 +103,6 @@
                                                 <Rectangle fx:id="vbact" arcHeight="5.0" arcWidth="5.0" fill="#9927b5" height="275.0" layoutX="506.0" layoutY="516.0" onMouseClicked="#takeRoadBoatMap" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
                                                 <Rectangle fx:id="jbact" arcHeight="5.0" arcWidth="5.0" fill="#fbff00" height="275.0" layoutX="506.0" layoutY="532.0" onMouseClicked="#takeRoadBoatMap" rotate="90.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
                                        			<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="280.0" layoutX="414.0" layoutY="67.0" rotate="73.5" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#911fff" height="156.0" layoutX="277.0" layoutY="505.0" rotate="-72.9" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-                                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff2121" height="156.0" layoutX="269.0" layoutY="526.0" rotate="-71.6" stroke="BLACK" strokeType="INSIDE" width="16.0" />
                                                 <Rectangle fx:id="bedinm" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="42.0" layoutX="578.0" layoutY="186.0" onMouseClicked="#takeRoadBoatMap" rotate="-20.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
                                                 <Rectangle fx:id="vedinm" arcHeight="5.0" arcWidth="5.0" fill="#1ebc38" height="42.0" layoutX="591.0" layoutY="176.0" onMouseClicked="#takeRoadBoatMap" rotate="-20.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
                                                 <Rectangle fx:id="rma" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="73.0" layoutX="639.0" layoutY="224.0" onMouseClicked="#takeRoadBoatMap" rotate="-74.1" stroke="BLACK" strokeType="INSIDE" width="26.0" />
@@ -130,6 +128,19 @@
                                                 <Rectangle fx:id="gre2" arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="17.0" layoutX="561.0" layoutY="124.0" onMouseClicked="#takeRoadBoatMap" rotate="87.6" stroke="BLACK" strokeType="INSIDE" width="41.0" />
                                                 <Rectangle fx:id="bbj1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="43.0" layoutX="1057.0" layoutY="411.0" onMouseClicked="#takeRoadBoatMap" rotate="9.2" stroke="BLACK" strokeType="INSIDE" width="20.0" />
                                                 <Rectangle fx:id="bbj2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="42.0" layoutX="1064.0" layoutY="446.0" onMouseClicked="#takeRoadBoatMap" rotate="-67.2" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                                                <Rectangle fx:id="bdesm1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="17.0" layoutX="805.0" layoutY="459.0" onMouseClicked="#takeRoadBoatMap" rotate="-11.9" stroke="BLACK" strokeType="INSIDE" width="91.0" />
+                                                <Rectangle fx:id="bdesm2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="75.0" layoutX="901.0" layoutY="387.0" onMouseClicked="#takeRoadBoatMap" rotate="29.1" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                                                <Rectangle fx:id="ghkt1" arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="91.0" layoutX="1145.0" layoutY="255.0" onMouseClicked="#takeRoadBoatMap" rotate="9.9" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                                                <Rectangle fx:id="ghkt2" arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="17.0" layoutX="1169.0" layoutY="250.0" onMouseClicked="#takeRoadBoatMap" rotate="21.8" stroke="BLACK" strokeType="INSIDE" width="51.0" />
+                                                <Rectangle fx:id="bmh1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="24.0" layoutX="1191.0" layoutY="410.0" onMouseClicked="#takeRoadBoatMap" rotate="8.5" stroke="BLACK" strokeType="INSIDE" width="123.0" />
+                                                <Rectangle fx:id="bmh2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="24.0" layoutX="1317.0" layoutY="406.0" onMouseClicked="#takeRoadBoatMap" rotate="-20.2" stroke="BLACK" strokeType="INSIDE" width="70.0" />
+                                                <Rectangle fx:id="vpmh1" arcHeight="5.0" arcWidth="5.0" fill="#1ebc38" height="25.0" layoutX="1313.0" layoutY="468.0" onMouseClicked="#takeRoadBoatMap" rotate="-27.9" stroke="BLACK" strokeType="INSIDE" width="78.0" />
+                                                <Rectangle fx:id="vpmh2" arcHeight="5.0" arcWidth="5.0" fill="#1ebc38" height="47.0" layoutX="1382.0" layoutY="409.0" onMouseClicked="#takeRoadBoatMap" rotate="11.3" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                                                <Rectangle fx:id="vhkm" arcHeight="5.0" arcWidth="5.0" fill="#911fff" height="17.0" layoutX="1125.0" layoutY="370.0" rotate="42.6" stroke="BLACK" strokeType="INSIDE" width="43.0" />
+                                                <Rectangle fx:id="gjp1" arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="74.0" layoutX="1083.0" layoutY="507.0" onMouseClicked="#takeRoadBoatMap" rotate="4.1" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                                                <Rectangle fx:id="gjp2" arcHeight="5.0" arcWidth="5.0" fill="#bfbfbf" height="49.0" layoutX="1111.0" layoutY="574.0" onMouseClicked="#takeRoadBoatMap" rotate="128.4" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+                                                <Rectangle fx:id="jpms1" arcHeight="5.0" arcWidth="5.0" fill="#edff21" height="70.0" layoutX="1300.0" layoutY="511.0" onMouseClicked="#takeRoadBoatMap" rotate="-10.0" stroke="BLACK" strokeType="INSIDE" width="26.0" />
+                                                <Rectangle fx:id="jpms2" arcHeight="5.0" arcWidth="5.0" fill="#edff21" height="60.0" layoutX="1287.0" layoutY="574.0" onMouseClicked="#takeRoadBoatMap" rotate="36.9" stroke="BLACK" strokeType="INSIDE" width="20.0" />
                                              </children>
                                           </AnchorPane>
                                       </content>
