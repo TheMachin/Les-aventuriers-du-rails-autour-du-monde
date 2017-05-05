@@ -11,8 +11,10 @@ import visitor.Visitor;
 
 public class PlateauJeu implements Visitable{
 	private Paquet paquet= new Paquet();
-	private int nbMaxJoueur=5;
+	private int nbMaxJoueur;
 	private int tour=0;
+	private boolean endGame=false;
+	private int tourRestant=3;
 	
 	private Map<Integer,Joueur> listJoueur=new HashMap<Integer,Joueur>();
 	
@@ -37,6 +39,12 @@ public class PlateauJeu implements Visitable{
 		return listJoueur;
 	}
 
+	/**
+	 * Ajoute si cela ne dépasse pas le nombre maximale de joueur
+	 * @param joueur
+	 * @param id
+	 * @return
+	 */
 	public boolean addJoueur(Joueur joueur, int id) {
 		if(listJoueur.containsValue(joueur)||listJoueur.containsKey(id)){
 			return false;
@@ -118,6 +126,9 @@ public class PlateauJeu implements Visitable{
 		return false;
 	}
 	
+	/**
+	 * Changer l'état start à false à tous les joueurs
+	 */
 	public void setAllPlayerNotReady(){
 		Set cles = this.getListJoueur().keySet();
 		Iterator it = cles.iterator();
@@ -131,6 +142,11 @@ public class PlateauJeu implements Visitable{
 		this.listJoueur = listJoueur;
 	}
 
+	/**
+	 * Récupère objet joueur à partir d'un numéro
+	 * @param id du joueur
+	 * @return objet joueur ou null s'il n'existe pas
+	 */
 	public Joueur getJoueur(int id){
 		if(listJoueur.containsKey(id)){
 			return listJoueur.get(id);
@@ -145,15 +161,88 @@ public class PlateauJeu implements Visitable{
 		visitor.visit(this);
 	}
 	
+	/**
+	 * Indique le prochain joueur
+	 * @return id du joueur 
+	 */
 	public int whoIsNext(){
 		return this.tour;
 	}
 	
 	public void endOfPlayerTurn(){
 		tour++;
+		if(!getJoueur(tour).isStart()){
+			tour++;
+		}
 		if(tour>=listJoueur.size()){
 			tour=0;
 		}
+	}
+	
+	/**
+	 * Vérifier si le jeu va être terminé dans les deux tours
+	 * @return
+	 */
+	public boolean checkIfGameWillBeEnd(){
+		Set cles = this.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next();
+		   this.getJoueur(cle).setStart(false);
+		   if(getJoueur(cle).getPions().countPion()<=6){
+			   if(!endGame){
+				   //si il reste moins de 6 pions, la partie va se terminer quand tous les joueurs auront joué 2 tours chacun
+				   tourRestant=(getNbPlayerActif()*2)+1;
+			   }
+			   tourRestant--;
+			   return true;
+		   }
+		}
+		return false;
+	}
+	
+	/**
+	 * Indique si le jeu est fini
+	 * @return boolean
+	 */
+	public boolean endGame(){
+		if(tourRestant<=0){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Compte le nombre de joueur actif et pret à jouer
+	 * @return
+	 */
+	public int getNbPlayerActif(){
+		int nb=0;
+		Set cles = this.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next();
+		   this.getJoueur(cle).setStart(false);
+		   if(getJoueur(cle).isStart()){
+			   nb++;
+		   }
+		}
+		return nb;
+	}
+	
+	/**
+	 * Vérifie si il reste plus qu'un joueur dans la partie
+	 * @return
+	 */
+	public boolean ifAlone(){
+		
+		if(getListJoueur().size()<=1){
+			return true;
+		}
+		if(getNbPlayerActif()<=1){
+			return true;
+		}
+		return false;
 	}
 	
 }

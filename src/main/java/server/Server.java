@@ -28,14 +28,14 @@ public class Server implements Runnable{
 	private ServerSocket serverSocket;
 	private int port;
 	private String ip;
-	private Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
+	static Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
 	private MenuController menu;
 	private PlateauController plateau;
 	
 	int nbClientMax=5;
 	static List<Integer> noDispo = new ArrayList<Integer>();
 	static int nbClient=1;
-	
+	static boolean menuBoolean=true;
 	
 	public Server(int port,MenuController menu) {
 		super();
@@ -57,6 +57,7 @@ public class Server implements Runnable{
 
 	public void setPlateau(PlateauController plateau) {
 		this.plateau = plateau;
+		menuBoolean=false;
 	}
 	
 	public void setPlateauControllerAtThread(Map<Integer,MyThreadHandler> listClient, PlateauController plateau){
@@ -81,6 +82,15 @@ public class Server implements Runnable{
 		}
 	}
 	
+	public void closeServer(){
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void getIpAdress(){
 		InetAddress ipAddr = null;
 		try {
@@ -92,10 +102,16 @@ public class Server implements Runnable{
         System.out.println(ipAddr.getHostAddress());
 	}
 	
-	public void accept() throws IOException{
+	public void accept(){
 		
-		while(true){
-			Socket socket = serverSocket.accept();
+		while(menuBoolean){
+			Socket socket = null;
+			try {
+				socket = serverSocket.accept();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			MyThreadHandler r = new MyThreadHandler(socket,menu);
 			Thread t=new Thread(r);
 			System.out.println("lancement");
@@ -149,7 +165,7 @@ public class Server implements Runnable{
         private MenuController menu;
         private PlateauController plateau;
         private int no=0;
-        private boolean menuBoolean=true;
+        
         
         MyThreadHandler(Socket socket, MenuController menu) {
             this.socket = socket;
@@ -218,8 +234,14 @@ public class Server implements Runnable{
         	System.out.println("socket fermé");
         	if(no!=0){
         		System.out.println(noDispo.toString());
-        		menu.clientDeconnecter(no);
+        		if(menuBoolean){
+        			menu.clientDeconnecter(no);
+        		}else{
+        			plateau.clientDeconnecter(no);
+        		}
+        		
         		noDispo.add(no);
+        		threads.remove(no);
         		System.out.println(noDispo.toString());
         	}
             socket.close();

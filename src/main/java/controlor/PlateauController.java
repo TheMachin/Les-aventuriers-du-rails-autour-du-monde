@@ -177,6 +177,17 @@ public class PlateauController extends Thread{
 	}
 	
 	
+	public void clientDeconnecter(int no){
+		if(server!=null){
+			plateauJeu.getJoueur(no).setStart(false);
+			if(plateauJeu.getNbPlayerActif()<=1){
+				server.closeServer();
+			}
+		}else{
+			client.deconnection();
+		}
+	}
+	
 	/**
 	 * On appelle cette fonction quand le serveur reçoit les paquets du client
 	 * @param json
@@ -232,7 +243,7 @@ public class PlateauController extends Thread{
 						json.put("error", "Erreur de traitement");
 						break;
 				}
-				
+				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -377,6 +388,9 @@ public class PlateauController extends Thread{
 				json = new JSONObject();
 				json.put("pion", true);
 				plateauJeu.getListJoueur().get(no).setStart(true);
+				if(plateauJeu.checkIfAllPlayerAreReady()){
+					this.beginTurn();
+				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -440,7 +454,9 @@ public class PlateauController extends Thread{
 						break;
 				}
 			}
+			System.out.println("choix cartes end");
 			if(checkEndOfTurn()){
+				System.out.println("fin tour");
 				endTurn();
 			}
 		}else{
@@ -481,17 +497,11 @@ public class PlateauController extends Thread{
 	
 	public void waitStartGame(){
 		initGame=false;
-		Platform.runLater(() -> {
-			if(server!=null){
-				while(plateauJeu.checkIfAllPlayerAreReady()==false){
-
-				}
-				
-				beginTurn();
-			}else{
-				waitServerMsg();
-			}
-        });
+		if(server!=null){
+			
+		}else{
+			client.timer();
+		}
 		
 	}
 	
@@ -537,11 +547,12 @@ public class PlateauController extends Thread{
 			try {
 				json.put("finTour", true);
 				client.sendJSON(json);
+				
 			} catch (JSONException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			waitServerMsg();
+			client.timer();
 		}
 	}
 	
@@ -556,12 +567,14 @@ public class PlateauController extends Thread{
 					break;
 				case "destination":
 					carteDestination=true;
+					System.out.println("destinationChoix");
 					break;
 			}
 		}
 		if(carteTransport){
 			nbCartes++;
 		}
+		System.out.println(nbCartes);
 	}
 	
 	/**
@@ -666,7 +679,6 @@ public class PlateauController extends Thread{
 	}
 	
 	public void takeCardsDestination(List<Destination> destSelect, List<Destination> destNoSelect, List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect){
-		System.out.println("here");
 		if(initGame){
 			if((destSelect.size()+iteSelectm.size())>=3){
 				traitementCartesDestination(destSelect, destNoSelect, iteSelectm, iteNoSelect);
@@ -751,6 +763,24 @@ public class PlateauController extends Thread{
 		}
 	}
 	
+	public void getJsonFromServer(JSONObject json){
+		if(json.has("tour")){
+			int no = 0;
+			try {
+				no = json.getInt("tour");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(no==id){
+				beginTurn();
+				client.setTurn(true);
+			}else{
+				client.setTurn(false);
+			}
+		}
+	}
+	
 	public void waitServerMsg(){
 		JSONObject json=null;
 		JSONArray jsonA = null;
@@ -799,6 +829,7 @@ public class PlateauController extends Thread{
 				try {
 					if(json.has("destination")){
 						jsonA = json.getJSONArray("destination");
+						System.out.println("destinationRecuCarte");
 						for(i=0;i<jsonA.length();i++){
 							plateauView.setCardsDestinationForChoice(gson.fromJson(jsonA.get(i).toString(), Destination.class));
 						}
@@ -812,17 +843,6 @@ public class PlateauController extends Thread{
 				} catch (JsonSyntaxException | JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-			}else if(json.has("tour")){
-				int no = 0;
-				try {
-					no = json.getInt("tour");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(no==id){
-					beginTurn();
 				}
 			}
 		}

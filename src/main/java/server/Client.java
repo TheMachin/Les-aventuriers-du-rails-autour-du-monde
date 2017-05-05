@@ -26,6 +26,7 @@ public class Client extends Thread{
     private Timer t;
     private TimerTask tt;
     private boolean menuBoolean;
+    private boolean turn=false;
 	
     
     public Client(String ip, int port, MenuController menu) {
@@ -36,11 +37,6 @@ public class Client extends Thread{
 		this.menuBoolean=true;
 	}
     
-    public void setPlateauController(PlateauController plateau){
-    	menuBoolean=false;
-    	this.plateau=plateau;
-    }
-    
     public boolean connexion(){
     	try {
 			socket = new Socket(ip, port);
@@ -50,6 +46,31 @@ public class Client extends Thread{
 			e.printStackTrace();
 			return false;
 		}
+    }
+    
+    public void deconnection(){
+    	try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public void setMenuBoolean(boolean menuBoolean) {
+		this.menuBoolean = menuBoolean;
+	}
+    
+    
+	public void setTurn(boolean turn) {
+		this.turn = turn;
+	}
+
+
+
+	public void setPlateauController(PlateauController plateau){
+    	menuBoolean=false;
+    	this.plateau=plateau;
     }
     
     public synchronized JSONObject receiveJSON() throws IOException {
@@ -88,31 +109,18 @@ public class Client extends Thread{
     public void sendJsonAtController(JSONObject json) throws JSONException{
     	if(menuBoolean){
     		menu.getJSONFromServer(json);
+    	}else{
+    		plateau.getJsonFromServer(json);
+    		if(turn){
+    			cancelTimer();
+    		}
     	}
-    }
-
-    public void waitTimer(){
-    	synchronized (t) {
-    		try {
-				t.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-    }
-    
-    public void notifyTimer(){
-    	t.notify();
     }
     
     public void cancelTimer(){
     	t.cancel();
-    	System.out.println("stop");
     	tt.cancel();
-    	System.out.println("stop");
     	t.cancel();
-    	System.out.println("stop");
     	t=null;
     }
     

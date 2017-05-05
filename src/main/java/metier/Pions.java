@@ -144,6 +144,10 @@ public class Pions implements Visitable{
 		return false;
 	}
 	
+	public int countPion(){
+		return this.nbBoat+this.nbWagon;
+	}
+	
 	@Override
 	public void accept(Visitor visitor) {
 		// TODO Auto-generated method stub
