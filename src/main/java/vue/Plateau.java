@@ -54,53 +54,8 @@ public class Plateau {
 	@FXML
 	private Pane paneDestination, panePion;
 	
-	// rectangles des routes maritimes
-		@FXML
-		private Rectangle vnyedin;
-		@FXML
-		private Rectangle rnyedin;
-		@FXML
-		private Rectangle nacb;
-		@FXML
-		private Rectangle bcbr;
-		@FXML
-		private Rectangle jnyr;
-		@FXML
-		private Rectangle bvt;
-		@FXML
-		private Rectangle nlat;
-		@FXML
-		private Rectangle vlat;
-		@FXML
-		private Rectangle jlah;
-		@FXML
-		private Rectangle glh;
-		@FXML
-		private Rectangle vls;
-		@FXML
-		private Rectangle nls;
-		@FXML
-		private Rectangle jvc;
-		@FXML
-		private Rectangle vvba;
-		@FXML
-		private Rectangle bmc;
-		@FXML
-		private Rectangle vmc;
-		@FXML
-		private Rectangle rcl;
-		@FXML
-		private Rectangle grdjl;
-		@FXML
-		private Rectangle nrdjct;
-		@FXML
-		private Rectangle brdjct;
-		@FXML
-		private Rectangle vbact;
-		@FXML
-		private Rectangle jbact;
 
-		// villes
+	// villes
 		Ville anchorage = new Ville("Anchorage", true);
 		Ville cambridgeBay = new Ville("Cambridge Bay", true);
 		Ville murmansk = new Ville("Murmansk", true);
@@ -115,7 +70,7 @@ public class Plateau {
 		Ville tokyo = new Ville("Tokyo", true);
 		Ville buenos = new Ville("Buenos Aires", true);
 		Ville marseille = new Ville("Marseille", true);
-		Ville capTown = new Ville("Cape Town", true);
+		Ville capeTown = new Ville("Cape Town", true);
 		Ville caracas = new Ville("Caracas", true);
 		Ville casablanca = new Ville("Casablanca", true);
 		Ville jakarta = new Ville("Jakarta", true);
@@ -132,7 +87,7 @@ public class Plateau {
 		Ville lagos = new Ville("Lagos", true);
 		Ville lima = new Ville("Lima", true);
 		Ville tehran = new Ville("Tehran", false);
-		Ville losAngelos = new Ville("Los Angeles", true);
+		Ville losAngeles = new Ville("Los Angeles", true);
 		Ville rio = new Ville("Rio De Janeiro", true);
 		Ville mexico = new Ville("Mexico", false);
 		Ville christchurch = new Ville("Christchurch", true);
@@ -151,6 +106,7 @@ public class Plateau {
 		Ville winnipeg = new Ville("Winnipeg", false);
 	
 	
+
 	private PlateauController plateauControlle = new PlateauController();
 	
 
@@ -325,59 +281,6 @@ public class Plateau {
 		 lbl.setOnMouseClicked(this::selectionCardDestination);
 		 lbl.getStyleClass().clear();
 	 }
-	 
-	 
-	 /**
-	  * Construction d'un port
-	  * Il faut 2 cartes bateau et 2 cartes wagon avec le sigle port
-	  * Une ou plusieurs cartes joker peuvent remplacer une carte bateau ou wagon (ou plusieurs)
-	  * @param e
-	  */
-	 @FXML
-	 private void buildPort(MouseEvent e){
-		 Ville v = new Ville("Marseille", true);
-		 int carteBoat=0;
-		 int carteWagon=0;
-		 int jokerBoat=0;
-		 int jokerWagon=0;
-		 
-		 List<Label> listLbl = new ArrayList<Label>();
-		 
-		 int i=0;
-		 for(i=0;i<HboxSelect.getChildren().size();i++){
-			 if(carteW.containsKey(HboxSelect.getChildren().get(i))){
-				 Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-				 
-				 if(c.isPort()){
-					 
-					 carteWagon++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }else if(c.isJoker()){
-					 jokerWagon++;
-					 listLbl.add((Label) HboxSelect.getChildren().get(i));
-				 }
-			 }else if(carteB.containsKey(HboxSelect.getChildren().get(i))){
-				 	Boat b = carteB.get(HboxSelect.getChildren().get(i));
-				 
-				 	/**
-				 	 * Pas de double bateau pour construire un port
-				 	 * La carte doit être siglé port
-				 	 */
-				 	if(!b.isDoubleBoat()&&b.isPort()){
-				 		carteBoat++;
-				 		listLbl.add((Label) HboxSelect.getChildren().get(i));
-					 }
-				 	
-			 }
-		 }
-		 
-		 if((carteBoat+carteWagon+jokerWagon+jokerBoat>=4)&&(carteWagon<=2)&&(carteBoat<=2)&&(jokerWagon+jokerBoat<=4)){
-		 	mettreCarteDansDefausse(4,listLbl);
-			 
-		 }
-		 // s'il reste des cartes en trop
-		 deSelectionAllCard(); 
-	 }
 
 	public void putDestinationInMainOfPlayer(List<Destination> listDes, List<Iteneraire> listIte) {
 		int i;
@@ -502,19 +405,19 @@ public class Plateau {
 			listFxId.add("grdjl");
 			break;
 		case "nrdjct":
-			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
+			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capeTown);
 			listFxId.add("nrdjct");
 			break;
 		case "brdjct":
-			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
+			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capeTown);
 			listFxId.add("brdjct");
 			break;
 		case "vbact":
-			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
+			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capeTown);
 			listFxId.add("vbact");
 			break;
 		case "jbact":
-			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
+			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capeTown);
 			listFxId.add("jbact");
 			break;
 		case "bedinm":
@@ -644,6 +547,124 @@ public class Plateau {
 			listFxId.add("jpms1");
 			listFxId.add("jpms2");
 			break;
+		case "bsc":
+			r = new RouteMartime(1, EnumCouleur.BLANC, sydney, christchurch);
+			listFxId.add("bsc");
+			break;
+		case "rsc":
+			r = new RouteMartime(1, EnumCouleur.ROUGE, sydney, christchurch);
+			listFxId.add("rsc");
+			break;
+		case "rbm1":
+		case "rbm2":
+			r = new RouteMartime(2, EnumCouleur.ROUGE, bangkok, manila);
+			listFxId.add("rbm1");
+			listFxId.add("rbm2");
+			break;
+		case "jdest":
+			r = new RouteMartime(1, EnumCouleur.JAUNE, darEsSalaam, toamasina);
+			listFxId.add("jdest");
+			break;
+		case "gctt":
+			r = new RouteMartime(3, EnumCouleur.GRIS, capeTown, toamasina);
+			listFxId.add("gctt");
+			break;
+		case "vvba1":
+		case "vvba2":
+		case "vvba3":
+			r = new RouteMartime(3, EnumCouleur.VERT, valparaiso, buenos);
+			listFxId.add("vvba1");
+			listFxId.add("vvba2");
+			listFxId.add("vvba3");
+			break;
+		case "rctn":
+			r = new RouteMartime(5, EnumCouleur.ROUGE, capeTown, null);
+			listFxId.add("rctn");
+			break;
+		case "vctn":
+			r = new RouteMartime(5, EnumCouleur.VERT, capeTown, null);
+			listFxId.add("vctn");
+			break;
+		case "bnp":
+			r = new RouteMartime(5, EnumCouleur.BLANC, null, perth);
+			listFxId.add("bnp");
+			break;
+		case "vnp":
+			r = new RouteMartime(5, EnumCouleur.VIOLET, null, perth);
+			listFxId.add("vnp");
+			break;
+		case "rth1":
+		case "rth2":
+		case "rth3":
+			r = new RouteMartime(5, EnumCouleur.ROUGE, tokyo, honolulu);
+			listFxId.add("rth1");
+			listFxId.add("rth2");
+			listFxId.add("rth3");
+			break;
+		case "jcv1":
+		case "jcv2":
+			r = new RouteMartime(7, EnumCouleur.JAUNE, christchurch, valparaiso);
+			listFxId.add("jcv1");
+			listFxId.add("jcv2");
+			break;
+		case "vsl1":
+		case "vsl2":
+			r = new RouteMartime(8, EnumCouleur.VIOLET, sydney, lima);
+			listFxId.add("vsl2");
+			listFxId.add("vsl2");
+			break;
+		case "nsl1":
+		case "nsl2":
+			r = new RouteMartime(8, EnumCouleur.NOIR, sydney, lima);
+			listFxId.add("nsl2");
+			listFxId.add("nsl2");
+			break;
+		case "ghl":
+			r = new RouteMartime(6, EnumCouleur.GRIS, honolulu, lima);
+			listFxId.add("ghl");
+			break;
+		case "jhla1":
+		case "jhla2":
+			r = new RouteMartime(3, EnumCouleur.JAUNE, honolulu, losAngeles);
+			listFxId.add("jhla1");
+			listFxId.add("jhla2");
+			break;
+		case "vtla1":
+		case "vtla2":
+		case "vtla3":
+		case "vtla4":
+		case "vtla5":
+		case "vtla6":
+			r = new RouteMartime(7, EnumCouleur.VERT, tokyo, losAngeles);
+			listFxId.add("vtla1");
+			listFxId.add("vtla2");
+			listFxId.add("vtla3");
+			listFxId.add("vtla4");
+			listFxId.add("vtla5");
+			listFxId.add("vtla6");
+			break;
+		case "ntla1":
+		case "ntla2":
+		case "ntla3":
+		case "ntla4":
+		case "ntla5":
+		case "ntla6":
+			r = new RouteMartime(7, EnumCouleur.NOIR, tokyo, losAngeles);
+			listFxId.add("ntla1");
+			listFxId.add("ntla2");
+			listFxId.add("ntla3");
+			listFxId.add("ntla4");
+			listFxId.add("ntla5");
+			listFxId.add("ntla6");
+			break;
+		case "btv1":
+		case "btv2":
+		case "btv3":
+			r = new RouteMartime(6, EnumCouleur.BLANC, tokyo, vancouver);
+			listFxId.add("btv1");
+			listFxId.add("btv2");
+			listFxId.add("btv3");
+			break;
 		}
 
 		
@@ -689,8 +710,6 @@ public class Plateau {
 				System.out.println("route prise");
 				mettreCarteDansDefausse(r.getNbPion(), listLbl);
 			}
-			
-			//rect.setOpacity(100);
 
 		}
 		// s'il reste des cartes en trop
@@ -706,9 +725,194 @@ public class Plateau {
 	 */
 	@FXML
 	private void takeRoadWagonMap(MouseEvent e) {
-		RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
+		Rectangle rect = (Rectangle) e.getSource();
+		List<String> listFxId = new ArrayList<String>();
+		RouteTerrestre r = null;
+		//RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
 		int carte = 0;
 		int joker = 0;
+
+		switch (rect.getId()) {
+			case "jvw":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, vancouver, winnipeg);
+				listFxId.add("jvw");
+				break;
+			case "vwny":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, winnipeg, ny);
+				listFxId.add("vwny");
+				break;
+			case "rvla":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, vancouver, losAngeles);
+				listFxId.add("rvla");
+				break;
+			case "vvla":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, vancouver, losAngeles);
+				listFxId.add("vvla");
+				break;
+			case "glaw":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, losAngeles, winnipeg);
+				listFxId.add("glaw");
+				break;
+			case "rpd":
+				r = new RouteTerrestre(2, EnumCouleur.ROUGE, perth, darwin);
+				listFxId.add("rpd");
+				break;
+			case "vds":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, darwin, sydney);
+				listFxId.add("vds");
+				break;
+			case "bps":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, perth, sydney);
+				listFxId.add("bps");
+				break;
+			case "jps":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, perth, sydney);
+				listFxId.add("jps");
+				break;
+			case "blam":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, losAngeles, mexico);
+				listFxId.add("blam");
+				break;
+			case "jlam":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, losAngeles, mexico);
+				listFxId.add("jlam");
+				break;
+			case "vlany":
+				r = new RouteTerrestre(4, EnumCouleur.VIOLET, losAngeles, ny);
+				listFxId.add("vlany");
+				break;
+			case "nlany":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, losAngeles, ny);
+				listFxId.add("nlany");
+				break;
+			case "vimc":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, mexico, caracas);
+				listFxId.add("vimc");
+				break;
+			case "rmc":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mexico, caracas);
+				listFxId.add("rmc");
+				break;
+			case "bmny1":
+			case "bmny2":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, miami, ny);
+				listFxId.add("bmny1");
+				listFxId.add("bmny2");
+				break;
+			case "jlc":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, lima, caracas);
+				listFxId.add("jlc");
+				break;
+			case "blc":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, lima, caracas);
+				listFxId.add("blc");
+				break;
+			case "vcrdj1":
+			case "vcrdj2":
+			case "vcrdj3":
+				r = new RouteTerrestre(4, EnumCouleur.VERT, caracas, rio);
+				listFxId.add("vcrdj1");
+				listFxId.add("vcrdj2");
+				listFxId.add("vcrdj3");
+				break;
+			case "ncrdj1":
+			case "ncrdj2":
+			case "ncrdj3":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, caracas, rio);
+				listFxId.add("ncrdj1");
+				listFxId.add("ncrdj2");
+				listFxId.add("ncrdj3");
+				break;
+			case "glvg":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+				listFxId.add("glvg");
+				break;
+			case "glvd":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+				listFxId.add("glvd");
+				break;
+			case "bbardj":
+				r = new RouteTerrestre(1, EnumCouleur.BLANC, buenos, rio);
+				listFxId.add("bbardj");
+				break;
+			case "rbardj":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, buenos, rio);
+				listFxId.add("rbardj");
+				break;
+			case "vectdes":
+				r = new RouteTerrestre(3, EnumCouleur.VERT, capeTown, darEsSalaam);
+				listFxId.add("vectdes");
+				break;
+			case "victdes":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, capeTown, darEsSalaam);
+				listFxId.add("victdes");
+				break;
+			case "glct":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, capeTown);
+				listFxId.add("glct");
+				break;
+			case "jll":
+				r = new RouteTerrestre(1, EnumCouleur.JAUNE, lagos, luanda);
+				listFxId.add("jll");
+				break;
+			case "vll":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, lagos, luanda);
+				listFxId.add("vll");
+				break;
+			case "gcl1":
+			case "gcl2":
+				r = new RouteTerrestre(4, EnumCouleur.GRIS, casablanca, lagos);
+				listFxId.add("gcl1");
+				listFxId.add("gcl2");
+				break;
+			case "gcaq":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, casablanca, alqahira);
+				listFxId.add("gcaq");
+				break;
+			case "raqd":
+				r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
+				listFxId.add("raqd");
+				break;
+			case "baqd":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
+				listFxId.add("baqd");
+				break;
+			case "rddes":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, djibouti, darEsSalaam);
+				listFxId.add("rddes");
+				break;
+			case "nddes":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, djibouti, darEsSalaam);
+				listFxId.add("nddes");
+				break;
+			case "rmh":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, marseille, hamburg);
+				listFxId.add("rmh");
+				break;
+			case "vmh":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, marseille, hamburg);
+				listFxId.add("vmh");
+				break;
+			case "romt":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, moskva, tehran);
+				listFxId.add("romt");
+				break;
+			case "vmm":
+				r = new RouteTerrestre(2, EnumCouleur.VIOLET, murmansk, moskva);
+				listFxId.add("vmm");
+				break;
+			case "vha1":
+			case "vha2":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, hamburg, athina);
+				listFxId.add("vha1");
+				listFxId.add("vha2");
+				break;
+			case "gat":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
+				listFxId.add("gat");
+				break;
+			
+		}
 
 		List<Label> listLbl = new ArrayList<Label>();
 
@@ -727,8 +931,11 @@ public class Plateau {
 			}
 		}
 
-		if ((joker + carte) >= r.getNbPion()) {
-			mettreCarteDansDefausse(r.getNbPion() - 1, listLbl);
+		if ((joker + carte) >= r.getNbPion() && plateauControlle.checkIfEnoughPion(carte+joker, 0, plateauControlle.getIdPlayer())) {
+			if(plateauControlle.takeRoadWagonOrBoatOrPort(r, null, null, listFxId)){
+				System.out.println("route prise");
+				mettreCarteDansDefausse(r.getNbPion(), listLbl);
+			}
 
 		}
 		// s'il reste des cartes en trop
@@ -743,6 +950,86 @@ public class Plateau {
 			rectangle.setOpacity(100);
 			rectangle.setFill(color.getColor(color));
 		}
+	}
+	/**
+	 * Construction d'un port Il faut 2 cartes bateau et 2 cartes wagon avec le
+	 * sigle port Une ou plusieurs cartes joker peuvent remplacer une carte
+	 * bateau ou wagon (ou plusieurs)
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void buildPort(MouseEvent e) {
+		//Ville v = new Ville("Marseille", true);
+		Rectangle rect = (Rectangle) e.getSource();
+		List<String> listFxId = new ArrayList<String>();
+		Ville v = null;
+
+		switch (rect.getId()) {
+			case "pm":
+				v = new Ville("Marseille", true);
+				break;
+			case "ph":
+				v = new Ville("Hamburg", true);
+				break;
+		}
+		listFxId.add(rect.getId());
+
+		int carteBoat = 0;
+		int carteWagon = 0;
+		int jokerWagon = 0;
+		EnumCouleur color = null;
+
+		List<Label> listLbl = new ArrayList<Label>();
+
+		int i = 0;
+		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+			if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+
+				if (c.isPort()&&!c.isJoker()) {
+					if(color==null){
+						color=c.getCouleur();
+					}
+					if(color.name()==c.getCouleur().name()){
+						carteWagon++;
+						listLbl.add((Label) HboxSelect.getChildren().get(i));
+					}
+				} else if (c.isJoker()) {
+					jokerWagon++;
+					listLbl.add((Label) HboxSelect.getChildren().get(i));
+				}
+			} else if (carteB.containsKey(HboxSelect.getChildren().get(i))) {
+				Boat b = carteB.get(HboxSelect.getChildren().get(i));
+
+				/**
+				 * Pas de double bateau pour construire un port La carte doit
+				 * être siglé port
+				 */
+				if (!b.isDoubleBoat() && b.isPort()) {
+					if(color==null){
+						color=b.getCouleur();
+					}
+					if(color.name()==b.getCouleur().name()){
+						carteBoat++;
+						listLbl.add((Label) HboxSelect.getChildren().get(i));
+					}
+					
+				}
+
+			}
+			
+		}
+		System.out.println(carteBoat+" "+carteWagon+" "+jokerWagon);
+		if ((carteBoat + carteWagon + jokerWagon >= 4) && (carteWagon <= 2) && (carteBoat <= 2) && (jokerWagon <= 4) && plateauControlle.checkIfEnoughPion(carteWagon+jokerWagon, carteBoat, plateauControlle.getIdPlayer())) {
+			if(plateauControlle.takeRoadWagonOrBoatOrPort(null, null, v, listFxId)){
+				System.out.println("route prise");
+				mettreCarteDansDefausse(4, listLbl);
+			}
+		}else{
+			printMsgGame("Pas assez de cartes pour construire un port");
+		}
+		deSelectionAllCard();
 	}
 
 	public void setMain(MainMenu main) {

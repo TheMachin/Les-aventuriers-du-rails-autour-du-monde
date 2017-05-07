@@ -438,9 +438,9 @@ public class PlateauController extends Thread{
 						
 						traitementDiscardingWagonBoat(listW, listB, no);
 						
-						int wagon = plateauJeu.getJoueur(id).getPions().getNbWagon();
-						int boat = plateauJeu.getJoueur(id).getPions().getNbBoat();
-						int port = plateauJeu.getJoueur(id).getPions().getNbPort();
+						int wagon = plateauJeu.getJoueur(no).getPions().getNbWagon();
+						int boat = plateauJeu.getJoueur(no).getPions().getNbBoat();
+						int port = plateauJeu.getJoueur(no).getPions().getNbPort();
 						json = new JSONObject();
 						json.put("pion", true);
 						json.put("Pwagon", wagon);

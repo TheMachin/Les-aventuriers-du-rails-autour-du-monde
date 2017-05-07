@@ -59,6 +59,7 @@ public class Pions implements Visitable{
 
 	public void addPort(Ville v){
 		this.ports.add(v);
+		this.nbPort--;
 	}
 
 	public ArrayList<RouteTerrestre> getRouteTerreste() {
@@ -139,6 +140,7 @@ public class Pions implements Visitable{
 	public void lessWagonBoat(int boat, int wagon){
 		this.nbBoat=this.nbBoat-boat;
 		this.nbWagon=this.nbWagon-wagon;
+		System.out.println("boat "+nbBoat+" wagon "+nbWagon);
 	}
 	
 	public int countPion(){
