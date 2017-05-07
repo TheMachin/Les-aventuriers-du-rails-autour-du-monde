@@ -129,6 +129,11 @@ public class Server implements Runnable{
 	}
 	
 	public void Broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
+		System.out.println("debut broadcast");
+		if(listClient==null){
+			System.out.println("pas de clients");
+		}
+		System.out.println(listClient.size());
 		Set cles = listClient.keySet();
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
@@ -214,7 +219,9 @@ public class Server implements Runnable{
                 		menu.getJSONFromClient(jsonFromClient, this);
                 	}else{
                 		jsonFromClient = plateau.getJSONFromClient(jsonFromClient);
-                		sendJSON(jsonFromClient);
+                		if(jsonFromClient!=null){
+                			sendJSON(jsonFromClient);
+                		}
                 	}
                 	
                 }
@@ -239,12 +246,14 @@ public class Server implements Runnable{
         		}else{
         			plateau.clientDeconnecter(no);
         		}
-        		
-        		noDispo.add(no);
+
+    			noDispo.add(no);
         		threads.remove(no);
         		System.out.println(noDispo.toString());
+        		socket.close();
+        		
         	}
-            socket.close();
+            
         }
 
         public JSONObject receiveJSON() throws IOException {

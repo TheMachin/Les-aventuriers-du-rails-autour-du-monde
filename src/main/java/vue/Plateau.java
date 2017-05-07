@@ -10,6 +10,7 @@ import ennumeration.EnumCouleur;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,10 +33,10 @@ public class Plateau {
 
 	
 	@FXML 
-	private Label lblDeckBoat;
+	private Label lblDeckBoat, lblMsgGame;
 	
 	@FXML 
-	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore;
+	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore, lblPionPort;
 	
 	@FXML 
 	private Label lblDeckDestination, lblSelectDestination;
@@ -417,20 +418,31 @@ public class Plateau {
 	}
 
 	public void mettreCarteDansDefausse(int nb, List<Label> listLbl) {
-		int i;
-		for (i = nb; i >= 0; i--) {
-			Label lbl = listLbl.get(i);
-			HboxSelect.getChildren().remove(lbl);
-			if (carteW.containsKey(lbl)) {
-				Wagon b = carteW.get(lbl);
-				// mettre carte wagon dans la défausse
-				carteW.remove(lbl);
-			} else if (carteB.containsKey(lbl)) {
-				Boat b = carteB.get(lbl);
-				// mettre carte bateau dans la défausse
-				carteB.remove(lbl);
+		int i=0;
+		List<Wagon> listW = new ArrayList<Wagon>();
+		List<Boat> listB = new ArrayList<Boat>();
+		System.out.println("label "+nb+ " taille"+listLbl.size());
+		for(i=0;i<nb;i++) {
+			if(listLbl.get(i)!=null){
+				Label lbl = listLbl.get(i);
+				HboxSelect.getChildren().remove(lbl);
+				if (carteW.containsKey(lbl)) {
+					Wagon b = carteW.get(lbl);
+					// mettre carte wagon dans la défausse
+					listW.add(b);
+					carteW.remove(lbl);
+				} else if (carteB.containsKey(lbl)) {
+					Boat b = carteB.get(lbl);
+					listB.add(b);
+					if(b.isDoubleBoat()){
+						nb--;
+					}
+					// mettre carte bateau dans la défausse
+					carteB.remove(lbl);
+				}
 			}
 		}
+		plateauControlle.discardingWagonBoat(listW, listB);
 	}
 
 	/**
@@ -444,154 +456,215 @@ public class Plateau {
 	private void takeRoadBoatMap(MouseEvent e) {
 		Rectangle rect = (Rectangle) e.getSource();
 		RouteMartime r = null;
+		List<String> listFxId = new ArrayList<String>();
 		switch (rect.getId()) {
 		case "vnyedin":
 			r = new RouteMartime(7, EnumCouleur.VIOLET, ny, edinburgh);
+			listFxId.add("vnyedin");
 			break;
 		case "rnyedin":
 			r = new RouteMartime(7, EnumCouleur.ROUGE, ny, edinburgh);
+			listFxId.add("rnyedin");
 			break;
 		case "nacb":
 			r = new RouteMartime(6, EnumCouleur.NOIR, anchorage, cambridgeBay);
+			listFxId.add("nacb");
 			break;
 		case "bcbr":
 			r = new RouteMartime(6, EnumCouleur.BLANC, cambridgeBay, reykjavik);
+			listFxId.add("bcbr");
 			break;
 		case "jnyr":
 			r = new RouteMartime(6, EnumCouleur.JAUNE, ny, reykjavik);
+			listFxId.add("jnyr");
 			break;
 		case "vmc":
 			r = new RouteMartime(7, EnumCouleur.VERT, miami, casablanca);
+			listFxId.add("vmc");
 			break;
 		case "bmc":
 			r = new RouteMartime(2, EnumCouleur.BLANC, miami, caracas);
+			listFxId.add("bmc");
 			break;
 		case "rcl":
 			r = new RouteMartime(7, EnumCouleur.ROUGE, caracas, lagos);
+			listFxId.add("rcl");
 			break;
 		case "grdjl":
 			r = new RouteMartime(6, EnumCouleur.GRIS, rio, luanda);
+			listFxId.add("grdjl");
 			break;
 		case "nrdjct":
 			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
+			listFxId.add("nrdjct");
 			break;
 		case "brdjct":
 			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
+			listFxId.add("brdjct");
 			break;
 		case "vbact":
 			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
+			listFxId.add("vbact");
 			break;
 		case "jbact":
 			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
+			listFxId.add("jbact");
 			break;
 		case "bedinm":
 			r = new RouteMartime(1, EnumCouleur.BLANC, edinburgh, marseille);
+			listFxId.add("bedinm");
 			break;
 		case "vedinm":
 			r = new RouteMartime(1, EnumCouleur.VERT, edinburgh, marseille);
+			listFxId.add("vedinm");
 			break;
 		case "rma":
 			r = new RouteMartime(2, EnumCouleur.ROUGE, marseille, athina);
+			listFxId.add("rma");
 			break;
 		case "vrm":
 			r = new RouteMartime(4, EnumCouleur.VERT, reykjavik, murmansk);
+			listFxId.add("vrm");
 			break;
 		case "rmt":
 			r = new RouteMartime(7, EnumCouleur.ROUGE, murmansk, tiksi);
+			listFxId.add("rmt");
 			break;
 		case "jta1":
 		case "jta2":
 			r = new RouteMartime(8, EnumCouleur.JAUNE, tiksi, anchorage);
+			listFxId.add("jta1");
+			listFxId.add("jta2");
 			break;
 		case "ntp1":
 		case "ntp2":
 		case "ntp3":
 			r = new RouteMartime(7, EnumCouleur.NOIR, tiksi, petropavlovsk);
+			
+			listFxId.add("ntp1");
+			listFxId.add("ntp2");
+			listFxId.add("ntp3");
 			break;
 		case "vpa":
 			r = new RouteMartime(3, EnumCouleur.VIOLET, petropavlovsk, anchorage);
+			listFxId.add("vpa");
 			break;
 		case "gtp":
 			r = new RouteMartime(2, EnumCouleur.GRIS, tokyo, petropavlovsk);
+			listFxId.add("gtp");
 			break;
 		case "gjm":
 			r = new RouteMartime(2, EnumCouleur.GRIS, jakarta, manila);
+			listFxId.add("gjm");
 			break;
 		case "vaalq":
 			r = new RouteMartime(1, EnumCouleur.VERT, athina, alqahira);
+			listFxId.add("vaalq");
 			break;
 		case "rdpm":
 			r = new RouteMartime(1, EnumCouleur.ROUGE, darwin, portMoresby);
+			listFxId.add("rdpm");
 			break;
 		case "njd":
 			r = new RouteMartime(2, EnumCouleur.NOIR, jakarta, darwin);
+			listFxId.add("njd");
 			break;
 		case "videsj":
 			r = new RouteMartime(7, EnumCouleur.VIOLET, darEsSalaam, jakarta);
+			listFxId.add("videsj");
 			break;
 		case "vedesj":
 			r = new RouteMartime(7, EnumCouleur.VERT, darEsSalaam, jakarta);
+			listFxId.add("vedesj");
 			break;
 		case "neh":
 			r = new RouteMartime(1, EnumCouleur.NOIR, edinburgh, hamburg);
+			listFxId.add("neh");
 			break;
 		case "jeh":
 			r = new RouteMartime(1, EnumCouleur.JAUNE, edinburgh, hamburg);
+			listFxId.add("jeh");
 			break;
 		case "jmt":
 			r = new RouteMartime(2, EnumCouleur.JAUNE, manila, tokyo);
+			listFxId.add("jmt");
 			break;
 		case "gre1":
 		case "gre2":
 			r = new RouteMartime(2, EnumCouleur.GRIS, reykjavik, edinburgh);
+			listFxId.add("gre1");
+			listFxId.add("gre2");
 			break;
 		case "bbj1":
 		case "bbj2":
 			r = new RouteMartime(2, EnumCouleur.BLANC, bangkok, jakarta);
+			listFxId.add("bbj1");
+			listFxId.add("bbj2");
 			break;
 		case "bdesm1":
 		case "bdesm2":
 			r = new RouteMartime(4, EnumCouleur.BLANC, darEsSalaam, mumbai);
+			listFxId.add("bdesm1");
+			listFxId.add("bdesm2");
 			break;
 		case "ghkt1":
 		case "ghkt2":
 			r = new RouteMartime(3, EnumCouleur.GRIS, hongkong, tokyo);
+			listFxId.add("ghkt1");
+			listFxId.add("ghkt2");
 			break;
 		case "bmh1":
 		case "bmh2":
 			r = new RouteMartime(5, EnumCouleur.BLANC, manila, honolulu);
+			listFxId.add("bmh1");
+			listFxId.add("bmh2");
 			break;
 		case "vpmh1":
 		case "vpmh2":
 			r = new RouteMartime(3, EnumCouleur.VERT, portMoresby, honolulu);
+			listFxId.add("vpmh1");
+			listFxId.add("vpmh2");
 			break;
 		case "gjp1":
 		case "gjp2":
 			r = new RouteMartime(3, EnumCouleur.GRIS, jakarta, perth);
+			listFxId.add("gjp1");
+			listFxId.add("gjp2");
 			break;
 		case "jpms1":
 		case "jpms2":
 			r = new RouteMartime(3, EnumCouleur.JAUNE, portMoresby, sydney);
+			listFxId.add("jpms1");
+			listFxId.add("jpms2");
 			break;
 		}
 
+		
 		int carte = 0;
+		int doubleBoat = 0 ;
 		int joker = 0;
-
+		EnumCouleur color=null;
+		RouteMartime routeM = r;
 		List<Label> listLbl = new ArrayList<Label>();
-
+		List<Wagon> listW = new ArrayList<Wagon>();
+		List<Boat> listB = new ArrayList<Boat>();
 		int i = 0;
 		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
 			if (carteB.containsKey(HboxSelect.getChildren().get(i))) {
 				Boat b = carteB.get(HboxSelect.getChildren().get(i));
-
-				if (b.getCouleur() == r.getCouleur()) {
+				if(r.getCouleur()==EnumCouleur.GRIS){
+					if(color==null){
+						color=b.getCouleur();
+					}
+				}
+				if (b.getCouleur() == routeM.getCouleur() || b.getCouleur() == color) {
 
 					carte++;
 					listLbl.add((Label) HboxSelect.getChildren().get(i));
 					if (b.isDoubleBoat()) {
-						carte++;
+						doubleBoat++;
 					}
+					listB.add(b);
 
 				}
 			} else if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
@@ -599,13 +672,18 @@ public class Plateau {
 				if (c.isJoker()) {
 					joker++;
 					listLbl.add((Label) HboxSelect.getChildren().get(i));
+					listW.add(c);
 				}
 			}
 		}
 
-		if ((joker + carte) >= r.getNbPion()) {
-			mettreCarteDansDefausse(r.getNbPion() - 1, listLbl);
-			rect.setOpacity(100);
+		if ((joker + carte + doubleBoat) >= r.getNbPion() && plateauControlle.checkIfEnoughPion(joker, carte+doubleBoat, plateauControlle.getIdPlayer())) {
+			if(plateauControlle.takeRoadWagonOrBoatOrPort(null, r, null, listFxId)){
+				System.out.println("route prise");
+				mettreCarteDansDefausse(r.getNbPion(), listLbl);
+			}
+			
+			//rect.setOpacity(100);
 
 		}
 		// s'il reste des cartes en trop
@@ -650,7 +728,15 @@ public class Plateau {
 		deSelectionAllCard();
 	}
 
-
+	public void colorRoadOrPort(EnumCouleur color, List<String> listFxId){
+		Scene scene = lblScore.getScene();
+		int i;
+		for(i=0;i<listFxId.size();i++){
+			Rectangle rectangle = (Rectangle) scene.lookup("#"+listFxId.get(i));
+			rectangle.setOpacity(100);
+			rectangle.setFill(color.getColor(color));
+		}
+	}
 
 	public void setMain(MainMenu main) {
 		this.main = main;
@@ -717,14 +803,25 @@ public class Plateau {
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
 		 
 		 plateauControlle.setPion(wagon, boat);
-		 lblPionWagon.setText(String.valueOf(wagon));
-		 lblPionBoat.setText(String.valueOf(boat));
+		 printPion(wagon, boat, 3);
 		 
 		
 	 }
 	 
+	 public void printPion(int wagon, int boat, int port){
+		 lblPionWagon.setText(String.valueOf(wagon));
+		 lblPionBoat.setText(String.valueOf(boat));
+		 lblPionPort.setText(String.valueOf(port));
+	 }
+	 
 	 public void printScore(int score){
 		 lblScore.setText(String.valueOf(score));
+	 }
+	 
+	 public void printMsgGame(String msg){
+		 Platform.runLater(() -> {
+			 lblMsgGame.setText(msg);
+			});
 	 }
 
 }

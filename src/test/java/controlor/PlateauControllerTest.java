@@ -20,11 +20,13 @@ import metier.Pions;
 import metier.PlateauJeu;
 import metier.RouteTerrestre;
 import metier.Wagon;
+import vue.Plateau;
 
 @RunWith(JUnitPlatform.class)
 public class PlateauControllerTest {
 	
 	PlateauJeu plateau = new PlateauJeu(5);
+	Plateau plateauView = new Plateau(null);
 	
 	@Test
 	public void testTakeRoad(){
@@ -39,14 +41,16 @@ public class PlateauControllerTest {
 		ArrayList<Wagon> l = new ArrayList<Wagon>();
 		l.add(w);
 		PlateauController p = new PlateauController();
+		plateauView.setPlateauController(p);
+		p.setPlateauView(plateauView);
 		Pions pion = new Pions(EnumCouleur.JAUNE, 10, 10);
 		j.setPions(pion);
 		joueurs.put(0, j);
 		plateau.setListJoueur(joueurs);
 		p.setPlateauJeu(plateau);
-		assertEquals(true, p.checkTakeRoadWagon(r));
-		assertEquals(true, p.takeRoadWagon(r, l));
 		assertEquals(false, p.checkTakeRoadWagon(r));
+		assertEquals(true, p.takeRoadWagonOrBoatOrPort(r, null, null, null));
+		assertEquals(true, p.checkTakeRoadWagon(r));
 		
 	}
 	
@@ -69,8 +73,8 @@ public class PlateauControllerTest {
 		joueurs.put(0, j);
 		plateau.setListJoueur(joueurs);
 		p.setPlateauJeu(plateau);
-		assertEquals(true, p.checkTakeRoadWagon(r));
-		assertEquals(false, p.takeRoadWagon(r, l));
+		assertEquals(false, p.checkTakeRoadWagon(r));
+		assertEquals(true, p.takeRoadWagonOrBoatOrPort(r, null, null, null));
 		assertEquals(true, p.checkTakeRoadWagon(r));
 		
 	}

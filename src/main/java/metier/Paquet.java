@@ -58,11 +58,11 @@ public class Paquet implements Visitable{
 	 * @return Carte wagon
 	 */
 	public Wagon piocheWagon(){
-		if(this.pWagon.isEmpty()){
+		if(this.pWagon.size()==0){
 			this.setpWagon(this.defausseWagon);
 			this.defausseWagon=null;
 		}
-		if(this.pWagon.isEmpty()){
+		if(this.pWagon.size()==0){
 			return null;
 		}
 		int i= this.getRandomNumber(0, this.pWagon.size()-1);
@@ -77,11 +77,11 @@ public class Paquet implements Visitable{
 	 * @return carte bateau
 	 */
 	public Boat piocheBoat(){
-		if(this.pBoat.isEmpty()){
+		if(this.pBoat.size()==0){
 			this.setpBoat(this.defausseBoat);
 			this.defausseBoat=null;
 		}
-		if(this.pBoat.isEmpty())
+		if(this.pBoat.size()==0)
 			return null;
 		else{
 			int i =this.getRandomNumber(0, this.pBoat.size()-1);
@@ -96,11 +96,11 @@ public class Paquet implements Visitable{
 	 * @return une carte destination ou iténéraire
 	 */
 	public Carte piocheDesination(){
-		if(this.pDestination.isEmpty()){
+		if(this.pDestination.size()==0){
 			this.pDestination=this.dDestination;
 			this.dDestination=null;
 		}
-		if(this.pDestination.isEmpty())
+		if(this.pDestination.size()==0)
 			return null;
 		else{
 			int i = this.getRandomNumber(0, this.pDestination.size()-1);
@@ -181,12 +181,12 @@ public class Paquet implements Visitable{
 		//double bateau
 		for(i=0;i<6;i++){
 			
-			pBoat.add(new Boat(EnumCouleur.BLANC, false, true, "/images/bateau/simple/bateauBlanc.png"));
-			pBoat.add(new Boat(EnumCouleur.JAUNE, false, true, "/images/bateau/simple/bateauJaune.png"));
-			pBoat.add(new Boat(EnumCouleur.VIOLET, false, true, "/images/bateau/simple/bateauViolet.png"));
-			pBoat.add(new Boat(EnumCouleur.VERT, false, true, "/images/bateau/simple/bateauVert.png"));
-			pBoat.add(new Boat(EnumCouleur.ROUGE, false, true, "/images/bateau/simple/bateauRouge.png"));
-			pBoat.add(new Boat(EnumCouleur.NOIR, false, true, "/images/bateau/simple/bateauNoir.png"));
+			pBoat.add(new Boat(EnumCouleur.BLANC, false, true, "/images/bateau/doubleBoat/doubleBlanc.png"));
+			pBoat.add(new Boat(EnumCouleur.JAUNE, false, true, "/images/bateau/doubleBoat/doubleJaune.png"));
+			pBoat.add(new Boat(EnumCouleur.VIOLET, false, true, "/images/bateau/doubleBoat/doubleViolet.png"));
+			pBoat.add(new Boat(EnumCouleur.VERT, false, true, "/images/bateau/doubleBoat/doubleVert.png"));
+			pBoat.add(new Boat(EnumCouleur.ROUGE, false, true, "/images/bateau/doubleBoat/doubleRouge.png"));
+			pBoat.add(new Boat(EnumCouleur.NOIR, false, true, "/images/bateau/doubleBoat/doubleNoir.png"));
 		}
 		
 		//destination iténéraire
@@ -308,7 +308,7 @@ public class Paquet implements Visitable{
 		
 		Iteneraire ite = new Iteneraire(EnumCarte.ITENERAIRE, 34, 23, 40, map, "/images/destination/AnchorageCambridgeRaykjavikMurmanskTiksi.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, anchorage);
@@ -318,7 +318,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 18, 12, 24, map, "/images/destination/AnchorageVancouverWinnipegCambridgeBay.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, casablanca);
@@ -327,7 +327,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 9, 6, 15, map, "/images/destination/CasablancaAlQahiraTehran.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, lagos);
@@ -337,7 +337,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 9, 6, 15, map, "/images/destination/LagosLuandaDarEsSalaamDjibouti.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, manila);
@@ -347,7 +347,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 13, 9, 19, map, "/images/destination/ManilaHonoluluPortMeresby.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, mexico);
@@ -357,7 +357,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 15, 10, 21, map, "/images/destination/MexicoCaracasLimaValparaiso.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, murmansk);
@@ -368,7 +368,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 30, 20, 36, map, "/images/destination/MurmanskTiksiNovosibirskYakutskPetropavlovsk.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 		map.clear();
 		map.put(0, tehran);
@@ -378,7 +378,7 @@ public class Paquet implements Visitable{
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 13, 9, 19, map, "/images/destination/TeheranLahoreMumbaiBangkok.png");
 		
-		dDestination.add(ite);
+		pDestination.add(ite);
 		
 	}
 	

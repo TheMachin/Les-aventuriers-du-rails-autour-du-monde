@@ -171,11 +171,12 @@ public class PlateauJeu implements Visitable{
 	
 	public void endOfPlayerTurn(){
 		tour++;
-		if(!getJoueur(tour).isStart()){
-			tour++;
-		}
+		System.out.println("tour de "+tour+ listJoueur.size());
 		if(tour>=listJoueur.size()){
 			tour=0;
+		}
+		if(!getJoueur(tour).isStart()){
+			tour++;
 		}
 	}
 	

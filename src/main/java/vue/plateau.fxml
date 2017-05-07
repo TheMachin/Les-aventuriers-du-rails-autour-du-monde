@@ -74,7 +74,7 @@
       </Pane>
       <Pane prefHeight="694.0" prefWidth="1228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <SplitPane dividerPositions="0.6790352504638218" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
+            <SplitPane dividerPositions="0.4972170686456401" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0">
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
@@ -181,24 +181,24 @@
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="543.0" prefWidth="1918.0">
                      <children>
-                        <ScrollPane layoutX="21.0" layoutY="41.0" prefHeight="163.0" prefWidth="894.0">
+                        <ScrollPane layoutX="21.0" layoutY="87.0" prefHeight="163.0" prefWidth="894.0">
                            <content>
                               <HBox fx:id="HboxSelect" prefHeight="161.0" prefWidth="890.0" style="-fx-border-style: solid;" />
                            </content>
                         </ScrollPane>
-                        <Label layoutX="29.0" layoutY="215.0" text="Votre main" />
-                        <ScrollPane layoutX="21.0" layoutY="246.0" prefHeight="141.0" prefWidth="894.0">
+                        <Label layoutX="21.0" layoutY="256.0" text="Votre main" />
+                        <ScrollPane layoutX="21.0" layoutY="278.0" prefHeight="193.0" prefWidth="894.0">
                            <content>
-                              <HBox fx:id="HboxMain" prefHeight="142.0" prefWidth="895.0" style="-fx-border-style: solid;" />
+                              <HBox fx:id="HboxMain" prefHeight="193.0" prefWidth="895.0" style="-fx-border-style: solid;" />
                            </content>
                         </ScrollPane>
-                        <Label layoutX="29.0" layoutY="14.0" text="Carte(s) sélectionnée(s)" />
-                        <ScrollPane layoutX="959.0" layoutY="41.0" prefHeight="291.0" prefWidth="618.0">
+                        <Label layoutX="21.0" layoutY="62.0" text="Carte(s) sélectionnée(s)" />
+                        <ScrollPane layoutX="959.0" layoutY="102.0" prefHeight="204.0" prefWidth="618.0">
                            <content>
-                              <HBox fx:id="hboxDestination" prefHeight="289.0" prefWidth="616.0" style="-fx-border-style: solid;" />
+                              <HBox fx:id="hboxDestination" prefHeight="201.0" prefWidth="616.0" style="-fx-border-style: solid;" />
                            </content>
                         </ScrollPane>
-                        <Label layoutX="959.0" layoutY="14.0" text="Cartes destination/iténéraire" />
+                        <Label layoutX="959.0" layoutY="70.0" text="Cartes destination/iténéraire" />
                         <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="1638.0" layoutY="123.0" onMouseClicked="#takeHideBoatCard" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/bateau.png" />
@@ -209,7 +209,7 @@
                               <Image url="@../images/wagon.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="1638.0" layoutY="87.0" prefHeight="33.0" prefWidth="199.0" text="Pion restant : ">
+                        <Label layoutX="1638.0" layoutY="87.0" prefHeight="33.0" prefWidth="199.0" text="Pion(s) restant(s) : ">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -242,6 +242,11 @@
                         <Label fx:id="lblPionBoat" layoutX="1744.0" layoutY="137.0" prefHeight="35.0" prefWidth="97.0" text="0">
                            <font>
                               <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblMsgGame" layoutX="21.0" layoutY="14.0" prefHeight="17.0" prefWidth="1554.0" text="Bienvenue dans le jeu">
+                           <font>
+                              <Font size="20.0" />
                            </font>
                         </Label>
                      </children></AnchorPane>

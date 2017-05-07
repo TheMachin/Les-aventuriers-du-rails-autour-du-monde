@@ -87,6 +87,13 @@ public class Pions implements Visitable{
 	}
 	
 	public boolean checkIfRoadWagonIsTake(RouteTerrestre r){
+		int i;
+		for(i=0;i<routeTerreste.size();i++){
+			RouteTerrestre r2 = routeTerreste.get(i);
+			if(r2.getCouleur()==r.getCouleur()&&r2.getNbPion()==r.getNbPion()&&r2.getV1()==r.getV1()&&r2.getV2()==r.getV2()){
+				return true;
+			}
+		}
 		if(this.routeTerreste.contains(r)){
 			return true;
 		}
@@ -94,6 +101,13 @@ public class Pions implements Visitable{
 	}
 	
 	public boolean checkIfRoadBoatIsTake(RouteMartime r){
+		int i;
+		for(i=0;i<routeMartime.size();i++){
+			RouteMartime r2 = routeMartime.get(i);
+			if(r2.getCouleur()==r.getCouleur()&&r2.getNbPion()==r.getNbPion()&&r2.getV1()==r.getV1()&&r2.getV2()==r.getV2()){
+				return true;
+			}
+		}
 		if(this.routeMartime.contains(r)){
 			return true;
 		}
@@ -101,47 +115,30 @@ public class Pions implements Visitable{
 	}
 	
 	public boolean checkIfPortnIsTake(Ville v){
+		int i;
+		for(i=0;i<ports.size();i++){
+			Ville v2 = ports.get(i);
+			if(v.getName()==v2.getName()){
+				return true;
+			}
+		}
 		if(this.ports.contains(v)){
 			return true;
 		}
 		return false;
 	}
 	
-	
-	/**
-	 * On vérifie s'il y a assez de pion pour prendre une route ou un port
-	 * Si c'est ok, on enleve les pions qu'il a utilisé
-	 * @param boat
-	 * @param wagon
-	 * @param rt
-	 * @param rm
-	 * @param v
-	 * @return
-	 */
-	public boolean takeRoadOrPort(int boat, int wagon, RouteTerrestre rt, RouteMartime rm, Ville v){
+	public boolean checkIfEnoughPion(int wagon, int boat){
 		if((this.nbBoat-boat)>=0&&(this.nbWagon-wagon)>=0){
-			if(rt!=null){
-				this.addRouteTerrestre(rt);
-				this.nbWagon=this.nbWagon-wagon;
-				return true;
-			}else if(rm!=null){
-				this.addRouteMaritime(rm);
-				this.nbBoat=this.nbBoat-boat;
-				return true;
-			}else if(v!=null){
-				if(v.isPort()&&nbPort>0){
-					this.addPort(v);
-					this.nbBoat=this.nbBoat-boat;
-					this.nbWagon=this.nbWagon-wagon;
-					this.nbPort--;
-					return true;
-				}
-				return false;
-			}else{
-				return false;
-			}
+			return true;
 		}
 		return false;
+	}
+	
+
+	public void lessWagonBoat(int boat, int wagon){
+		this.nbBoat=this.nbBoat-boat;
+		this.nbWagon=this.nbWagon-wagon;
 	}
 	
 	public int countPion(){

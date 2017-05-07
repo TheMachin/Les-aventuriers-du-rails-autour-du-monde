@@ -79,10 +79,10 @@ public class Client extends Thread{
         String line = null;
         try {
             line = (String) i.readObject();
-
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
              e.printStackTrace();
+             System.out.println(e.getMessage());
 
         }
         JSONObject json = null;
@@ -92,6 +92,7 @@ public class Client extends Thread{
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
         return json;
