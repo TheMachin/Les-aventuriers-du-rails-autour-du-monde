@@ -111,7 +111,7 @@ public class Plateau {
 	Ville tokyo = new Ville("Tokyo", true);
 	Ville buenos = new Ville("Buenos Aires", true);
 	Ville marseille = new Ville("Marseille", true);
-	Ville capTown = new Ville("Cape Town", true);
+	Ville capeTown = new Ville("Cape Town", true);
 	Ville caracas = new Ville("Caracas", true);
 	Ville casablanca = new Ville("Casablanca", true);
 	Ville jakarta = new Ville("Jakarta", true);
@@ -128,7 +128,7 @@ public class Plateau {
 	Ville lagos = new Ville("Lagos", true);
 	Ville lima = new Ville("Lima", true);
 	Ville tehran = new Ville("Tehran", false);
-	Ville losAngelos = new Ville("Los Angeles", true);
+	Ville losAngeles = new Ville("Los Angeles", true);
 	Ville rio = new Ville("Rio De Janeiro", true);
 	Ville mexico = new Ville("Mexico", false);
 	Ville christchurch = new Ville("Christchurch", true);
@@ -417,16 +417,16 @@ public class Plateau {
 			r = new RouteMartime(6, EnumCouleur.GRIS, rio, luanda);
 			break;
 		case "nrdjct":
-			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capTown);
+			r = new RouteMartime(6, EnumCouleur.NOIR, rio, capeTown);
 			break;
 		case "brdjct":
-			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capTown);
+			r = new RouteMartime(6, EnumCouleur.BLANC, rio, capeTown);
 			break;
 		case "vbact":
-			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capTown);
+			r = new RouteMartime(7, EnumCouleur.VIOLET, buenos, capeTown);
 			break;
 		case "jbact":
-			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capTown);
+			r = new RouteMartime(7, EnumCouleur.JAUNE, buenos, capeTown);
 			break;
 		case "bedinm":
 			r = new RouteMartime(1, EnumCouleur.BLANC, edinburgh, marseille);
@@ -517,6 +517,84 @@ public class Plateau {
 		case "jpms2":
 			r = new RouteMartime(3, EnumCouleur.JAUNE, portMoresby, sydney);
 			break;
+		case "bsc":
+			r = new RouteMartime(1, EnumCouleur.BLANC, sydney, christchurch);
+			break;
+		case "rsc":
+			r = new RouteMartime(1, EnumCouleur.ROUGE, sydney, christchurch);
+			break;
+		case "rbm1":
+		case "rbm2":
+			r = new RouteMartime(2, EnumCouleur.ROUGE, bangkok, manila);
+			break;
+		case "jdest":
+			r = new RouteMartime(1, EnumCouleur.JAUNE, darEsSalaam, toamasina);
+			break;
+		case "gctt":
+			r = new RouteMartime(3, EnumCouleur.GRIS, capeTown, toamasina);
+			break;
+		case "vvba1":
+		case "vvba2":
+		case "vvba3":
+			r = new RouteMartime(3, EnumCouleur.VERT, valparaiso, buenos);
+			break;
+		case "rctn":
+			r = new RouteMartime(5, EnumCouleur.ROUGE, capeTown, null);
+			break;
+		case "vctn":
+			r = new RouteMartime(5, EnumCouleur.VERT, capeTown, null);
+			break;
+		case "bnp":
+			r = new RouteMartime(5, EnumCouleur.BLANC, null, perth);
+			break;
+		case "vnp":
+			r = new RouteMartime(5, EnumCouleur.VIOLET, null, perth);
+			break;
+		case "rth1":
+		case "rth2":
+		case "rth3":
+			r = new RouteMartime(5, EnumCouleur.ROUGE, tokyo, honolulu);
+			break;
+		case "jcv1":
+		case "jcv2":
+			r = new RouteMartime(7, EnumCouleur.JAUNE, christchurch, valparaiso);
+			break;
+		case "vsl1":
+		case "vsl2":
+			r = new RouteMartime(8, EnumCouleur.VIOLET, sydney, lima);
+			break;
+		case "nsl1":
+		case "nsl2":
+			r = new RouteMartime(8, EnumCouleur.NOIR, sydney, lima);
+			break;
+		case "ghl":
+			r = new RouteMartime(6, EnumCouleur.GRIS, honolulu, lima);
+			break;
+		case "jhla1":
+		case "jhla2":
+			r = new RouteMartime(3, EnumCouleur.JAUNE, honolulu, losAngeles);
+			break;
+		case "vtla1":
+		case "vtla2":
+		case "vtla3":
+		case "vtla4":
+		case "vtla5":
+		case "vtla6":
+			r = new RouteMartime(7, EnumCouleur.VERT, tokyo, losAngeles);
+			break;
+		case "ntla1":
+		case "ntla2":
+		case "ntla3":
+		case "ntla4":
+		case "ntla5":
+		case "ntla6":
+			r = new RouteMartime(7, EnumCouleur.NOIR, tokyo, losAngeles);
+			break;
+		case "btv1":
+		case "btv2":
+		case "btv3":
+			r = new RouteMartime(6, EnumCouleur.BLANC, tokyo, vancouver);
+			break;
 		}
 
 		int carte = 0;
@@ -565,9 +643,145 @@ public class Plateau {
 	 */
 	@FXML
 	private void takeRoadWagonMap(MouseEvent e) {
-		RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
+		Rectangle rect = (Rectangle) e.getSource();
+		RouteTerrestre r = null;
+		//RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
 		int carte = 0;
 		int joker = 0;
+
+		switch (rect.getId()) {
+			case "jvw":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, vancouver, winnipeg);
+				break;
+			case "vwny":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, winnipeg, ny);
+				break;
+			case "rvla":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, vancouver, losAngeles);
+				break;
+			case "vvla":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, vancouver, losAngeles);
+				break;
+			case "glaw":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, losAngeles, winnipeg);
+				break;
+			case "rpd":
+				r = new RouteTerrestre(2, EnumCouleur.ROUGE, perth, darwin);
+				break;
+			case "vds":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, darwin, sydney);
+				break;
+			case "bps":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, perth, sydney);
+				break;
+			case "jps":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, perth, sydney);
+				break;
+			case "blam":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, losAngeles, mexico);
+				break;
+			case "jlam":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, losAngeles, mexico);
+				break;
+			case "vlany":
+				r = new RouteTerrestre(4, EnumCouleur.VIOLET, losAngeles, ny);
+				break;
+			case "nlany":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, losAngeles, ny);
+				break;
+			case "vimc":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, mexico, caracas);
+				break;
+			case "rmc":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mexico, caracas);
+				break;
+			case "bmny1":
+			case "bmny2":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, miami, ny);
+				break;
+			case "jlc":
+				r = new RouteTerrestre(2, EnumCouleur.JAUNE, lima, caracas);
+				break;
+			case "blc":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, lima, caracas);
+				break;
+			case "vcrdj1":
+			case "vcrdj2":
+			case "vcrdj3":
+				r = new RouteTerrestre(4, EnumCouleur.VERT, caracas, rio);
+				break;
+			case "ncrdj1":
+			case "ncrdj2":
+			case "ncrdj3":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, caracas, rio);
+				break;
+			case "glvg":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+				break;
+			case "glvd":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+				break;
+			case "bbardj":
+				r = new RouteTerrestre(1, EnumCouleur.BLANC, buenos, rio);
+				break;
+			case "rbardj":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, buenos, rio);
+				break;
+			case "vectdes":
+				r = new RouteTerrestre(3, EnumCouleur.VERT, capeTown, darEsSalaam);
+				break;
+			case "victdes":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, capeTown, darEsSalaam);
+				break;
+			case "glct":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, capeTown);
+				break;
+			case "jll":
+				r = new RouteTerrestre(1, EnumCouleur.JAUNE, lagos, luanda);
+				break;
+			case "vll":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, lagos, luanda);
+				break;
+			case "gcl1":
+			case "gcl2":
+				r = new RouteTerrestre(4, EnumCouleur.GRIS, casablanca, lagos);
+				break;
+			case "gcaq":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, casablanca, alqahira);
+				break;
+			case "raqd":
+				r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
+				break;
+			case "baqd":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
+				break;
+			case "rddes":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, djibouti, darEsSalaam);
+				break;
+			case "nddes":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, djibouti, darEsSalaam);
+				break;
+			case "rmh":
+				r = new RouteTerrestre(1, EnumCouleur.ROUGE, marseille, hamburg);
+				break;
+			case "vmh":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, marseille, hamburg);
+				break;
+			case "romt":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, moskva, tehran);
+				break;
+			case "vmm":
+				r = new RouteTerrestre(2, EnumCouleur.VIOLET, murmansk, moskva);
+				break;
+			case "vha1":
+			case "vha2":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, hamburg, athina);
+				break;
+			case "gat":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
+				break;
+			
+		}
 
 		List<Label> listLbl = new ArrayList<Label>();
 
@@ -603,7 +817,20 @@ public class Plateau {
 	 */
 	@FXML
 	private void buildPort(MouseEvent e) {
-		Ville v = new Ville("Marseille", true);
+		//Ville v = new Ville("Marseille", true);
+		Rectangle rect = (Rectangle) e.getSource();
+		Ville v = null;
+
+		switch (rect.getId()) {
+			case "pm":
+				v = new Ville("Marseille", true);
+				break;
+			case "ph":
+				v = new Ville("Hamburg", true);
+				break;
+		}
+
+
 		int carteBoat = 0;
 		int carteWagon = 0;
 		int jokerBoat = 0;
