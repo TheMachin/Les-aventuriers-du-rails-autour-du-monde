@@ -87,11 +87,16 @@ public class Pions implements Visitable{
 		this.routeMartime = routeMartime;
 	}
 	
+	/**
+	 * On vérifie s'il n'a pas déjà une route
+	 * @param r
+	 * @return
+	 */
 	public boolean checkIfRoadWagonIsTake(RouteTerrestre r){
 		int i;
 		for(i=0;i<routeTerreste.size();i++){
 			RouteTerrestre r2 = routeTerreste.get(i);
-			if(r2.getCouleur()==r.getCouleur()&&r2.getNbPion()==r.getNbPion()&&r2.getV1()==r.getV1()&&r2.getV2()==r.getV2()){
+			if(r2.getCouleur().equals(r.getCouleur())&&r2.getNbPion()==r.getNbPion()&&r2.getV1().getName().equals(r.getV1().getName())&&r2.getV2().getName().equals(r.getV2().getName())){
 				return true;
 			}
 		}
@@ -101,11 +106,23 @@ public class Pions implements Visitable{
 		return false;
 	}
 	
+	public boolean checkIfRoadWagonDouble(RouteTerrestre r){
+		int i;
+		for(i=0;i<routeTerreste.size();i++){
+			RouteTerrestre r2 = routeTerreste.get(i);
+			System.out.println(r2.getV1().getName()+" "+r.getV1().getName()+" "+r2.getV2().getName()+" "+r.getV2().getName());
+			if(r2.getV1().getName().equals(r.getV1().getName())&&r2.getV2().getName().equals(r.getV2().getName())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean checkIfRoadBoatIsTake(RouteMartime r){
 		int i;
 		for(i=0;i<routeMartime.size();i++){
 			RouteMartime r2 = routeMartime.get(i);
-			if(r2.getCouleur()==r.getCouleur()&&r2.getNbPion()==r.getNbPion()&&r2.getV1()==r.getV1()&&r2.getV2()==r.getV2()){
+			if(r2.getCouleur().equals(r.getCouleur())&&r2.getNbPion()==r.getNbPion()&&r2.getV1().getName().equals(r.getV1().getName())&&r2.getV2().getName().equals(r.getV2().getName())){
 				return true;
 			}
 		}
@@ -115,11 +132,22 @@ public class Pions implements Visitable{
 		return false;
 	}
 	
+	public boolean checkIfRoadBoatDouble(RouteMartime r){
+		int i;
+		for(i=0;i<routeMartime.size();i++){
+			RouteMartime r2 = routeMartime.get(i);
+			if(r2.getV1().getName().equals(r.getV1().getName())&&r2.getV2().getName().equals(r.getV2().getName())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean checkIfPortnIsTake(Ville v){
 		int i;
 		for(i=0;i<ports.size();i++){
 			Ville v2 = ports.get(i);
-			if(v.getName()==v2.getName()){
+			if(v.getName().equals(v2.getName())){
 				return true;
 			}
 		}

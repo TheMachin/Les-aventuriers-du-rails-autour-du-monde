@@ -307,7 +307,7 @@ public class PlateauController extends Thread{
 				int longueurRoad=0;
 				String msg = "";
 				if(rt!=null){
-					if(checkTakeRoadWagon(rt)){
+					if(checkTakeRoadWagon(rt,no)){
 						json.put("error", "La route a déjà été prise");
 						return json;
 					}
@@ -315,7 +315,7 @@ public class PlateauController extends Thread{
 					plateauJeu.getJoueur(no).getPions().addRouteTerrestre(rt);
 					longueurRoad=rt.getNbPion();
 				}else if(rm!=null){
-					if(checkTakeRoadBoat(rm)){
+					if(checkTakeRoadBoat(rm,no)){
 						json.put("error", "La route a déjà été prise");
 						return json;
 					}
@@ -824,7 +824,7 @@ public class PlateauController extends Thread{
 					int longueurRoad=0;
 					String msg = "";
 					if(rt!=null){
-						if(checkTakeRoadWagon(rt)){
+						if(checkTakeRoadWagon(rt,id)){
 							plateauView.printMsgGame("La route a déjà été prise");
 							return false;
 						}
@@ -832,7 +832,7 @@ public class PlateauController extends Thread{
 						plateauJeu.getJoueur(0).getPions().addRouteTerrestre(rt);
 						longueurRoad=rt.getNbPion();
 					}else if(rm!=null){
-						if(checkTakeRoadBoat(rm)){
+						if(checkTakeRoadBoat(rm,id)){
 							plateauView.printMsgGame("La route a déjà été prise");
 							return false;
 						}
@@ -921,7 +921,7 @@ public class PlateauController extends Thread{
 	 * @param r
 	 * @return
 	 */
-	public boolean checkTakeRoadWagon(RouteTerrestre r){
+	public boolean checkTakeRoadWagon(RouteTerrestre r, int no){
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
@@ -929,6 +929,9 @@ public class PlateauController extends Thread{
 			if(plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadWagon(r)){
 				return true;
 			}
+		}
+		if(plateauJeu.getJoueur(no).getPions().checkIfRoadWagonDouble(r)){
+			return true;
 		}
 		return false;
 	}
@@ -938,7 +941,7 @@ public class PlateauController extends Thread{
 	 * @param r
 	 * @return
 	 */
-	public boolean checkTakeRoadBoat(RouteMartime r){
+	public boolean checkTakeRoadBoat(RouteMartime r, int no){
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
@@ -946,6 +949,9 @@ public class PlateauController extends Thread{
 			if(plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadBoat(r)){
 				return true;
 			}
+		}
+		if(plateauJeu.getJoueur(no).getPions().checkIfRoadBoatDouble(r)){
+			return true;
 		}
 		return false;
 	}

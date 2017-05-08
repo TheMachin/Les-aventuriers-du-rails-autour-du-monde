@@ -56,56 +56,54 @@ public class Plateau {
 	
 
 	// villes
-		Ville anchorage = new Ville("Anchorage", true);
-		Ville cambridgeBay = new Ville("Cambridge Bay", true);
-		Ville murmansk = new Ville("Murmansk", true);
-		Ville tiksi = new Ville("Tiksi", true);
-		Ville alqahira = new Ville("Al Qahira", true);
-		Ville portMoresby = new Ville("Port Moresby", true);
-		Ville alZahira = new Ville("Al Zahira", true);
-		Ville sydney = new Ville("Sydney", true);
-		Ville athina = new Ville("Athina", true);
-		Ville manila = new Ville("Manila", true);
-		Ville bangkok = new Ville("Bangkok", true);
-		Ville tokyo = new Ville("Tokyo", true);
-		Ville buenos = new Ville("Buenos Aires", true);
-		Ville marseille = new Ville("Marseille", true);
-		Ville capeTown = new Ville("Cape Town", true);
-		Ville caracas = new Ville("Caracas", true);
-		Ville casablanca = new Ville("Casablanca", true);
-		Ville jakarta = new Ville("Jakarta", true);
-		Ville honolulu = new Ville("Honolulu", true);
-		Ville vakutsk = new Ville("Vakutsk", false);
-		Ville darEsSalaam = new Ville("Dar Es Salaam", true);
-		Ville djibouti = new Ville("Djibouti", false);
-		Ville lahore = new Ville("Lahore", false);
-		Ville edinburgh = new Ville("Edinburgh", true);
-		Ville luanda = new Ville("Luanda", true);
-		Ville hongkong = new Ville("Hong Kong", true);
-		Ville hamburg = new Ville("Hamburg", true);
-		Ville beijing = new Ville("Beijing", false);
-		Ville lagos = new Ville("Lagos", true);
-		Ville lima = new Ville("Lima", true);
-		Ville tehran = new Ville("Tehran", false);
-		Ville losAngeles = new Ville("Los Angeles", true);
-		Ville rio = new Ville("Rio De Janeiro", true);
-		Ville mexico = new Ville("Mexico", false);
-		Ville christchurch = new Ville("Christchurch", true);
-		Ville mumbai = new Ville("Mumbai", true);
-		Ville ny = new Ville("New York", true);
-		Ville miami = new Ville("Miami", true);
-		Ville moskva = new Ville("Moskva", false);
-		Ville petropavlovsk = new Ville("Petropavlovsk", true);
-		Ville toamasina = new Ville("Toamasina", true);
-		Ville novosibirsk = new Ville("Novosibirsk", true);
-		Ville darwin = new Ville("Darwin", false);
-		Ville reykjavik = new Ville("Reykjavik", true);
-		Ville perth = new Ville("Perth", true);
-		Ville valparaiso = new Ville("Valparaiso", true);
-		Ville vancouver = new Ville("Vancouver", true);
-		Ville winnipeg = new Ville("Winnipeg", false);
-	
-	
+	Ville anchorage = new Ville("Anchorage", true);
+	Ville cambridgeBay = new Ville("Cambridge Bay", true);
+	Ville murmansk = new Ville("Murmansk", true);
+	Ville tiksi = new Ville("Tiksi", true);
+	Ville alqahira = new Ville("Al Qahira", true);
+	Ville portMoresby = new Ville("Port Moresby", true);
+	Ville alZahira = new Ville("Al Zahira", true);
+	Ville sydney = new Ville("Sydney", true);
+	Ville athina = new Ville("Athina", true);
+	Ville manila = new Ville("Manila", true);
+	Ville bangkok = new Ville("Bangkok", true);
+	Ville tokyo = new Ville("Tokyo", true);
+	Ville buenos = new Ville("Buenos Aires", true);
+	Ville marseille = new Ville("Marseille", true);
+	Ville capeTown = new Ville("Cape Town", true);
+	Ville caracas = new Ville("Caracas", true);
+	Ville casablanca = new Ville("Casablanca", true);
+	Ville jakarta = new Ville("Jakarta", true);
+	Ville honolulu = new Ville("Honolulu", true);
+	Ville yakutsk = new Ville("Yakutsk", false);
+	Ville darEsSalaam = new Ville("Dar Es Salaam", true);
+	Ville djibouti = new Ville("Djibouti", false);
+	Ville lahore = new Ville("Lahore", false);
+	Ville edinburgh = new Ville("Edinburgh", true);
+	Ville luanda = new Ville("Luanda", true);
+	Ville hongkong = new Ville("Hong Kong", true);
+	Ville hamburg = new Ville("Hamburg", true);
+	Ville beijing = new Ville("Beijing", false);
+	Ville lagos = new Ville("Lagos", true);
+	Ville lima = new Ville("Lima", true);
+	Ville tehran = new Ville("Tehran", false);
+	Ville losAngeles = new Ville("Los Angeles", true);
+	Ville rio = new Ville("Rio De Janeiro", true);
+	Ville mexico = new Ville("Mexico", false);
+	Ville christchurch = new Ville("Christchurch", true);
+	Ville mumbai = new Ville("Mumbai", true);
+	Ville ny = new Ville("New York", true);
+	Ville miami = new Ville("Miami", true);
+	Ville moskva = new Ville("Moskva", false);
+	Ville petropavlovsk = new Ville("Petropavlovsk", true);
+	Ville toamasina = new Ville("Toamasina", true);
+	Ville novosibirsk = new Ville("Novosibirsk", true);
+	Ville darwin = new Ville("Darwin", false);
+	Ville reykjavik = new Ville("Reykjavik", true);
+	Ville perth = new Ville("Perth", true);
+	Ville valparaiso = new Ville("Valparaiso", true);
+	Ville vancouver = new Ville("Vancouver", true);
+	Ville winnipeg = new Ville("Winnipeg", false);
 
 	private PlateauController plateauControlle = new PlateauController();
 	
@@ -911,30 +909,217 @@ public class Plateau {
 				r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
 				listFxId.add("gat");
 				break;
-			
+			case "bhm":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, hamburg, moskva);
+				listFxId.add("bhm");
+				break;
+			case "nhm":
+				r = new RouteTerrestre(2, EnumCouleur.NOIR, hamburg, moskva);
+				listFxId.add("nhm");
+				break;
+			case "vmn":
+				r = new RouteTerrestre(4, EnumCouleur.VERT, moskva, novosibirsk);
+				listFxId.add("vmn");
+				break;
+			case "jmn":
+				r = new RouteTerrestre(4, EnumCouleur.JAUNE, moskva, novosibirsk);
+				listFxId.add("jmn");
+				break;
+			case "rnb":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, novosibirsk, beijing);
+				listFxId.add("rnb");
+				break;
+			case "nnb":
+				r = new RouteTerrestre(3, EnumCouleur.NOIR, novosibirsk, beijing);
+				listFxId.add("nnb");
+				break;
+			case "bbhk":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, beijing, hongkong);
+				listFxId.add("bbhk");
+				break;
+			case "vbhk":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, beijing, hongkong);
+				listFxId.add("vbhk");
+				break;
+			case "gnt":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, novosibirsk, tiksi);
+				listFxId.add("gnt");
+				break;
+			case "vny":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, novosibirsk, yakutsk);
+				listFxId.add("vny");
+				break;
+			case "vty":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, tiksi, yakutsk);
+				listFxId.add("vty");
+				break;
+			case "bnl":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, novosibirsk, lahore);
+				listFxId.add("bnl");
+				break;
+			case "jyb":
+				r = new RouteTerrestre(3, EnumCouleur.JAUNE, yakutsk, beijing);
+				listFxId.add("jyb");
+				break;
+			case "byp":
+				r = new RouteTerrestre(3, EnumCouleur.BLANC, yakutsk, petropavlovsk);
+				listFxId.add("byp");
+				break;
+			case "nlm":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, lahore, mumbai);
+				listFxId.add("nlm");
+				break;
+			case "vlm":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, lahore, mumbai);
+				listFxId.add("vlm");
+				break;
+			case "nwcb":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, winnipeg, cambridgeBay);
+				listFxId.add("nwcb");
+				break;
+			case "btm1":
+			case "btm2":
+			case "btm3":
+				r = new RouteTerrestre(3, EnumCouleur.BLANC, tehran, mumbai);
+				listFxId.add("btm1");
+				listFxId.add("btm2");
+				listFxId.add("btm3");
+				break;
+			case "vtm1":
+			case "vtm2":
+			case "vtm3":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, tehran, mumbai);
+				listFxId.add("vtm1");
+				listFxId.add("vtm2");
+				listFxId.add("vtm3");
+				break;
+			case "rmb1":
+			case "rmb2":
+			case "rmb3":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mumbai, bangkok);
+				listFxId.add("rmb1");
+				listFxId.add("rmb2");
+				listFxId.add("rmb3");
+				break;
+			case "jmb1":
+			case "jmb2":
+			case "jmb3":
+				r = new RouteTerrestre(3, EnumCouleur.JAUNE, mumbai, bangkok);
+				listFxId.add("jmb1");
+				listFxId.add("jmb2");
+				listFxId.add("jmb3");
+				break;
+			case "vhkb":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, bangkok);
+				listFxId.add("vhkb");
+				break;
+			case "nhkb":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, hongkong, bangkok);
+				listFxId.add("nhkb");
+				break;
+			case "dcm":
+				r = new RouteTerrestre(1, EnumCouleur.GRIS, casablanca, marseille, true);
+				listFxId.add("dcm");
+				break;
+			case "dldes":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, darEsSalaam, true);
+				listFxId.add("dldes");
+				break;
+			case "dtl":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, tehran, lahore, true);
+				listFxId.add("dtl");
+				break;
+			case "dlb":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, lahore, beijing, true);
+				listFxId.add("dlb");
+				break;
+			case "jaqt":
+				r = new RouteTerrestre(1, EnumCouleur.JAUNE, alqahira, tehran);
+				listFxId.add("jaqt");
+				break;
+			case "naqt":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, alqahira, tehran);
+				listFxId.add("naqt");
+				break;
+			case "dva1":
+			case "dva2":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, vancouver, anchorage, true);
+				listFxId.add("dva1");
+				listFxId.add("dva2");
+				break;
 		}
-
+		EnumCouleur color=null;
 		List<Label> listLbl = new ArrayList<Label>();
-
-		int i = 0;
-		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
-			if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
-				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-
-				if (c.getCouleur() == r.getCouleur()) {
-					carte++;
-					listLbl.add((Label) HboxSelect.getChildren().get(i));
-				} else if (c.isJoker()) {
-					joker++;
-					listLbl.add((Label) HboxSelect.getChildren().get(i));
+		if(r.isPair()){
+			int i,j,k;
+			
+			//pour chaque voie
+			for(i=0;i<r.getNbPion();i++){
+				color = null;
+				int voie = 0;
+				for(j=0;j<2 && voie<2;j++){
+					for (k = 0; k < HboxSelect.getChildren().size(); k++) {
+						if (carteW.containsKey(HboxSelect.getChildren().get(k)) && !listLbl.contains(HboxSelect.getChildren().get(k))) {
+							Wagon c = carteW.get(HboxSelect.getChildren().get(k));
+			
+							if(color==null){
+								color=c.getCouleur();
+							}
+							if (c.getCouleur().name() == color.name() && !c.isJoker()) {
+								System.out.println(c.getCouleur().name());
+								carte++;
+								listLbl.add((Label) HboxSelect.getChildren().get(k));
+								voie++;
+							}
+						}
+					}
+				}
+			}
+			for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+				if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+					Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+					if (c.isJoker()) {
+						joker++;
+						listLbl.add((Label) HboxSelect.getChildren().get(i));
+					}
+				}
+			}
+		}else{
+			int i = 0;
+			for (i = 0; i < HboxSelect.getChildren().size(); i++) {
+				if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
+					Wagon c = carteW.get(HboxSelect.getChildren().get(i));
+					if(r.getCouleur().name()!=EnumCouleur.GRIS.name()){
+						if (c.getCouleur().name() == r.getCouleur().name() && !c.isJoker()) {
+							carte++;
+							listLbl.add((Label) HboxSelect.getChildren().get(i));
+						}else if (c.isJoker()) {
+							joker++;
+							listLbl.add((Label) HboxSelect.getChildren().get(i));
+						}
+					}else{
+						if(color==null){
+							color=c.getCouleur();
+						}
+						if (c.getCouleur().name() == color.name() && !c.isJoker()) {
+							carte++;
+							listLbl.add((Label) HboxSelect.getChildren().get(i));
+						}else if (c.isJoker()) {
+							joker++;
+							listLbl.add((Label) HboxSelect.getChildren().get(i));
+						}
+					}
 				}
 			}
 		}
-
-		if ((joker + carte) >= r.getNbPion() && plateauControlle.checkIfEnoughPion(carte+joker, 0, plateauControlle.getIdPlayer())) {
+		int nbPion = r.getNbPion();
+		if(r.isPair()){
+			nbPion = r.getNbPion()*2;
+		}
+		if ((joker + carte) >= nbPion && plateauControlle.checkIfEnoughPion(carte+joker, 0, plateauControlle.getIdPlayer())) {
 			if(plateauControlle.takeRoadWagonOrBoatOrPort(r, null, null, listFxId)){
 				System.out.println("route prise");
-				mettreCarteDansDefausse(r.getNbPion(), listLbl);
+				mettreCarteDansDefausse(nbPion, listLbl);
 			}
 
 		}
@@ -966,11 +1151,119 @@ public class Plateau {
 		Ville v = null;
 
 		switch (rect.getId()) {
-			case "pm":
-				v = new Ville("Marseille", true);
+			case "pmarseille":
+				v = marseille;
 				break;
-			case "ph":
-				v = new Ville("Hamburg", true);
+			case "phamburg":
+				v = hamburg;
+				break;
+			case "pvanc":
+				v = vancouver;
+				break;
+			case "pla":
+				v = losAngeles;
+				break;
+			case "pny":
+				v = ny;
+				break;
+			case "pmiami":
+				v = miami;
+				break;
+			case "pcaracas":
+				v = caracas;
+				break;
+			case "plima":
+				v = lima;
+				break;
+			case "pvalparaiso":
+				v = valparaiso;
+				break;
+			case "pba":
+				v = buenos;
+				break;
+			case "prdj":
+				v = rio;
+				break;
+			case "pct":
+				v = capeTown;
+				break;
+			case "pluanda":
+				v = luanda;
+				break;
+			case "plagos":
+				v = lagos;
+				break;
+			case "pcasablanca":
+				v = casablanca;
+				break;
+			case "paq":
+				v = alqahira;
+				break;
+			case "pdes":
+				v = darEsSalaam;
+				break;
+			case "ptoamasina":
+				v = toamasina;
+				break;
+			case "pathina":
+				v = athina;
+				break;
+			case "pedinburgh":
+				v = edinburgh;
+				break;
+			case "prey":
+				v = reykjavik;
+				break;
+			case "pmurmansk":
+				v = murmansk;
+				break;
+			case "pmumbai":
+				v = mumbai;
+				break;
+			case "pbangkok":
+				v = bangkok;
+				break;
+			case "ptiksi":
+				v = tiksi;
+				break;
+			case "panchorage":
+				v = anchorage;
+				break;
+			case "ppetropavlovsk":
+				v = petropavlovsk;
+				break;
+			case "ptokyo":
+				v = tokyo;
+				break;
+			case "phk":
+				v = hongkong;
+				break;
+			case "pmanila":
+				v = manila;
+				break;
+			case "pjakarta":
+				v = jakarta;
+				break;
+			case "phonolulu":
+				v = honolulu;
+				break;
+			case "ppm":
+				v = portMoresby;
+				break;
+			case "pdarwin":
+				v = darwin;
+				break;
+			case "pperth":
+				v = perth;
+				break;
+			case "psydney":
+				v = sydney;
+				break;
+			case "pchristchurch":
+				v = christchurch;
+				break;
+			case "pcb":
+				v = cambridgeBay;
 				break;
 		}
 		listFxId.add(rect.getId());

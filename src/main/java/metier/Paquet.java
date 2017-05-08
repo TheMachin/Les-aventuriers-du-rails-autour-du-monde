@@ -191,24 +191,31 @@ public class Paquet implements Visitable{
 		
 		//destination iténéraire
 		
+		// villes
+		Ville anchorage = new Ville("Anchorage", true);
+		Ville cambridgeBay = new Ville("Cambridge Bay", true);
+		Ville murmansk = new Ville("Murmansk", true);
+		Ville tiksi = new Ville("Tiksi", true);
+		Ville alqahira = new Ville("Al Qahira", true);
+		Ville portMoresby = new Ville("Port Moresby", true);
 		Ville alZahira = new Ville("Al Zahira", true);
 		Ville sydney = new Ville("Sydney", true);
 		Ville athina = new Ville("Athina", true);
-		Ville manila = new Ville("Manila", true); 
+		Ville manila = new Ville("Manila", true);
 		Ville bangkok = new Ville("Bangkok", true);
 		Ville tokyo = new Ville("Tokyo", true);
 		Ville buenos = new Ville("Buenos Aires", true);
 		Ville marseille = new Ville("Marseille", true);
-		Ville capTown = new Ville("Cape Town", true);
+		Ville capeTown = new Ville("Cape Town", true);
 		Ville caracas = new Ville("Caracas", true);
 		Ville casablanca = new Ville("Casablanca", true);
 		Ville jakarta = new Ville("Jakarta", true);
 		Ville honolulu = new Ville("Honolulu", true);
-		Ville vakutsk = new Ville("Vakutsk", false);
+		Ville yakutsk = new Ville("Yakutsk", false);
 		Ville darEsSalaam = new Ville("Dar Es Salaam", true);
 		Ville djibouti = new Ville("Djibouti", false);
 		Ville lahore = new Ville("Lahore", false);
-		Ville edimburg = new Ville("Edimburg", true);
+		Ville edinburgh = new Ville("Edinburgh", true);
 		Ville luanda = new Ville("Luanda", true);
 		Ville hongkong = new Ville("Hong Kong", true);
 		Ville hamburg = new Ville("Hamburg", true);
@@ -216,7 +223,7 @@ public class Paquet implements Visitable{
 		Ville lagos = new Ville("Lagos", true);
 		Ville lima = new Ville("Lima", true);
 		Ville tehran = new Ville("Tehran", false);
-		Ville losAngelos = new Ville("Los Angeles", true);
+		Ville losAngeles = new Ville("Los Angeles", true);
 		Ville rio = new Ville("Rio De Janeiro", true);
 		Ville mexico = new Ville("Mexico", false);
 		Ville christchurch = new Ville("Christchurch", true);
@@ -229,7 +236,7 @@ public class Paquet implements Visitable{
 		Ville novosibirsk = new Ville("Novosibirsk", true);
 		Ville darwin = new Ville("Darwin", false);
 		Ville reykjavik = new Ville("Reykjavik", true);
-		Ville perth=  new Ville("Perth", true);
+		Ville perth = new Ville("Perth", true);
 		Ville valparaiso = new Ville("Valparaiso", true);
 		Ville vancouver = new Ville("Vancouver", true);
 		Ville winnipeg = new Ville("Winnipeg", false);
@@ -240,17 +247,17 @@ public class Paquet implements Visitable{
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, buenos, manila, "/images/destination/BuenosAiresManila.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 18, buenos, marseille, "/images/destination/BuenosAiresMarseille.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, buenos, sydney, "/images/destination/BuenosAiresSydney.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, capTown, jakarta, "/images/destination/CapTownJakarta.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, capeTown, jakarta, "/images/destination/CapTownJakarta.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, caracas, alZahira, "/images/destination/CaracasAlZahira.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 12, caracas, athina, "/images/destination/CaracasAthina.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 16, casablanca, honolulu, "/images/destination/CasablancaHonolulu.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 16, casablanca, vakutsk, "/images/destination/CasanblancaVakutsk.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 16, casablanca, yakutsk, "/images/destination/CasanblancaVakutsk.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 15, darEsSalaam, tokyo, "/images/destination/DarEsSalaamTokyo.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 7, djibouti, lahore, "/images/destination/DjiboutiLahore.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 10, edimburg, luanda, "/images/destination/EdimburgLuanda.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, edimburg, hongkong, "/images/destination/EdinburgHongKong.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 25, edimburg, sydney, "/images/destination/EdinburgSydney.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 22, edimburg, tokyo, "/images/destination/EdinburgTokyo.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 10, edinburgh, luanda, "/images/destination/EdimburgLuanda.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, edinburgh, hongkong, "/images/destination/EdinburgHongKong.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 25, edinburgh, sydney, "/images/destination/EdinburgSydney.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 22, edinburgh, tokyo, "/images/destination/EdinburgTokyo.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, hamburg, beijing, "/images/destination/HamburgBeijing.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 8, hamburg, darEsSalaam, "/images/destination/HamburgDarEsSalaam.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 5, hongkong, jakarta, "/images/destination/HongKongJakarta.png"));
@@ -258,10 +265,10 @@ public class Paquet implements Visitable{
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, lagos, hongkong, "/images/destination/LagosHongKong.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 10, lagos, tehran, "/images/destination/LagosTeheran.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, lima, jakarta, "/images/destination/LimaJakarta.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, losAngelos, darEsSalaam, "/images/destination/LosAngelesDarEsSalaam.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, losAngelos, hamburg, "/images/destination/LosAngelesHamburg.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 11, losAngelos, jakarta, "/images/destination/LosAngelesJakarta.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 15, losAngelos, rio, "/images/destination/LosAngelesRioDeJaneiro.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, losAngeles, darEsSalaam, "/images/destination/LosAngelesDarEsSalaam.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, losAngeles, hamburg, "/images/destination/LosAngelesHamburg.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 11, losAngeles, jakarta, "/images/destination/LosAngelesJakarta.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 15, losAngeles, rio, "/images/destination/LosAngelesRioDeJaneiro.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 5, marseille, alZahira, "/images/destination/MarseilleAlZahira.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, marseille, beijing, "/images/destination/MarseilleBeijing.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 23, marseille, christchurch, "/images/destination/MarseilleChristchurch.png"));
@@ -275,7 +282,7 @@ public class Paquet implements Visitable{
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 15, petropavlovsk, moskva, "/images/destination/MoskvaPetropavlovsk.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 11, toamasina, moskva, "/images/destination/MoskvaToamasina.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 6, mumbai, beijing, "/images/destination/MumbaiBeijing.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 19, ny, capTown, "/images/destination/NewYorkCapTown.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 19, ny, capeTown, "/images/destination/NewYorkCapTown.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 10, ny, marseille, "/images/destination/NewYorkMarseille.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 19, ny, mumbai, "/images/destination/NewYorkMumbai.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, ny, sydney, "/images/destination/NewYorkSydney.png"));
@@ -288,16 +295,10 @@ public class Paquet implements Visitable{
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 20, rio, tokyo, "/images/destination/RioDeJaneiroTokyo.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 11, sydney, tokyo, "/images/destination/TokyoSydney.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 6, rio, valparaiso, "/images/destination/ValparaisoRioDeJaneiro.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, vancouver, edimburg, "/images/destination/VancouverEdinburg.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, vancouver, edinburgh, "/images/destination/VancouverEdinburg.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 9, vancouver, miami, "/images/destination/VancouverMiami.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, perth, winnipeg, "/images/destination/WinnipegPerth.png"));
 		
-		Ville anchorage = new Ville("Anchorage", true);
-		Ville cambridgeBay = new Ville("Cambridge Bay", true);
-		Ville murmansk = new Ville("Murmansk", true);
-		Ville tiksi = new Ville("Tiksi",true);
-		Ville alqahira = new Ville("Al Qahira", true);
-		Ville portMoresby = new Ville("Port Moresby",true);
 		
 		Map<Integer,Ville> map = new HashMap<Integer,Ville>();
 		map.put(0, anchorage);
@@ -363,7 +364,7 @@ public class Paquet implements Visitable{
 		map.put(0, murmansk);
 		map.put(1, tiksi);
 		map.put(2, novosibirsk);
-		map.put(3, vakutsk);
+		map.put(3, yakutsk);
 		map.put(4, petropavlovsk);
 		
 		ite = new Iteneraire(EnumCarte.ITENERAIRE, 30, 20, 36, map, "/images/destination/MurmanskTiksiNovosibirskYakutskPetropavlovsk.png");
