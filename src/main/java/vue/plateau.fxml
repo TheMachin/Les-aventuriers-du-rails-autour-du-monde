@@ -234,7 +234,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="lblScore" layoutX="1731.0" layoutY="24.0" prefHeight="35.0" prefWidth="97.0" text="0">
+                        <Label fx:id="lblScore" layoutX="1731.0" layoutY="24.0" prefHeight="35.0" prefWidth="63.0" text="0">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -249,6 +249,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
+                        <Button layoutX="1807.0" layoutY="32.0" mnemonicParsing="false" onAction="#printAllScore" prefHeight="25.0" prefWidth="97.0" text="Afficher score" />
                      </children></AnchorPane>
               </items>
             </SplitPane>

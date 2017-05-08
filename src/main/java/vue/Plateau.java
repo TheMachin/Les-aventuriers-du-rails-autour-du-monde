@@ -1,5 +1,6 @@
 package vue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import ennumeration.EnumCouleur;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -18,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import main.MainMenu;
 import metier.Boat;
 import metier.Carte;
@@ -152,6 +156,9 @@ public class Plateau {
 
 
 	private MainMenu main;
+	
+	private Stage stageScore = new Stage();
+	private Score score = null;
 	
 	private Map<Label,Wagon> carteW = new HashMap<Label,Wagon>();
 	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
@@ -822,6 +829,51 @@ public class Plateau {
 		 Platform.runLater(() -> {
 			 lblMsgGame.setText(msg);
 			});
+	 }
+	 
+	 @FXML
+	 private void printAllScore(ActionEvent e){
+		 
+		 
+		 if(stageScore.isShowing()){
+			 stageScore.close();
+		 }
+		 Platform.runLater(() -> {
+			 windowsScore(plateauControlle.getPlateauJeu().getListJoueur());
+		 });
+	 }
+	 
+	 public void setListJoueurAtScoreView(Map<Integer,Joueur> listJoueurs){
+		 Platform.runLater(() -> {
+			 if(score!=null){
+				 score.setListJoueur(listJoueurs);
+			 }else{
+				 windowsScore(listJoueurs);
+			 }
+		 });
+	 }
+	 
+	 private void windowsScore(Map<Integer,Joueur> listJoueurs){
+			
+			Parent root = null;
+			score = new Score();
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Score.fxml"));
+			loader.setController(score);
+			try {
+				root = loader.load();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Scene scene = new Scene(root);
+			score.setScene(scene);
+			score.setListJoueur(listJoueurs);
+			
+			stageScore.setScene(scene);
+			stageScore.setTitle("Score des joueurs");
+			stageScore.showAndWait();
+			stageScore.toFront();
 	 }
 
 }

@@ -91,7 +91,7 @@ public class Server implements Runnable{
 		}
 	}
 	
-	public void getIpAdress(){
+	public String getIpAdress(){
 		InetAddress ipAddr = null;
 		try {
 			ipAddr = Inet4Address.getLocalHost();
@@ -99,7 +99,7 @@ public class Server implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.out.println(ipAddr.getHostAddress());
+        return ipAddr.getHostAddress();
 	}
 	
 	public void accept(){

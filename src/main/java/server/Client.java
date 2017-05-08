@@ -13,7 +13,10 @@ import controlor.MenuController;
 import controlor.PlateauController;
 import vue.Plateau;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,6 +50,19 @@ public class Client extends Thread{
 			return false;
 		}
     }
+    
+    public String getIpAdress(){
+		/*InetAddress ipAddr = null;
+		try {
+			ipAddr = Inet4Address.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return ipAddr.getHostAddress();*/
+    	InetAddress ip = socket.getInetAddress();
+    	return ip.getHostName();
+	}
     
     public void deconnection(){
     	try {

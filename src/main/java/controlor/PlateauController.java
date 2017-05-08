@@ -1,7 +1,6 @@
 package controlor;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
@@ -25,8 +23,6 @@ import metier.Boat;
 import metier.Carte;
 import metier.Destination;
 import metier.Iteneraire;
-import metier.Joueur;
-import metier.Paquet;
 import metier.PlateauJeu;
 import metier.RouteMartime;
 import metier.RouteTerrestre;
@@ -35,7 +31,6 @@ import metier.Wagon;
 import server.Client;
 import server.Server;
 import server.Server.MyThreadHandler;
-import visitor.SaveJsonVisitor;
 import vue.Plateau;
 
 public class PlateauController extends Thread{
@@ -359,6 +354,7 @@ public class PlateauController extends Thread{
 				plateauView.printMsgGame(msg);
 				List<String> listFxID =  gson.fromJson(fxId, ArrayList.class);
 				plateauView.colorRoadOrPort(plateauJeu.getJoueur(no).getCouleur(),listFxID);
+				plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -776,13 +772,15 @@ public class PlateauController extends Thread{
 	}
 	
 	/**
-	 * Fonction pour prendre une route
+	 * Prendre une route ou construire un port
 	 * @param rt
-	 * @param listW
+	 * @param rm
+	 * @param port
+	 * @param listFxId
 	 * @return
 	 */
 	public boolean takeRoadWagonOrBoatOrPort(RouteTerrestre rt,RouteMartime rm,Ville port, List<String> listFxId){
-		if(!routePort){
+		if(!routePort&&!carteDestination&&!carteTransport&&!choixCarteDestination){
 			if(client!=null){
 				JSONObject json = new JSONObject();
 				Gson gson = new Gson();
@@ -808,6 +806,7 @@ public class PlateauController extends Thread{
 						plateauView.printScore(score);
 						plateauView.printMsgGame("Vous avez pris la route");
 						plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
+						plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 						return true;
 					}else{
 						plateauView.printMsgGame(json.getString("error"));
@@ -866,6 +865,7 @@ public class PlateauController extends Thread{
 					server.Broadcast(listClientsServer, json);
 					plateauView.printMsgGame("Vous avez pris la route");
 					plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
+					plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 					routePort=true;
 					return true;
 				} catch (JSONException | IOException e) {
@@ -880,6 +880,13 @@ public class PlateauController extends Thread{
 		return false;
 	}
 	
+	/**
+	 * On vérifie si le joueur a assez de pion pour prendre uen route ou construire un port
+	 * @param wagon
+	 * @param boat
+	 * @param no : id du joueur
+	 * @return
+	 */
 	public boolean checkIfEnoughPion(int wagon, int boat, int no){
 		if(tour&&!routePort){
 			if(server!=null){
@@ -909,6 +916,11 @@ public class PlateauController extends Thread{
 		return false;
 	}
 	
+	/**
+	 * On vérifie si la route n'a pas déjà été prise
+	 * @param r
+	 * @return
+	 */
 	public boolean checkTakeRoadWagon(RouteTerrestre r){
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
@@ -921,6 +933,11 @@ public class PlateauController extends Thread{
 		return false;
 	}
 	
+	/**
+	 * On vérifie si la route n'a pas déjà été prise
+	 * @param r
+	 * @return
+	 */
 	public boolean checkTakeRoadBoat(RouteMartime r){
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
@@ -933,6 +950,11 @@ public class PlateauController extends Thread{
 		return false;
 	}
 	
+	/**
+	 * On vérifie si le port n'a pas déjà été construit
+	 * @param v
+	 * @return
+	 */
 	public boolean checkTakePort(Ville v){
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
@@ -964,7 +986,7 @@ public class PlateauController extends Thread{
 		}
 	}
 	
-	public void traitementCartesDestination(List<Destination> destSelect, List<Destination> destNoSelect, List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect){
+	private void traitementCartesDestination(List<Destination> destSelect, List<Destination> destNoSelect, List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect){
 		int i;
 		if(server==null){
 			JSONArray jsonAD = new JSONArray();
@@ -1030,6 +1052,10 @@ public class PlateauController extends Thread{
 		}
 	}
 	
+	/**
+	 * Donnée reçu par le client depuis le serveur
+	 * @param json
+	 */
 	public void getJsonFromServer(JSONObject json){
 		if(json.has("tour")){
 			int no = 0;
@@ -1061,7 +1087,7 @@ public class PlateauController extends Thread{
 				List<String> listFxId = gson.fromJson(list, ArrayList.class);
 				
 				plateauView.colorRoadOrPort(color, listFxId);
-				
+				plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

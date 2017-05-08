@@ -53,7 +53,8 @@ public class MenuController {
 	 * Un joueur a créé la partie, on créé un serveur
 	 */
 	public void createServer(){
-		server = new Server(42000,this);
+		int port = 42000;
+		server = new Server(port,this);
 		System.out.println("Lancement");
 		t = new Thread(server);
 		t.start();
@@ -63,6 +64,7 @@ public class MenuController {
 		plateauJeu.setListJoueur(joueurs);
 		menuView.setPanePseudo();
 		menuView.setCombobox(id);
+		menuView.setAdressIP("IP : "+server.getIpAdress()+" port : "+port);
 	}
 	
 	public void clientDeconnecter(int no){
@@ -83,7 +85,8 @@ public class MenuController {
 		String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
 		if(matcher.find()||ip.equals(new String("localhost"))){
-			client = new Client(ip, 42000,this);
+			int port = 42000;
+			client = new Client(ip, port,this);
 			t = new Thread(client);
 			t.start();
 			if(client.connexion()){
@@ -104,7 +107,7 @@ public class MenuController {
 						// TODO Auto-generated catch block
 						menuView.setMsgAdressIp("Le transfert de donnée a échouée");
 					}
-					System.out.println(json.toString());
+					menuView.setAdressIP("IP : "+client.getIpAdress()+" port : "+port);
 					menuView.setPanePseudo();
 					menuView.setCombobox(id);
 				}else{
