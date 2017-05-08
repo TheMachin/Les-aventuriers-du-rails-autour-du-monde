@@ -171,6 +171,21 @@ public class Pions implements Visitable{
 		System.out.println("boat "+nbBoat+" wagon "+nbWagon);
 	}
 	
+	public boolean checkPortIsConnectedToRoad(Ville v){
+		int i;
+		for(i=0;i<routeMartime.size();i++){
+			if(routeMartime.get(i).containsVille(v)){
+				return true;
+			}
+		}
+		for(i=0;i<routeTerreste.size();i++){
+			if(routeTerreste.get(i).containsVille(v)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public int countPion(){
 		return this.nbBoat+this.nbWagon;
 	}

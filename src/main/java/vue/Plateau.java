@@ -37,7 +37,7 @@ public class Plateau {
 
 	
 	@FXML 
-	private Label lblDeckBoat, lblMsgGame;
+	private Label lblDeckBoat, lblMsgGame, lblMsgNotification;
 	
 	@FXML 
 	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore, lblPionPort;
@@ -608,13 +608,13 @@ public class Plateau {
 		case "vsl1":
 		case "vsl2":
 			r = new RouteMartime(8, EnumCouleur.VIOLET, sydney, lima);
-			listFxId.add("vsl2");
+			listFxId.add("vsl1");
 			listFxId.add("vsl2");
 			break;
 		case "nsl1":
 		case "nsl2":
 			r = new RouteMartime(8, EnumCouleur.NOIR, sydney, lima);
-			listFxId.add("nsl2");
+			listFxId.add("nsl1");
 			listFxId.add("nsl2");
 			break;
 		case "ghl":
@@ -1408,6 +1408,12 @@ public class Plateau {
 	 public void printMsgGame(String msg){
 		 Platform.runLater(() -> {
 			 lblMsgGame.setText(msg);
+			});
+	 }
+	 
+	 public void printNotification(String msg){
+		 Platform.runLater(() -> {
+			 lblMsgNotification.setText(msg);
 			});
 	 }
 	 

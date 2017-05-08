@@ -143,7 +143,7 @@ public class MenuController {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("plateau", true);
-			server.Broadcast(listClientsServer, json);
+			server.broadcast(listClientsServer, json);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,7 +218,7 @@ public class MenuController {
 	    			plateauJeu.getListJoueur().replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
-	    			server.Broadcast(listClientsServer, json);
+	    			server.broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
 	    		}
 			} catch (JSONException e) {
@@ -242,7 +242,7 @@ public class MenuController {
 		    			plateauJeu.getListJoueur().replace(no, joueur);
 		    			json = getInformationGame();
 		    			putAllPseudoInView();
-		    			server.Broadcast(listClientsServer, json);
+		    			server.broadcast(listClientsServer, json);
 		    			System.out.println("fin broascast");
 		    			
 					}
@@ -273,7 +273,7 @@ public class MenuController {
 	    			plateauJeu.getListJoueur().replace(no, joueur);
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
-	    			server.Broadcast(listClientsServer, json);
+	    			server.broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
 	    			if(plateauJeu.checkIfAllPlayerAreReady()){
 	    				menuView.setButtonStart(false);
@@ -357,7 +357,7 @@ public class MenuController {
 				joueur.setCouleur(EnumCouleur.valueOf(color));
 				plateauJeu.getListJoueur().replace(id, joueur);
 				
-				server.Broadcast(listClientsServer, getInformationGame());
+				server.broadcast(listClientsServer, getInformationGame());
 				putAllPseudoInView();
 				if(plateauJeu.checkIfAllPlayerAreReady()){
     				menuView.setButtonStart(false);

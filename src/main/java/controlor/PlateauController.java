@@ -222,6 +222,8 @@ public class PlateauController extends Thread{
 				int no = json.getInt("id");
 				String pioche = json.getString("pioche");
 				json = new JSONObject();
+				JSONObject json2 = new JSONObject();
+				String msg="";
 				jsonA = new JSONArray();
 				switch(pioche){
 					case "bateau" :
@@ -229,6 +231,8 @@ public class PlateauController extends Thread{
 						if(b!=null){
 							plateauJeu.getJoueur(no).addBoat(b);
 							json.put("bateau", jsonA.put(gson.toJson(b)));
+							json.put("msg", "Vous avez piocher une carte bateau");
+							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte bateau";
 						}else{
 							json.put("error", "La pioche bateau est vide");
 						}
@@ -238,6 +242,8 @@ public class PlateauController extends Thread{
 						if(w!=null){
 							plateauJeu.getJoueur(no).addWagon(w);
 							json.put("wagon", jsonA.put(gson.toJson(w)));
+							json.put("msg", "Vous avez piocher une carte wagon");
+							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte wagon";
 						}else{
 							json.put("error", "La pioche wagon est vide");
 						}
@@ -261,6 +267,8 @@ public class PlateauController extends Thread{
 								json.put("error", "La pioche destination est vide");
 							}
 						}
+						json.put("msg", "Vous avez piocher une carte bateau");
+						msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte destination";
 						try {
 							json.put("destination", jsonAD);
 							json.put("iteneraire", jsonAI);
@@ -273,6 +281,11 @@ public class PlateauController extends Thread{
 						json.put("error", "Erreur de traitement");
 						break;
 				}
+				
+				json2.put("msg", msg);
+				plateauView.printNotification(msg);
+				server.broadcastExceptOne(listClientsServer, json2, no);
+				
 				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -327,6 +340,10 @@ public class PlateauController extends Thread{
 						json.put("error", "Le port a déjà été pris");
 						return json;
 					}
+					if(!plateauJeu.getJoueur(no).getPions().checkPortIsConnectedToRoad(port)){
+						json.put("error", "La ville n'est pas connectée à une de vos route");
+						return json;
+					}
 					msg="Le port de "+port.getName()+" est pris par "+plateauJeu.getJoueur(no).getName();
 					plateauJeu.getJoueur(no).getPions().addPort(port);
 				}else{
@@ -343,15 +360,8 @@ public class PlateauController extends Thread{
 				json.put("score", score);
 				json.put("fxId", fxId);
 				//envoyer à tout le monde sauf à celui qui a pris la route
-				MyThreadHandler t = listClientsServer.get(no);
-				System.out.println(listClientsServer.size());
-				listClientsServer.remove(no);
-				System.out.println(listClientsServer.size());
-				if(listClientsServer.size()!=0){
-					server.Broadcast(listClientsServer, json);
-				}
-				listClientsServer.put(no, t);
-				plateauView.printMsgGame(msg);
+				server.broadcastExceptOne(listClientsServer, json, no);
+				plateauView.printNotification(msg);
 				List<String> listFxID =  gson.fromJson(fxId, ArrayList.class);
 				plateauView.colorRoadOrPort(plateauJeu.getJoueur(no).getCouleur(),listFxID);
 				plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
@@ -446,7 +456,6 @@ public class PlateauController extends Thread{
 						json.put("Pwagon", wagon);
 						json.put("Pboat", boat);
 						json.put("Pport", port);
-						System.out.println(json.toString());
 						return json; 
 					} catch (JsonSyntaxException e) {
 						// TODO Auto-generated catch block
@@ -477,7 +486,7 @@ public class PlateauController extends Thread{
 				json.put("pion", true);
 				plateauJeu.getListJoueur().get(no).setStart(true);
 				if(plateauJeu.checkIfAllPlayerAreReady()){
-					this.beginTurn();
+					this.endTurn();
 					
 				}
 			} catch (JSONException e) {
@@ -485,7 +494,6 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}else if(json.has("finTour")){
-			System.out.println("un client a fini son tour");
 			endTurn();
 			return null;
 		}
@@ -513,6 +521,7 @@ public class PlateauController extends Thread{
 				}
 				
 			}else{
+				String msg="";
 				switch(card){
 					case "wagon":
 						Wagon w = plateauJeu.getPaquet().piocheWagon();
@@ -520,8 +529,10 @@ public class PlateauController extends Thread{
 							plateauView.setCardsWagonInMainOfPlayer(w);
 							plateauJeu.getJoueur(id).addWagon(w);
 							choixCartes(card);
+							plateauView.printNotification("Vous avez pris une carte wagon");
+							msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte wagon";
 						}else{
-							plateauView.printMsgGame("La pioche wagon est vide");
+							plateauView.printNotification("La pioche wagon est vide");
 						}
 						break;
 					case "bateau":
@@ -530,8 +541,10 @@ public class PlateauController extends Thread{
 							plateauView.setCardsBoatInMainOfPlayer(b);
 							plateauJeu.getJoueur(id).addBoat(b);
 							choixCartes(card);
+							plateauView.printNotification("Vous avez pris une carte bateau");
+							msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte bateau";
 						}else{
-							plateauView.printMsgGame("La pioche bateau est vide");
+							plateauView.printNotification("La pioche bateau est vide");
 						}
 						break;
 					case "destination":
@@ -550,15 +563,28 @@ public class PlateauController extends Thread{
 									plateauJeu.getJoueur(id).addIteneraire(ite);
 								}
 								choixCartes(card);
+								plateauView.printNotification("Vous avez choisi de prendre une ou plusieurs cartes destination");
+								msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte destination";
 							}else{
-								plateauView.printMsgGame("La pioche destination est vide");
+								plateauView.printNotification("La pioche destination est vide");
 							}
 							
 						}
 						break;
 					default:
-						plateauView.printMsgGame("Auncune carte demandé. Veuillez recommencer");
+						plateauView.printNotification("Auncune carte demandé. Veuillez recommencer");
 						break;
+				}
+				if(!msg.equals("")){
+					JSONObject json = new JSONObject();
+					try {
+						json.put("msg", msg);
+						server.broadcast(listClientsServer, json);
+					} catch (JSONException | IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}
 			if(checkEndOfTurn()){
@@ -627,7 +653,6 @@ public class PlateauController extends Thread{
 	}
 	
 	public void endTurn(){
-		System.out.println("a qui le tour");
 		plateauView.printMsgGame("Votre tour est terminé");
 		if(server!=null){
 			plateauJeu.endOfPlayerTurn();
@@ -641,10 +666,9 @@ public class PlateauController extends Thread{
 			System.out.println("creation json");
 			try {
 				json.put("tour", no);
-				System.out.println(json.toString());
 				 Platform.runLater(() -> {
 					 try {
-						server.Broadcast(listClientsServer, json);
+						server.broadcast(listClientsServer, json);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -653,7 +677,6 @@ public class PlateauController extends Thread{
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.out.println("echec d'envoie");
 			}
 		}else{
 			JSONObject json = new JSONObject();
@@ -688,7 +711,6 @@ public class PlateauController extends Thread{
 		if(carteTransport){
 			nbCartes++;
 		}
-		System.out.println(nbCartes);
 	}
 	
 	public void traitementDiscardingWagonBoat(List<Wagon> listW, List<Boat> listB, int no){
@@ -710,7 +732,6 @@ public class PlateauController extends Thread{
 	
 	public void discardingWagonBoat(List<Wagon> listW, List<Boat> listB){
 		if(server!=null){
-			System.out.println("on defausse le tout");
 			int i;
 			int doble=0;
 			if(server!=null){
@@ -751,7 +772,7 @@ public class PlateauController extends Thread{
 				if(json.has("error")){
 					try {
 						String msgError = json.getString("error");
-						plateauView.printMsgGame(msgError);
+						plateauView.printNotification(msgError);
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -762,11 +783,8 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}
-		System.out.println("fin du tour");
 		if(checkEndOfTurn()){
 			endTurn();
-		}else{
-			System.out.println("pas fini");
 		}
 		
 	}
@@ -804,12 +822,12 @@ public class PlateauController extends Thread{
 						routePort=true;
 						plateauJeu.getJoueur(id).setScore(score);
 						plateauView.printScore(score);
-						plateauView.printMsgGame("Vous avez pris la route");
+						plateauView.printNotification("Vous avez pris la route");
 						plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
 						plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 						return true;
 					}else{
-						plateauView.printMsgGame(json.getString("error"));
+						plateauView.printNotification(json.getString("error"));
 					}
 					
 				} catch (JSONException e) {
@@ -825,7 +843,7 @@ public class PlateauController extends Thread{
 					String msg = "";
 					if(rt!=null){
 						if(checkTakeRoadWagon(rt,id)){
-							plateauView.printMsgGame("La route a déjà été prise");
+							plateauView.printNotification("La route a déjà été prise");
 							return false;
 						}
 						msg="La route "+rt.getV1().getName()+"-"+rt.getV2().getName()+" est prise par "+plateauJeu.getJoueur(id).getName();
@@ -833,7 +851,7 @@ public class PlateauController extends Thread{
 						longueurRoad=rt.getNbPion();
 					}else if(rm!=null){
 						if(checkTakeRoadBoat(rm,id)){
-							plateauView.printMsgGame("La route a déjà été prise");
+							plateauView.printNotification("La route a déjà été prise");
 							return false;
 						}
 						msg="La route "+rm.getV1().getName()+"-"+rm.getV2().getName()+" est prise par "+plateauJeu.getJoueur(id).getName();
@@ -841,13 +859,17 @@ public class PlateauController extends Thread{
 						longueurRoad=rm.getNbPion();
 					}else if(port!=null){
 						if(checkTakePort(port)){
-							plateauView.printMsgGame("Le port a déjà été pris");
+							plateauView.printNotification("Le port a déjà été pris");
+							return false;
+						}
+						if(!plateauJeu.getJoueur(id).getPions().checkPortIsConnectedToRoad(port)){
+							plateauView.printNotification("La ville n'est pas connectée à une de vos route");
 							return false;
 						}
 						msg="Le port de "+port.getName()+" est pris par "+plateauJeu.getJoueur(id).getName();
 						plateauJeu.getJoueur(0).getPions().addPort(port);
 					}else{
-						plateauView.printMsgGame("Erreur de traitement. Veuillez recommencer");
+						plateauView.printNotification("Erreur de traitement. Veuillez recommencer");
 						return false;
 					}
 					JSONObject json = new JSONObject();
@@ -862,8 +884,8 @@ public class PlateauController extends Thread{
 					plateauView.printScore(score);
 					json.put("score", score);
 					json.put("fxId", gson.toJson(listFxId));
-					server.Broadcast(listClientsServer, json);
-					plateauView.printMsgGame("Vous avez pris la route");
+					server.broadcast(listClientsServer, json);
+					plateauView.printNotification("Vous avez pris la route");
 					plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
 					plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 					routePort=true;
@@ -1102,8 +1124,7 @@ public class PlateauController extends Thread{
 		if(json.has("msg")){
 			try {
 				String msg = json.getString("msg");
-				System.out.println(msg);
-				plateauView.printMsgGame(msg);
+				plateauView.printNotification(msg);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1183,7 +1204,16 @@ public class PlateauController extends Thread{
 			if(json.has("error")){
 				try {
 					String msgError = json.getString("error");
-					plateauView.printMsgGame(msgError);
+					plateauView.printNotification(msgError);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(json.has("msg")){
+				try {
+					String msg = json.getString("msg");
+					plateauView.printNotification(msg);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

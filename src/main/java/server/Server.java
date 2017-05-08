@@ -128,18 +128,31 @@ public class Server implements Runnable{
 		t.sendJSON(json);
 	}
 	
-	public void Broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
+	public void broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
 		System.out.println("debut broadcast");
-		if(listClient==null){
-			System.out.println("pas de clients");
+		if(listClient!=null){
+			Set cles = listClient.keySet();
+			Iterator it = cles.iterator();
+			while (it.hasNext()){
+			   int cle = (int) it.next(); // tu peux typer plus finement ici
+			   System.out.println(cle+" braodcast");
+			   listClient.get(cle).sendJSON(json);
+			}
 		}
-		System.out.println(listClient.size());
-		Set cles = listClient.keySet();
-		Iterator it = cles.iterator();
-		while (it.hasNext()){
-		   int cle = (int) it.next(); // tu peux typer plus finement ici
-		   System.out.println(cle+" braodcast");
-		   listClient.get(cle).sendJSON(json);
+	}
+	
+	public void broadcastExceptOne(Map<Integer,MyThreadHandler> listClient,JSONObject json, int no) throws IOException{
+		System.out.println("debut broadcast");
+		if(listClient!=null){
+			Set cles = listClient.keySet();
+			Iterator it = cles.iterator();
+			while (it.hasNext()){
+			   int cle = (int) it.next(); // tu peux typer plus finement ici
+			   System.out.println(cle+" braodcast");
+			   if(cle!=no){
+				   listClient.get(cle).sendJSON(json);
+			   }
+			}
 		}
 	}
 	
