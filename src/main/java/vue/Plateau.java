@@ -116,7 +116,7 @@ public class Plateau {
 	Ville casablanca = new Ville("Casablanca", true);
 	Ville jakarta = new Ville("Jakarta", true);
 	Ville honolulu = new Ville("Honolulu", true);
-	Ville vakutsk = new Ville("Vakutsk", false);
+	Ville yakutsk = new Ville("Yakutsk", false);
 	Ville darEsSalaam = new Ville("Dar Es Salaam", true);
 	Ville djibouti = new Ville("Djibouti", false);
 	Ville lahore = new Ville("Lahore", false);
@@ -780,7 +780,105 @@ public class Plateau {
 			case "gat":
 				r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
 				break;
-			
+			case "bhm":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, hamburg, moskva);
+				break;
+			case "nhm":
+				r = new RouteTerrestre(2, EnumCouleur.NOIR, hamburg, moskva);
+				break;
+			case "vmn":
+				r = new RouteTerrestre(4, EnumCouleur.VERT, moskva, novosibirsk);
+				break;
+			case "jmn":
+				r = new RouteTerrestre(4, EnumCouleur.JAUNE, moskva, novosibirsk);
+				break;
+			case "rnb":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, novosibirsk, beijing);
+				break;
+			case "nnb":
+				r = new RouteTerrestre(3, EnumCouleur.NOIR, novosibirsk, beijing);
+				break;
+			case "bbhk":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, beijing, hongkong);
+				break;
+			case "vbhk":
+				r = new RouteTerrestre(2, EnumCouleur.VERT, beijing, hongkong);
+				break;
+			case "gnt":
+				r = new RouteTerrestre(3, EnumCouleur.GRIS, novosibirsk, tiksi);
+				break;
+			case "vny":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, novosibirsk, yakutsk);
+				break;
+			case "vty":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, tiksi, yakutsk);
+				break;
+			case "bnl":
+				r = new RouteTerrestre(2, EnumCouleur.BLANC, novosibirsk, lahore);
+				break;
+			case "jyb":
+				r = new RouteTerrestre(3, EnumCouleur.JAUNE, yakutsk, beijing);
+				break;
+			case "byp":
+				r = new RouteTerrestre(3, EnumCouleur.BLANC, yakutsk, petropavlovsk);
+				break;
+			case "nlm":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, lahore, mumbai);
+				break;
+			case "vlm":
+				r = new RouteTerrestre(1, EnumCouleur.VERT, lahore, mumbai);
+				break;
+			case "nwcb":
+				r = new RouteTerrestre(4, EnumCouleur.NOIR, winnipeg, cambridgeBay);
+				break;
+			case "btm1":
+			case "btm2":
+			case "btm3":
+				r = new RouteTerrestre(3, EnumCouleur.BLANC, tehran, mumbai);
+				break;
+			case "vtm1":
+			case "vtm2":
+			case "vtm3":
+				r = new RouteTerrestre(3, EnumCouleur.VIOLET, tehran, mumbai);
+				break;
+			case "rmb1":
+			case "rmb2":
+			case "rmb3":
+				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mumbai, bangkok);
+				break;
+			case "jmb1":
+			case "jmb2":
+			case "jmb3":
+				r = new RouteTerrestre(3, EnumCouleur.JAUNE, mumbai, bangkok);
+				break;
+			case "vhkb":
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, bangkok);
+				break;
+			case "nhkb":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, hongkong, bangkok);
+				break;
+			case "dcm":
+				r = new RouteTerrestre(2, EnumCouleur.GRIS, casablanca, marseille);
+				break;
+			case "dldes":
+				r = new RouteTerrestre(4, EnumCouleur.GRIS, luanda, darEsSalaam);
+				break;
+			case "dtl":
+				r = new RouteTerrestre(4, EnumCouleur.GRIS, tehran, lahore);
+				break;
+			case "dlb":
+				r = new RouteTerrestre(6, EnumCouleur.GRIS, lahore, beijing);
+				break;
+			case "jaqt":
+				r = new RouteTerrestre(1, EnumCouleur.JAUNE, alqahira, tehran);
+				break;
+			case "naqt":
+				r = new RouteTerrestre(1, EnumCouleur.NOIR, alqahira, tehran);
+				break;
+			case "dva1":
+			case "dva2":
+				r = new RouteTerrestre(4, EnumCouleur.GRIS, vancouver, anchorage);
+				break;
 		}
 
 		List<Label> listLbl = new ArrayList<Label>();
@@ -822,11 +920,119 @@ public class Plateau {
 		Ville v = null;
 
 		switch (rect.getId()) {
-			case "pm":
-				v = new Ville("Marseille", true);
+			case "pmarseille":
+				v = marseille;
 				break;
-			case "ph":
-				v = new Ville("Hamburg", true);
+			case "phamburg":
+				v = hamburg;
+				break;
+			case "pvanc":
+				v = vancouver;
+				break;
+			case "pla":
+				v = losAngeles;
+				break;
+			case "pny":
+				v = ny;
+				break;
+			case "pmiami":
+				v = miami;
+				break;
+			case "pcaracas":
+				v = caracas;
+				break;
+			case "plima":
+				v = lima;
+				break;
+			case "pvalparaiso":
+				v = valparaiso;
+				break;
+			case "pba":
+				v = buenos;
+				break;
+			case "prdj":
+				v = rio;
+				break;
+			case "pct":
+				v = capeTown;
+				break;
+			case "pluanda":
+				v = luanda;
+				break;
+			case "plagos":
+				v = lagos;
+				break;
+			case "pcasablanca":
+				v = casablanca;
+				break;
+			case "paq":
+				v = alqahira;
+				break;
+			case "pdes":
+				v = darEsSalaam;
+				break;
+			case "ptoamasina":
+				v = toamasina;
+				break;
+			case "pathina":
+				v = athina;
+				break;
+			case "pedinburgh":
+				v = edinburgh;
+				break;
+			case "prey":
+				v = reykjavik;
+				break;
+			case "pmurmansk":
+				v = murmansk;
+				break;
+			case "pmumbai":
+				v = mumbai;
+				break;
+			case "pbangkok":
+				v = bangkok;
+				break;
+			case "ptiksi":
+				v = tiksi;
+				break;
+			case "panchorage":
+				v = anchorage;
+				break;
+			case "ppetropavlovsk":
+				v = petropavlovsk;
+				break;
+			case "ptokyo":
+				v = tokyo;
+				break;
+			case "phk":
+				v = hongkong;
+				break;
+			case "pmanila":
+				v = manila;
+				break;
+			case "pjakarta":
+				v = jakarta;
+				break;
+			case "phonolulu":
+				v = honolulu;
+				break;
+			case "ppm":
+				v = portMoresby;
+				break;
+			case "pdarwin":
+				v = darwin;
+				break;
+			case "pperth":
+				v = perth;
+				break;
+			case "psydney":
+				v = sydney;
+				break;
+			case "pchristchurch":
+				v = christchurch;
+				break;
+			case "pcb":
+				v = cambridgeBay;
 				break;
 		}
 
