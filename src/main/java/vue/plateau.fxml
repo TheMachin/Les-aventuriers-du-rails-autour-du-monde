@@ -337,7 +337,22 @@
                                        <image>
                                           <Image url="@../images/itineraire.png" />
                                        </image>                         
-                                    </ImageView>                              
+                                    </ImageView>
+                                    <Label layoutX="23.0" layoutY="84.0" onMouseClicked="#takeHideBoatCard" text="Tirer Carte Bateau">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="176.0" layoutY="84.0" onMouseClicked="#takeHideTrainCard" text="Tirer Carte Wagon">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="331.0" layoutY="84.0" onMouseClicked="#takeHideDestinationCard" text="Tirer Carte Itinéraire">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>                              
                                  </children></AnchorPane>
                           </items>
                         </SplitPane>
