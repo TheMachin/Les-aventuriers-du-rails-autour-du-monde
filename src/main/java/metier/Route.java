@@ -35,9 +35,9 @@ public abstract class Route {
 	}
 	
 	public boolean containsVille(Ville v){
-		if(v.getName().equals(v1.getName())){
+		if(v.getName()==v1.getName()){
 			return true;
-		}else if(v.getName().equals(v2.getName())){
+		}else if(v.getName()==v2.getName()){
 			return true;
 		}else{
 			return false;

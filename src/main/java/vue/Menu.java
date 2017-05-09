@@ -36,7 +36,7 @@ public class Menu{
 	private MenuController menuController = new MenuController(this);
     
 	@FXML
-	private Label lblMsgError, lblMsgIp, lblIP;
+	private Label lblMsgError, lblMsgIp;
 	
 	@FXML
 	private Pane menu;
@@ -240,10 +240,6 @@ public class Menu{
 	
 	public void setMsgAdressIp(String msg){
 		lblMsgIp.setText(msg);
-	}
-	
-	public void setAdressIP(String ip){
-		lblIP.setText(ip);
 	}
 	
 	@FXML

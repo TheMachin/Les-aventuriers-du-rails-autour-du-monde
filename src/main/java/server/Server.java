@@ -28,14 +28,14 @@ public class Server implements Runnable{
 	private ServerSocket serverSocket;
 	private int port;
 	private String ip;
-	static Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
+	private Map<Integer,Thread> threads=new HashMap<Integer,Thread>();
 	private MenuController menu;
 	private PlateauController plateau;
 	
 	int nbClientMax=5;
 	static List<Integer> noDispo = new ArrayList<Integer>();
 	static int nbClient=1;
-	static boolean menuBoolean=true;
+	
 	
 	public Server(int port,MenuController menu) {
 		super();
@@ -57,7 +57,6 @@ public class Server implements Runnable{
 
 	public void setPlateau(PlateauController plateau) {
 		this.plateau = plateau;
-		menuBoolean=false;
 	}
 	
 	public void setPlateauControllerAtThread(Map<Integer,MyThreadHandler> listClient, PlateauController plateau){
@@ -82,16 +81,7 @@ public class Server implements Runnable{
 		}
 	}
 	
-	public void closeServer(){
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public String getIpAdress(){
+	public void getIpAdress(){
 		InetAddress ipAddr = null;
 		try {
 			ipAddr = Inet4Address.getLocalHost();
@@ -99,19 +89,13 @@ public class Server implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return ipAddr.getHostAddress();
+        System.out.println(ipAddr.getHostAddress());
 	}
 	
-	public void accept(){
+	public void accept() throws IOException{
 		
-		while(menuBoolean){
-			Socket socket = null;
-			try {
-				socket = serverSocket.accept();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		while(true){
+			Socket socket = serverSocket.accept();
 			MyThreadHandler r = new MyThreadHandler(socket,menu);
 			Thread t=new Thread(r);
 			System.out.println("lancement");
@@ -128,31 +112,13 @@ public class Server implements Runnable{
 		t.sendJSON(json);
 	}
 	
-	public void broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
-		System.out.println("debut broadcast");
-		if(listClient!=null){
-			Set cles = listClient.keySet();
-			Iterator it = cles.iterator();
-			while (it.hasNext()){
-			   int cle = (int) it.next(); // tu peux typer plus finement ici
-			   System.out.println(cle+" braodcast");
-			   listClient.get(cle).sendJSON(json);
-			}
-		}
-	}
-	
-	public void broadcastExceptOne(Map<Integer,MyThreadHandler> listClient,JSONObject json, int no) throws IOException{
-		System.out.println("debut broadcast");
-		if(listClient!=null){
-			Set cles = listClient.keySet();
-			Iterator it = cles.iterator();
-			while (it.hasNext()){
-			   int cle = (int) it.next(); // tu peux typer plus finement ici
-			   System.out.println(cle+" braodcast");
-			   if(cle!=no){
-				   listClient.get(cle).sendJSON(json);
-			   }
-			}
+	public void Broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
+		Set cles = listClient.keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next(); // tu peux typer plus finement ici
+		   System.out.println(cle+" braodcast");
+		   listClient.get(cle).sendJSON(json);
 		}
 	}
 	
@@ -183,7 +149,7 @@ public class Server implements Runnable{
         private MenuController menu;
         private PlateauController plateau;
         private int no=0;
-        
+        private boolean menuBoolean=true;
         
         MyThreadHandler(Socket socket, MenuController menu) {
             this.socket = socket;
@@ -232,9 +198,7 @@ public class Server implements Runnable{
                 		menu.getJSONFromClient(jsonFromClient, this);
                 	}else{
                 		jsonFromClient = plateau.getJSONFromClient(jsonFromClient);
-                		if(jsonFromClient!=null){
-                			sendJSON(jsonFromClient);
-                		}
+                		sendJSON(jsonFromClient);
                 	}
                 	
                 }
@@ -254,19 +218,11 @@ public class Server implements Runnable{
         	System.out.println("socket fermé");
         	if(no!=0){
         		System.out.println(noDispo.toString());
-        		if(menuBoolean){
-        			menu.clientDeconnecter(no);
-        		}else{
-        			plateau.clientDeconnecter(no);
-        		}
-
-    			noDispo.add(no);
-        		threads.remove(no);
+        		menu.clientDeconnecter(no);
+        		noDispo.add(no);
         		System.out.println(noDispo.toString());
-        		socket.close();
-        		
         	}
-            
+            socket.close();
         }
 
         public JSONObject receiveJSON() throws IOException {

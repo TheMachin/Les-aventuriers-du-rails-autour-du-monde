@@ -21,6 +21,7 @@ import server.Server;
 import server.Server.MyThreadHandler;
 import vue.Menu;
 import metier.PlateauJeu;
+import vue.Plateau;
 
 public class MenuController {
 
@@ -53,8 +54,7 @@ public class MenuController {
 	 * Un joueur a créé la partie, on créé un serveur
 	 */
 	public void createServer(){
-		int port = 42000;
-		server = new Server(port,this);
+		server = new Server(42000,this);
 		System.out.println("Lancement");
 		t = new Thread(server);
 		t.start();
@@ -64,7 +64,6 @@ public class MenuController {
 		plateauJeu.setListJoueur(joueurs);
 		menuView.setPanePseudo();
 		menuView.setCombobox(id);
-		menuView.setAdressIP("IP : "+server.getIpAdress()+" port : "+port);
 	}
 	
 	public void clientDeconnecter(int no){
@@ -85,8 +84,7 @@ public class MenuController {
 		String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
 		if(matcher.find()||ip.equals(new String("localhost"))){
-			int port = 42000;
-			client = new Client(ip, port,this);
+			client = new Client(ip, 42000,this);
 			t = new Thread(client);
 			t.start();
 			if(client.connexion()){
@@ -107,7 +105,7 @@ public class MenuController {
 						// TODO Auto-generated catch block
 						menuView.setMsgAdressIp("Le transfert de donnée a échouée");
 					}
-					menuView.setAdressIP("IP : "+client.getIpAdress()+" port : "+port);
+					System.out.println(json.toString());
 					menuView.setPanePseudo();
 					menuView.setCombobox(id);
 				}else{
@@ -143,7 +141,7 @@ public class MenuController {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("plateau", true);
-			server.broadcast(listClientsServer, json);
+			server.Broadcast(listClientsServer, json);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -208,7 +206,7 @@ public class MenuController {
 				int no = json.getInt("id");
 				String pseudo = json.getString("pseudo");
 				
-	    		if(plateauJeu.checkPseudoExists(pseudo)){
+	    		if(checkPseudoExists(pseudo)){
 	    			System.out.println("existe");
 	    			json=new JSONObject();
 	    			json.put("error", "Le pseudo existe déjà, veuillez saisir un autre.");
@@ -218,7 +216,7 @@ public class MenuController {
 	    			plateauJeu.getListJoueur().replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
-	    			server.broadcast(listClientsServer, json);
+	    			server.Broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
 	    		}
 			} catch (JSONException e) {
@@ -231,7 +229,7 @@ public class MenuController {
 					int no = json.getInt("id");
 					String color = json.getString("color");
 					EnumCouleur colorEnum = EnumCouleur.valueOf(color);
-					if(plateauJeu.checkColorExists(colorEnum)){
+					if(checkColorExists(colorEnum)){
 						json=new JSONObject();
 		    			json.put("error", "La couleur a déjà été choisi.");
 		    			t.sendJSON(json);
@@ -242,7 +240,7 @@ public class MenuController {
 		    			plateauJeu.getListJoueur().replace(no, joueur);
 		    			json = getInformationGame();
 		    			putAllPseudoInView();
-		    			server.broadcast(listClientsServer, json);
+		    			server.Broadcast(listClientsServer, json);
 		    			System.out.println("fin broascast");
 		    			
 					}
@@ -273,7 +271,7 @@ public class MenuController {
 	    			plateauJeu.getListJoueur().replace(no, joueur);
 	    			json = getInformationGame();
 	    			putAllPseudoInView();
-	    			server.broadcast(listClientsServer, json);
+	    			server.Broadcast(listClientsServer, json);
 	    			System.out.println("fin broascast");
 	    			if(plateauJeu.checkIfAllPlayerAreReady()){
 	    				menuView.setButtonStart(false);
@@ -294,6 +292,25 @@ public class MenuController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Permet de vérifier si le pseudo est unique
+	 * @param pseudo : pseudo d'un joueur
+	 * @return vrai s'il est unique et faux sinon.
+	 */
+	public boolean checkPseudoExists(String pseudo){
+		Set cles = plateauJeu.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		boolean exists=false ;
+		while (it.hasNext()&&!exists){
+		   int cle = (int) it.next();
+		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
+		   if(joueur.getName().equals(pseudo)){
+			   return true;
+		   }
+		}
+		return false;
+	}	
 	
 	
 	/**
@@ -318,7 +335,7 @@ public class MenuController {
 				client.timer();
 			}
 		}else{
-			if(plateauJeu.checkPseudoExists(pseudo)){
+			if(checkPseudoExists(pseudo)){
 				menuView.setMsgLblPseudo("error");
 			}else{
 				plateauJeu.getListJoueur().replace(id, new Joueur(pseudo, null, 0, 0, 0,false));
@@ -327,6 +344,27 @@ public class MenuController {
 				putAllPseudoInView();
 			}
 		}
+	}
+	
+	/**
+	 * Vérifie la couleur n'a pas été déjà utilisé par un autre joueur
+	 * @param color
+	 * @return
+	 */
+	public boolean checkColorExists(EnumCouleur color){
+		Set cles = plateauJeu.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		boolean exists=false ;
+		while (it.hasNext()&&!exists){
+		   int cle = (int) it.next();
+		   Joueur joueur = plateauJeu.getListJoueur().get(cle);
+		   if(joueur.getCouleur()!=null){
+			   if(joueur.getCouleur().equals(color)){
+				   return true;
+			   }
+		   }
+		}
+		return false;
 	}
 	
 	/**
@@ -349,7 +387,7 @@ public class MenuController {
 			client.sendJSON(json);
 			
 		}else{
-			if(plateauJeu.checkColorExists(EnumCouleur.valueOf(color))){
+			if(checkColorExists(EnumCouleur.valueOf(color))){
 				menuView.setMsgError("La couleur a déjà été sélectionné par un autre joueur.");
 			}else{
 				//Si la couleur n'a pas été utilisé, on affecte la couleur au joueur concerné et on met à jour la liste des joueurs
@@ -357,7 +395,7 @@ public class MenuController {
 				joueur.setCouleur(EnumCouleur.valueOf(color));
 				plateauJeu.getListJoueur().replace(id, joueur);
 				
-				server.broadcast(listClientsServer, getInformationGame());
+				server.Broadcast(listClientsServer, getInformationGame());
 				putAllPseudoInView();
 				if(plateauJeu.checkIfAllPlayerAreReady()){
     				menuView.setButtonStart(false);

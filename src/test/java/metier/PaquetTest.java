@@ -55,7 +55,6 @@ public class PaquetTest {
 		p = new Paquet();
 		int nbBoat = p.getpBoat().size();
 		p.piocheBoat();
-		
 		assertEquals(p.getpBoat().size(),nbBoat-1);
 		//assertEquals(p.pWagon.get(1),wagon);
 	}

@@ -143,7 +143,13 @@ public class Joueur implements Visitable{
 		return pions.checkIfPortnIsTake(v);
 	}
 	
-	public void calculScoreTakeRoad(int value){
+	public void calculScoreAfterTakeRoad(int boat, int wagon){
+		int value=0;
+		if(boat!=0){
+			value=boat;
+		}else{
+			value=wagon;
+		}
 		if(value!=0){
 			if(value<=2){
 				this.score=this.score+value;
