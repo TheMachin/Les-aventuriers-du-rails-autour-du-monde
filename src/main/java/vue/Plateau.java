@@ -130,7 +130,6 @@ public class Plateau {
 	
 	public void setCardsWagonInMainOfPlayer(Wagon w){
 		Label lbl = new Label();
-		System.out.println(w.getLienImage());
 		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
 	    lbl.setGraphic(new ImageView(image));
 	    lbl.setOnMouseClicked(this::selectionCard);
@@ -141,7 +140,6 @@ public class Plateau {
 	
 	public void setCardsBoatInMainOfPlayer(Boat b){
 		Label lbl = new Label();
-		System.out.println(b.getLienImage());
 		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
 	    lbl.setGraphic(new ImageView(image));
 	    lbl.setOnMouseClicked(this::selectionCard);
@@ -152,7 +150,6 @@ public class Plateau {
 	
 	public void setCardsDestinationForChoice(Destination destination){
 		paneDestination.toFront();
-		System.out.println("destination");
 		Label lbl = new Label();
 		lbl.getStylesheets().add(themeUrl);
 		Image image = new Image(getClass().getResourceAsStream(destination.getLienImage()));
@@ -165,7 +162,6 @@ public class Plateau {
 	
 	public void setCardsIteneraireForChoice(Iteneraire ite){
 		paneDestination.toFront();
-		System.out.println("iteneraire");
 		Label lbl = new Label();
 		lbl.getStylesheets().add(themeUrl);
 		Image image = new Image(getClass().getResourceAsStream(ite.getLienImage()));
@@ -870,6 +866,10 @@ public class Plateau {
 			case "raqd":
 				r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
 				listFxId.add("raqd");
+				break;
+			case "vhkm":
+				r = new RouteTerrestre(2, EnumCouleur.VIOLET, hongkong, manila);
+				listFxId.add("vhkm");
 				break;
 			case "baqd":
 				r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
