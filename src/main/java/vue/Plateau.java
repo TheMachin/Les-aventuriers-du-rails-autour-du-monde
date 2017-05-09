@@ -576,19 +576,19 @@ public class Plateau {
 			listFxId.add("vvba3");
 			break;
 		case "rctn":
-			r = new RouteMartime(5, EnumCouleur.ROUGE, capeTown, null);
+			r = new RouteMartime(5, EnumCouleur.ROUGE, capeTown, new Ville("", false));
 			listFxId.add("rctn");
 			break;
 		case "vctn":
-			r = new RouteMartime(5, EnumCouleur.VERT, capeTown, null);
+			r = new RouteMartime(5, EnumCouleur.VERT, capeTown, new Ville("", false));
 			listFxId.add("vctn");
 			break;
 		case "bnp":
-			r = new RouteMartime(5, EnumCouleur.BLANC, null, perth);
+			r = new RouteMartime(5, EnumCouleur.BLANC, new Ville("", false), perth);
 			listFxId.add("bnp");
 			break;
 		case "vnp":
-			r = new RouteMartime(5, EnumCouleur.VIOLET, null, perth);
+			r = new RouteMartime(5, EnumCouleur.VIOLET, new Ville("", false), perth);
 			listFxId.add("vnp");
 			break;
 		case "rth1":
