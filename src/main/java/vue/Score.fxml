@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<AnchorPane prefHeight="298.0" prefWidth="370.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+   <children>
+      <Pane layoutX="-79.0" layoutY="-125.0" prefHeight="486.0" prefWidth="359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <GridPane layoutY="40.0" prefHeight="191.0" prefWidth="370.0" style="-fx-border-style: solid;">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="j1" prefHeight="24.0" prefWidth="114.0" text="Label" GridPane.rowIndex="1" />
+                  <Label prefHeight="17.0" prefWidth="120.0" text="Joueur" />
+                  <Label fx:id="j2" prefHeight="17.0" prefWidth="120.0" text="Label" GridPane.rowIndex="2" />
+                  <Label fx:id="j3" prefHeight="17.0" prefWidth="116.0" text="Label" GridPane.rowIndex="3" />
+                  <Label fx:id="j4" prefHeight="17.0" prefWidth="116.0" text="Label" GridPane.rowIndex="4" />
+                  <Label fx:id="j5" prefHeight="17.0" prefWidth="114.0" text="Label" GridPane.rowIndex="5" />
+                  <Label prefHeight="17.0" prefWidth="119.0" text="Couleur" GridPane.columnIndex="1" />
+                  <Label fx:id="c1" prefHeight="17.0" prefWidth="119.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="c2" prefHeight="17.0" prefWidth="115.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="c3" prefHeight="17.0" prefWidth="118.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="c4" prefHeight="17.0" prefWidth="118.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="c5" prefHeight="17.0" prefWidth="121.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label prefHeight="17.0" prefWidth="117.0" text="Score" GridPane.columnIndex="2" />
+                  <Label fx:id="s1" prefHeight="17.0" prefWidth="115.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label fx:id="s2" prefHeight="17.0" prefWidth="114.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label fx:id="s3" prefHeight="17.0" prefWidth="120.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label fx:id="s4" prefHeight="17.0" prefWidth="116.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <Label fx:id="s5" prefHeight="17.0" prefWidth="114.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+               </children>
+            </GridPane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
