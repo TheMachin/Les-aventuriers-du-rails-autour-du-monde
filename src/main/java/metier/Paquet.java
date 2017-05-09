@@ -60,7 +60,7 @@ public class Paquet implements Visitable{
 	public Wagon piocheWagon(){
 		if(this.pWagon.size()==0){
 			this.setpWagon(this.defausseWagon);
-			this.defausseWagon=null;
+			this.defausseWagon=new ArrayList<Wagon>();
 		}
 		if(this.pWagon.size()==0){
 			return null;
@@ -79,7 +79,7 @@ public class Paquet implements Visitable{
 	public Boat piocheBoat(){
 		if(this.pBoat.size()==0){
 			this.setpBoat(this.defausseBoat);
-			this.defausseBoat=null;
+			this.defausseBoat=new ArrayList<Boat>();
 		}
 		if(this.pBoat.size()==0)
 			return null;
