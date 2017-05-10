@@ -172,6 +172,10 @@ public class Plateau {
 		
 	}
 	
+	public void discoverCard(){
+		//TODO pour voir les cartes à découvert
+	}
+	
 	
 	 /**
 	  * Permet de piocher une carte bateau
