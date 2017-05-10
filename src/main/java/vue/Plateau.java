@@ -172,6 +172,11 @@ public class Plateau {
 		
 	}
 	
+	@FXML
+	private void scorelive(ActionEvent e){
+		plateauControlle.scoreLive();
+	}
+	
 	
 	 /**
 	  * Permet de piocher une carte bateau
@@ -868,7 +873,7 @@ public class Plateau {
 				listFxId.add("raqd");
 				break;
 			case "vhkm":
-				r = new RouteTerrestre(2, EnumCouleur.VIOLET, hongkong, manila);
+				r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, manila);
 				listFxId.add("vhkm");
 				break;
 			case "baqd":
@@ -1339,8 +1344,8 @@ public class Plateau {
 	 
 	 public void pionChoix(){
 		 panePion.toFront();
-		 lblSelectNbBoat.setText("35");
-		 lblSelectNbWagon.setText("25");
+		 lblSelectNbBoat.setText("25");
+		 lblSelectNbWagon.setText("35");
 	 }
 	 
 	 @FXML

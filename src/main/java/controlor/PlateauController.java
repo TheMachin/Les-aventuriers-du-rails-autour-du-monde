@@ -210,7 +210,8 @@ public class PlateauController extends Thread{
 				int wagon = json.getInt("wagon");
 				int boat = json.getInt("boat");
 				json = new JSONObject();
-				json.put("checkPionRoad", plateauJeu.getJoueur(no).getPions().checkIfEnoughPion(wagon, boat));
+				boolean pion = plateauJeu.getJoueur(no).getPions().checkIfEnoughPion(wagon, boat);
+				json.put("checkPionRoad", pion);
 				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -417,7 +418,7 @@ public class PlateauController extends Thread{
 			}
 			if(json.has("selectionIteneraire")){
 				try {
-					jsonA = json.getJSONArray("selectionDestination");
+					jsonA = json.getJSONArray("selectionIteneraire");
 					no = json.getInt("id");
 					for(i=0;i<jsonA.length();i++){
 						plateauJeu.getListJoueur().get(no).addIteneraire((gson.fromJson(jsonA.get(i).toString(), Iteneraire.class)));
@@ -657,6 +658,7 @@ public class PlateauController extends Thread{
 		if(server!=null){
 			plateauJeu.endOfPlayerTurn();
 			int no = plateauJeu.whoIsNext();
+			System.out.println(no);
 			String notification="";
 			boolean endGame=false;
 			if(plateauJeu.checkIfGameWillBeEnd()){
@@ -668,8 +670,11 @@ public class PlateauController extends Thread{
 				}
 				plateauView.printNotification(notification);
 			}
+			System.out.println(no);
 			if(endGame){
+				System.out.println("fin jeu");
 				JSONObject json = new JSONObject();
+				plateauJeu.calculAllScore();
 				try {
 					json.put("fin", true);
 					try {
@@ -683,6 +688,7 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}else{
+				System.out.println("jeu continu");
 				if(no==id){
 					beginTurn();
 				}else{
@@ -954,6 +960,8 @@ public class PlateauController extends Thread{
 					if(json.has("checkPionRoad")){
 						if(json.getBoolean("checkPionRoad")){
 							return true;
+						}else if(no==id){
+							plateauView.printNotification("Pas assez de pion(s)");
 						}
 					}
 				} catch (JSONException | IOException e) {
@@ -1250,4 +1258,11 @@ public class PlateauController extends Thread{
 			}
 		}
 	}
+	
+	public void scoreLive(){
+		if(server!=null){
+			plateauJeu.calculAllScore();
+		}
+	}
+	
 }

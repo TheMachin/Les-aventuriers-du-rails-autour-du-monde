@@ -187,6 +187,62 @@ public class Pions implements Visitable{
 		return false;
 	}
 	
+	public boolean checkIfRoadContainsTwoCity(Ville v1, Ville v2){
+		int i;
+		for(i=0;i<routeMartime.size();i++){
+			if(routeMartime.get(i).containsVille(v1)&&routeMartime.get(i).containsVille(v2)){
+				return true;
+			}
+		}
+		for(i=0;i<routeTerreste.size();i++){
+			if(routeTerreste.get(i).containsVille(v1)&&routeTerreste.get(i).containsVille(v2)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkIfTwoCityAreConnected(Ville v1, Ville v2){
+		ArrayList<Route> route = new ArrayList<Route>();
+		ArrayList<Route> r2 = new ArrayList<Route>();
+		route.addAll(routeMartime);
+		route.addAll(routeTerreste);
+		
+		if(explore(route, v1, r2, v2)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean explore(ArrayList<Route> r,Ville v, ArrayList<Route> rMarque,Ville dest){
+		ArrayList<Route> r2 = new ArrayList<Route>();
+		r2=getAllRoadOfCity(v, r);
+		int i;
+		for(i=0;i<r2.size();i++){
+			if(!rMarque.contains(r2.get(i))){
+				if(r2.get(i).containsVille(dest)){
+					return true;
+				}else{
+					rMarque.add(r2.get(i));
+					return explore(r, v, rMarque, dest);
+				}
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<Route> getAllRoadOfCity(Ville v, ArrayList<Route> route){
+		ArrayList<Route> r2 = new ArrayList<Route>();
+		int i;
+		for(i=0;i<route.size();i++){
+			if(route.get(i).containsVille(v)){
+				r2.add(route.get(i));
+			}
+		}
+		return r2;
+	}
+	
 	public int countPion(){
 		return this.nbBoat+this.nbWagon;
 	}

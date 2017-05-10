@@ -2,8 +2,10 @@ package metier;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ennumeration.EnumCouleur;
 import visitor.Visitable;
@@ -164,22 +166,57 @@ public class Joueur implements Visitable{
 		}
 	}
 	
-	public int calculScore(){
-		
+	public void calculScore(){
+		bonus=0;
+		System.out.println(cartesD.size()+" taille destination");
+		System.out.println(cartesI.size()+" taille iteneraire");
 		int i;
 		for(i=0;i<cartesD.size();i++){
-			if(getPions().checkCityIsConnectedToRoad(cartesD.get(i).getV1())&&getPions().checkCityIsConnectedToRoad(cartesD.get(i).getV2())){
+			if(getPions().checkIfTwoCityAreConnected(cartesD.get(i).getV1(),cartesD.get(i).getV2())){
 				bonus=bonus+cartesD.get(i).getPoint();
+				System.out.println("point bonus : "+bonus);
+			}else{
+				System.out.println("pas relier");
 			}
 		}
 		
 		for(i=0;i<cartesI.size();i++){
 			Map<Integer,Ville> villes = cartesI.get(i).getIteneraire();
-			
+			Set cles = villes.keySet();
+			Iterator it = cles.iterator();
+			Ville v1 = null;
+			Ville v2=null;
+			boolean ordre = true;
+			boolean allCity=true;
+			while (it.hasNext()&&allCity){
+			   int cle = (int) it.next();
+			   if(v1==null){
+				   v1=villes.get(cle);
+			   }else if(v2==null){
+				   v2=villes.get(cle);
+				   if(getPions().checkIfRoadContainsTwoCity(v1, v2)){
+					   System.out.println(v1.getName());
+					   System.out.println(v2.getName());
+					   v1=v2;
+					   System.out.println(v1.getName());
+					   System.out.println(v2.getName());
+					   v2=null;
+				   }else{
+					   ordre=false;
+					   if(!getPions().checkIfTwoCityAreConnected(v1, v2)){
+						   allCity=false;
+					   }
+				   }
+			   }			   
+			}
+			if(ordre){
+				bonus=bonus+cartesI.get(i).getPointMax();
+			}else if(allCity){
+				bonus=bonus+cartesI.get(i).getPoint();
+			}else{
+				malus=malus+cartesI.get(i).getMalus();
+			}
 		}
-		
-		this.score  = getScore()+getBonus()-getMalus();
-		return this.score ;
 	}
 
 	public void deleteDestination(Destination d) {

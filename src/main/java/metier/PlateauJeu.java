@@ -126,6 +126,19 @@ public class PlateauJeu implements Visitable{
 		return false;
 	}
 	
+	public void calculAllScore(){
+		Set cles = getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next();
+		   Joueur joueur = getListJoueur().get(cle);
+		   joueur.calculScore();
+		   System.out.println(joueur.getScore());
+		   System.out.println(joueur.getBonus());
+		   System.out.println(joueur.getName());
+		}
+	}
+	
 	/**
 	 * Changer l'état start à false à tous les joueurs
 	 */
@@ -189,11 +202,13 @@ public class PlateauJeu implements Visitable{
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
 		   int cle = (int) it.next();
-		   this.getJoueur(cle).setStart(false);
 		   if(getJoueur(cle).getPions().countPion()<=6){
 			   if(!endGame){
+				   
 				   //si il reste moins de 6 pions, la partie va se terminer quand tous les joueurs auront joué 2 tours chacun
 				   tourRestant=(getNbPlayerActif()*2)+1;
+				   endGame=true;
+				   System.out.println("tour restant = "+tourRestant);
 			   }
 			   tourRestant--;
 			   return true;
@@ -207,6 +222,7 @@ public class PlateauJeu implements Visitable{
 	 * @return boolean
 	 */
 	public boolean endGame(){
+		System.out.println(tourRestant+ " nb trourt restant");
 		if(tourRestant<=0){
 			return true;
 		}
@@ -238,7 +254,6 @@ public class PlateauJeu implements Visitable{
 		Iterator it = cles.iterator();
 		while (it.hasNext()){
 		   int cle = (int) it.next();
-		   this.getJoueur(cle).setStart(false);
 		   if(getJoueur(cle).isStart()){
 			   nb++;
 		   }
