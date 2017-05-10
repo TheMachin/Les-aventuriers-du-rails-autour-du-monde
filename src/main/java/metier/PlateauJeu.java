@@ -213,6 +213,21 @@ public class PlateauJeu implements Visitable{
 		return false;
 	}
 	
+	public Joueur whoWin(){
+		Joueur j = null;
+		Set cles = this.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next();
+		   if(j==null){
+			   j=getJoueur(cle);
+		   }else if(getJoueur(cle).getScore()>j.getScore()){
+			   j=getJoueur(cle);
+		   }
+		}
+		return j;
+	}
+	
 	/**
 	 * Compte le nombre de joueur actif et pret à jouer
 	 * @return

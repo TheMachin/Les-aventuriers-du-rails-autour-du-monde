@@ -157,6 +157,7 @@ public class Pions implements Visitable{
 		return false;
 	}
 	
+	
 	public boolean checkIfEnoughPion(int wagon, int boat){
 		if((this.nbBoat-boat)>=0&&(this.nbWagon-wagon)>=0){
 			return true;
@@ -171,7 +172,7 @@ public class Pions implements Visitable{
 		System.out.println("boat "+nbBoat+" wagon "+nbWagon);
 	}
 	
-	public boolean checkPortIsConnectedToRoad(Ville v){
+	public boolean checkCityIsConnectedToRoad(Ville v){
 		int i;
 		for(i=0;i<routeMartime.size();i++){
 			if(routeMartime.get(i).containsVille(v)){

@@ -3,6 +3,7 @@ package metier;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import ennumeration.EnumCouleur;
 import visitor.Visitable;
@@ -161,6 +162,24 @@ public class Joueur implements Visitable{
 				this.score=this.score+21;
 			}
 		}
+	}
+	
+	public int calculScore(){
+		
+		int i;
+		for(i=0;i<cartesD.size();i++){
+			if(getPions().checkCityIsConnectedToRoad(cartesD.get(i).getV1())&&getPions().checkCityIsConnectedToRoad(cartesD.get(i).getV2())){
+				bonus=bonus+cartesD.get(i).getPoint();
+			}
+		}
+		
+		for(i=0;i<cartesI.size();i++){
+			Map<Integer,Ville> villes = cartesI.get(i).getIteneraire();
+			
+		}
+		
+		this.score  = getScore()+getBonus()-getMalus();
+		return this.score ;
 	}
 
 	public void deleteDestination(Destination d) {

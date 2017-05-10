@@ -340,7 +340,7 @@ public class PlateauController extends Thread{
 						json.put("error", "Le port a déjà été pris");
 						return json;
 					}
-					if(!plateauJeu.getJoueur(no).getPions().checkPortIsConnectedToRoad(port)){
+					if(!plateauJeu.getJoueur(no).getPions().checkCityIsConnectedToRoad(port)){
 						json.put("error", "La ville n'est pas connectée à une de vos route");
 						return json;
 					}
@@ -657,26 +657,55 @@ public class PlateauController extends Thread{
 		if(server!=null){
 			plateauJeu.endOfPlayerTurn();
 			int no = plateauJeu.whoIsNext();
-			if(no==id){
-				beginTurn();
-			}else{
-				plateauView.printMsgGame("C'est au tour du joueur "+ plateauJeu.getJoueur(no).getName() +" !");
+			String notification="";
+			boolean endGame=false;
+			if(plateauJeu.checkIfGameWillBeEnd()){
+				if(!plateauJeu.endGame()){
+					notification="Il reste moins de 2 tours";
+				}else{
+					notification="Le jeu est terminé";
+					endGame=true;
+				}
+				plateauView.printNotification(notification);
 			}
-			JSONObject json = new JSONObject();
-			System.out.println("creation json");
-			try {
-				json.put("tour", no);
-				 Platform.runLater(() -> {
-					 try {
+			if(endGame){
+				JSONObject json = new JSONObject();
+				try {
+					json.put("fin", true);
+					try {
 						server.broadcast(listClientsServer, json);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				 });
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				if(no==id){
+					beginTurn();
+				}else{
+					plateauView.printMsgGame("C'est au tour du joueur "+ plateauJeu.getJoueur(no).getName() +" !");
+				}
+				JSONObject json = new JSONObject();
+				try {
+					json.put("tour", no);
+					if(!notification.equals("")){
+						json.put("msg", notification);
+					}
+					 Platform.runLater(() -> {
+						 try {
+							server.broadcast(listClientsServer, json);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					 });
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}else{
 			JSONObject json = new JSONObject();
@@ -862,7 +891,7 @@ public class PlateauController extends Thread{
 							plateauView.printNotification("Le port a déjà été pris");
 							return false;
 						}
-						if(!plateauJeu.getJoueur(id).getPions().checkPortIsConnectedToRoad(port)){
+						if(!plateauJeu.getJoueur(id).getPions().checkCityIsConnectedToRoad(port)){
 							plateauView.printNotification("La ville n'est pas connectée à une de vos route");
 							return false;
 						}
