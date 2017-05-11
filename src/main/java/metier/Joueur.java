@@ -166,17 +166,22 @@ public class Joueur implements Visitable{
 		}
 	}
 	
+	/**
+	 * Permet de calculer le score à partir des cartes Destinations, Iténéraire et des ports
+	 * On commence par calculer les points gagnés avec les cartes destinations
+	 * Puis les points gagnés ou le malus des cartes iténéraire
+	 * Et pour finir les points gagnés/perdus avec les ports
+	 */
 	public void calculScore(){
-		bonus=0;
 		System.out.println(cartesD.size()+" taille destination");
 		System.out.println(cartesI.size()+" taille iteneraire");
+		//Pour les ports, il faut qu'une ville soit présente dans une ou plusieurs cartes destination 
+		List<Destination> cartesDPort = new ArrayList<Destination>();
 		int i;
 		for(i=0;i<cartesD.size();i++){
 			if(getPions().checkIfTwoCityAreConnected(cartesD.get(i).getV1(),cartesD.get(i).getV2())){
-				bonus=bonus+cartesD.get(i).getPoint();
-				System.out.println("point bonus : "+bonus);
-			}else{
-				System.out.println("pas relier");
+				this.bonus=this.bonus+cartesD.get(i).getPoint();
+				cartesDPort.add(cartesD.get(i));
 			}
 		}
 		
@@ -195,11 +200,7 @@ public class Joueur implements Visitable{
 			   }else if(v2==null){
 				   v2=villes.get(cle);
 				   if(getPions().checkIfRoadContainsTwoCity(v1, v2)){
-					   System.out.println(v1.getName());
-					   System.out.println(v2.getName());
 					   v1=v2;
-					   System.out.println(v1.getName());
-					   System.out.println(v2.getName());
 					   v2=null;
 				   }else{
 					   ordre=false;
@@ -217,6 +218,28 @@ public class Joueur implements Visitable{
 				malus=malus+cartesI.get(i).getMalus();
 			}
 		}
+		int j;
+		int nb=0;
+		ArrayList<Ville> ports = new ArrayList<Ville>();
+		ports=getPions().getPorts();
+		if(getPions().getNbPort()<3){
+			for(i=0;i<ports.size();i++){
+				nb=0;
+				for(j=0;j<cartesDPort.size();j++){
+					if(cartesDPort.get(j).getV1().getName().equals(ports.get(i).getName())||cartesDPort.get(j).getV2().getName().equals(ports.get(i).getName())){
+						nb++;
+					}
+				}
+				if(nb!=0){
+					bonus=bonus+10+(10*nb);
+				}else{
+					malus=malus+4;
+				}
+			}
+		}else{
+			malus=malus+(3*4);
+		}
+		score=score+bonus-malus;
 	}
 
 	public void deleteDestination(Destination d) {

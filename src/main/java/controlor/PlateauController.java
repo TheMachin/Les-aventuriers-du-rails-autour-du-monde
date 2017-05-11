@@ -1,6 +1,7 @@
 package controlor;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
@@ -23,6 +25,7 @@ import metier.Boat;
 import metier.Carte;
 import metier.Destination;
 import metier.Iteneraire;
+import metier.Joueur;
 import metier.PlateauJeu;
 import metier.RouteMartime;
 import metier.RouteTerrestre;
@@ -232,7 +235,7 @@ public class PlateauController extends Thread{
 						if(b!=null){
 							plateauJeu.getJoueur(no).addBoat(b);
 							json.put("bateau", jsonA.put(gson.toJson(b)));
-							json.put("msg", "Vous avez piocher une carte bateau");
+							json.put("msg", "Vous avez pioché une carte bateau");
 							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte bateau";
 						}else{
 							json.put("error", "La pioche bateau est vide");
@@ -243,7 +246,7 @@ public class PlateauController extends Thread{
 						if(w!=null){
 							plateauJeu.getJoueur(no).addWagon(w);
 							json.put("wagon", jsonA.put(gson.toJson(w)));
-							json.put("msg", "Vous avez piocher une carte wagon");
+							json.put("msg", "Vous avez pioché une carte wagon");
 							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte wagon";
 						}else{
 							json.put("error", "La pioche wagon est vide");
@@ -268,7 +271,7 @@ public class PlateauController extends Thread{
 								json.put("error", "La pioche destination est vide");
 							}
 						}
-						json.put("msg", "Vous avez piocher une carte bateau");
+						json.put("msg", "Vous avez piocher des cartes destinations");
 						msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte destination";
 						try {
 							json.put("destination", jsonAD);
@@ -557,11 +560,9 @@ public class PlateauController extends Thread{
 								if(c.getName().equals(EnumCarte.DESTINATION)){
 									Destination d = (Destination) o;
 									plateauView.setCardsDestinationForChoice(d);
-									plateauJeu.getJoueur(id).addDestination(d);
 								}else{
 									Iteneraire ite = (Iteneraire) o;
 									plateauView.setCardsIteneraireForChoice(ite);
-									plateauJeu.getJoueur(id).addIteneraire(ite);
 								}
 								choixCartes(card);
 								plateauView.printNotification("Vous avez choisi de prendre une ou plusieurs cartes destination");
@@ -653,6 +654,40 @@ public class PlateauController extends Thread{
 		return false;
 	}
 	
+	
+	public void endGame(){
+		System.out.println("fin jeu");
+		JSONObject json = new JSONObject();
+		plateauJeu.calculAllScore();
+		try {
+			json.put("fin", true);
+			Gson gson = new Gson();
+			json.put("listePlayer", gson.toJson(plateauJeu.getListJoueur()));
+			//qui est le gagnant
+			Joueur j = plateauJeu.whoWin();
+			json.put("gagnant", gson.toJson(j));
+			try {
+				server.broadcast(listClientsServer, json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			printScoreAndWinner(plateauJeu.getJoueur(id), j);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void printScoreAndWinner(Joueur j,Joueur winner){
+		if(winner.equals(j)){
+			plateauView.printMsgGame("Vous avez gagné la partie");
+		}else{
+			plateauView.printMsgGame("Le joueur "+winner.getName()+" a gagné la partie. Score : "+winner.getScore());
+		}
+		plateauView.printNotification("Vous avez fait "+plateauJeu.getJoueur(id).getScore()+" Bonus : "+plateauJeu.getJoueur(id).getBonus()+" Malus : "+plateauJeu.getJoueur(id).getMalus());
+	}
+	
 	public void endTurn(){
 		plateauView.printMsgGame("Votre tour est terminé");
 		if(server!=null){
@@ -672,21 +707,7 @@ public class PlateauController extends Thread{
 			}
 			System.out.println(no);
 			if(endGame){
-				System.out.println("fin jeu");
-				JSONObject json = new JSONObject();
-				plateauJeu.calculAllScore();
-				try {
-					json.put("fin", true);
-					try {
-						server.broadcast(listClientsServer, json);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				endGame();
 			}else{
 				System.out.println("jeu continu");
 				if(no==id){
@@ -1162,6 +1183,21 @@ public class PlateauController extends Thread{
 			try {
 				String msg = json.getString("msg");
 				plateauView.printNotification(msg);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(json.has("fin")){
+			Gson gson = new Gson();
+			String jsonTxt;
+			try {
+				jsonTxt = json.getString("listePlayer");
+				Type type = new TypeToken<Map<Integer, Joueur>>(){}.getType();
+				plateauJeu.setListJoueur( gson.fromJson(jsonTxt,type));
+				//qui est le gagnant
+				Joueur j = gson.fromJson((String) json.getString("gagnant"),Joueur.class);
+				printScoreAndWinner(plateauJeu.getJoueur(id), j);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

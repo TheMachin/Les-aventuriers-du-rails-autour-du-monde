@@ -1,6 +1,7 @@
 package metier;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ennumeration.EnumCouleur;
 import visitor.Visitable;
@@ -207,15 +208,16 @@ public class Pions implements Visitable{
 		ArrayList<Route> r2 = new ArrayList<Route>();
 		route.addAll(routeMartime);
 		route.addAll(routeTerreste);
-		
+		System.out.println(route.size());
 		if(explore(route, v1, r2, v2)){
 			return true;
 		}else{
 			return false;
 		}
-	}
+	} 
 	
 	public boolean explore(ArrayList<Route> r,Ville v, ArrayList<Route> rMarque,Ville dest){
+		
 		ArrayList<Route> r2 = new ArrayList<Route>();
 		r2=getAllRoadOfCity(v, r);
 		int i;
@@ -225,7 +227,13 @@ public class Pions implements Visitable{
 					return true;
 				}else{
 					rMarque.add(r2.get(i));
-					return explore(r, v, rMarque, dest);
+					if(explore(r, r2.get(i).getV1(), rMarque, dest)){
+						return true;
+					}else if(explore(r, r2.get(i).getV2(), rMarque, dest)){
+						return true;
+					}else{
+						return false;
+					}
 				}
 			}
 		}

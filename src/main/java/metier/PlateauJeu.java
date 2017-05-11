@@ -135,6 +135,7 @@ public class PlateauJeu implements Visitable{
 		   joueur.calculScore();
 		   System.out.println(joueur.getScore());
 		   System.out.println(joueur.getBonus());
+		   System.out.println(joueur.getMalus());
 		   System.out.println(joueur.getName());
 		}
 	}

@@ -62,7 +62,7 @@ public class Plateau {
 	Ville tiksi = new Ville("Tiksi", true);
 	Ville alqahira = new Ville("Al Qahira", true);
 	Ville portMoresby = new Ville("Port Moresby", true);
-	Ville alZahira = new Ville("Al Zahira", true);
+	//Ville alZahira = new Ville("Al Zahira", true);
 	Ville sydney = new Ville("Sydney", true);
 	Ville athina = new Ville("Athina", true);
 	Ville manila = new Ville("Manila", true);
@@ -255,9 +255,6 @@ public class Plateau {
 		 for(i=0;i<carteI2.size();i++){
 			 iteNonSelect.add(carteI2.get(i));
 		 }
-		 
-		 
-		 System.out.println("go controller "+desSelect.size()+" "+iteSelect.size());
 		 plateauControlle.takeCardsDestination(desSelect, desNonSelect, iteSelect, iteNonSelect);
 	 }
 	 
@@ -664,6 +661,10 @@ public class Plateau {
 			listFxId.add("btv2");
 			listFxId.add("btv3");
 			break;
+		case "vhkm":
+			r = new RouteMartime(1, EnumCouleur.VIOLET, hongkong, manila);
+			listFxId.add("vhkm");
+			break;
 		}
 
 		
@@ -872,10 +873,6 @@ public class Plateau {
 				r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
 				listFxId.add("raqd");
 				break;
-			case "vhkm":
-				r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, manila);
-				listFxId.add("vhkm");
-				break;
 			case "baqd":
 				r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
 				listFxId.add("baqd");
@@ -1062,7 +1059,7 @@ public class Plateau {
 			for(i=0;i<r.getNbPion();i++){
 				color = null;
 				int voie = 0;
-				for(j=0;j<2 && voie<2;j++){
+				//for(j=0;j<2 && voie<2;j++){
 					for (k = 0; k < HboxSelect.getChildren().size(); k++) {
 						if (carteW.containsKey(HboxSelect.getChildren().get(k)) && !listLbl.contains(HboxSelect.getChildren().get(k))) {
 							Wagon c = carteW.get(HboxSelect.getChildren().get(k));
@@ -1078,7 +1075,7 @@ public class Plateau {
 							}
 						}
 					}
-				}
+				//}
 			}
 			for (i = 0; i < HboxSelect.getChildren().size(); i++) {
 				if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
@@ -1344,8 +1341,8 @@ public class Plateau {
 	 
 	 public void pionChoix(){
 		 panePion.toFront();
-		 lblSelectNbBoat.setText("25");
-		 lblSelectNbWagon.setText("35");
+		 lblSelectNbBoat.setText("40");
+		 lblSelectNbWagon.setText("20");
 	 }
 	 
 	 @FXML

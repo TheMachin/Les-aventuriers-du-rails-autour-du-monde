@@ -48,9 +48,9 @@ public class PlateauControllerTest {
 		joueurs.put(0, j);
 		plateau.setListJoueur(joueurs);
 		p.setPlateauJeu(plateau);
-		assertEquals(false, p.checkTakeRoadWagon(r));
+		assertEquals(false, p.checkTakeRoadWagon(r, 0));
 		assertEquals(true, p.takeRoadWagonOrBoatOrPort(r, null, null, null));
-		assertEquals(true, p.checkTakeRoadWagon(r));
+		assertEquals(true, p.checkTakeRoadWagon(r, 0));
 		
 	}
 	
@@ -73,9 +73,9 @@ public class PlateauControllerTest {
 		joueurs.put(0, j);
 		plateau.setListJoueur(joueurs);
 		p.setPlateauJeu(plateau);
-		assertEquals(false, p.checkTakeRoadWagon(r));
+		assertEquals(false, p.checkTakeRoadWagon(r, 0));
 		assertEquals(true, p.takeRoadWagonOrBoatOrPort(r, null, null, null));
-		assertEquals(true, p.checkTakeRoadWagon(r));
+		assertEquals(true, p.checkTakeRoadWagon(r, 0));
 		
 	}
 	

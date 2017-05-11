@@ -241,14 +241,14 @@ public class Paquet implements Visitable{
 		Ville vancouver = new Ville("Vancouver", true);
 		Ville winnipeg = new Ville("Winnipeg", false);
 		
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 19, alZahira, sydney, "/images/destination/AlZahiraSydney.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 19, alqahira, sydney, "/images/destination/AlZahiraSydney.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, athina, manila, "/images/destination/AthinaManila.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 6, bangkok, tokyo, "/images/destination/BangkokTokyo.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 17, buenos, manila, "/images/destination/BuenosAiresManila.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 18, buenos, marseille, "/images/destination/BuenosAiresMarseille.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, buenos, sydney, "/images/destination/BuenosAiresSydney.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, capeTown, jakarta, "/images/destination/CapTownJakarta.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, caracas, alZahira, "/images/destination/CaracasAlZahira.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 13, caracas, alqahira, "/images/destination/CaracasAlZahira.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 12, caracas, athina, "/images/destination/CaracasAthina.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 16, casablanca, honolulu, "/images/destination/CasablancaHonolulu.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 16, casablanca, yakutsk, "/images/destination/CasanblancaVakutsk.png"));
@@ -269,7 +269,7 @@ public class Paquet implements Visitable{
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, losAngeles, hamburg, "/images/destination/LosAngelesHamburg.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 11, losAngeles, jakarta, "/images/destination/LosAngelesJakarta.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 15, losAngeles, rio, "/images/destination/LosAngelesRioDeJaneiro.png"));
-		pDestination.add(new Destination(EnumCarte.DESTINATION, 5, marseille, alZahira, "/images/destination/MarseilleAlZahira.png"));
+		pDestination.add(new Destination(EnumCarte.DESTINATION, 5, marseille, alqahira, "/images/destination/MarseilleAlZahira.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 14, marseille, beijing, "/images/destination/MarseilleBeijing.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 23, marseille, christchurch, "/images/destination/MarseilleChristchurch.png"));
 		pDestination.add(new Destination(EnumCarte.DESTINATION, 18, marseille, jakarta, "/images/destination/MarseilleJakarta.png"));
