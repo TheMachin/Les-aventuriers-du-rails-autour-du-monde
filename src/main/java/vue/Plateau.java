@@ -44,6 +44,12 @@ public class Plateau {
 	
 	@FXML 
 	private Label lblDeckDestination, lblSelectDestination;
+	
+	@FXML 
+	private HBox boatDiscover1, boatDiscover2, boatDiscover3;
+	
+	@FXML 
+	private HBox wagonDiscover1, wagonDiscover2, wagonDiscover3;
 
 	@FXML 
 	private HBox HboxMain, hboxDestination, hboxDestinationSelect;
@@ -118,6 +124,8 @@ public class Plateau {
 	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
 	private Map<Label,Destination> carteD = new HashMap<Label,Destination>();
 	private Map<Label,Iteneraire> carteI = new HashMap<Label,Iteneraire>();
+	private Map<Label,Wagon> carteWD = new HashMap<Label,Wagon>();
+	private Map<Label,Boat> carteBD = new HashMap<Label,Boat>();
 	private List<Label> carteCSelect = new ArrayList<Label>();
 	private String themeUrl = getClass().getResource("plateau.css").toExternalForm();
 	
@@ -126,6 +134,108 @@ public class Plateau {
 		this.plateauControlle=plateauController;
 		HboxMain = new HBox();
 		HboxSelect = new HBox();
+	}
+	
+	public void setCardWagonInWagonDiscover1(Wagon w){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardWagon1);
+	    this.wagonDiscover1.getChildren().add(lbl);
+	    this.carteWD.put(lbl, w);
+	}
+	
+	@FXML
+	private void takeCardWagon1(MouseEvent e){
+				
+	}
+	
+	public void setCardWagonInWagonDiscover2(Wagon w){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardWagon2);
+	    this.wagonDiscover2.getChildren().add(lbl);
+	    this.carteWD.put(lbl, w);
+	}
+	
+	@FXML
+	private void takeCardWagon2(MouseEvent e){
+				
+	}
+	
+	public void setCardWagonInWagonDiscover3(Wagon w){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardWagon3);
+	    this.wagonDiscover3.getChildren().add(lbl);
+	    this.carteWD.put(lbl, w);
+	}
+	
+	@FXML
+	private void takeCardWagon3(MouseEvent e){
+				
+	}
+	
+	public void setCardBoatInBoatDiscover1(Boat b){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardBoat1);
+	    this.boatDiscover1.getChildren().add(lbl);
+	    this.carteBD.put(lbl, b);
+	}
+	
+	@FXML
+	private void takeCardBoat1(MouseEvent e){
+				
+	}
+	
+	public void setCardBoatInBoatDiscover2(Boat b){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardBoat2);
+	    this.boatDiscover2.getChildren().add(lbl);
+	    this.carteBD.put(lbl, b);
+	}
+	
+	@FXML
+	private void takeCardBoat2(MouseEvent e){
+				
+	}
+	
+	public void setCardBoatInBoatDiscover3(Boat b){
+		Label lbl = new Label();
+		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+		ImageView imageView = new ImageView(image);
+		imageView.setFitWidth(150); 
+        imageView.setFitHeight(99);
+	    lbl.setGraphic(imageView);
+	    lbl.setOnMouseClicked(this::takeCardBoat3);
+	    this.boatDiscover3.getChildren().add(lbl);
+	    this.carteBD.put(lbl, b);
+	}
+	
+	@FXML
+	private void takeCardBoat3(MouseEvent e){
+				
 	}
 	
 	public void setCardsWagonInMainOfPlayer(Wagon w){

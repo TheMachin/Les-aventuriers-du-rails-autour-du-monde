@@ -318,12 +318,6 @@
                                     <Label fx:id="lblDeckBoat" layoutY="7.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: DeepSkyBlue;" />
                                     <Label fx:id="lblDeckWagon" layoutX="157.0" layoutY="7.0" onMouseClicked="#takeHideTrainCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: orange;" />
                                     <Label fx:id="lblDeckDestination" layoutX="314.0" layoutY="7.0" onMouseClicked="#takeHideDestinationCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: green;" />
-                                    <Label id="lblP1" fx:id="boatDiscover1" layoutX="25.0" layoutY="173.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
-                                    <Label id="lblP2" fx:id="wagonDiscover1" layoutX="191.0" layoutY="173.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
-                                    <Label id="lblP3" fx:id="boatDiscover2" layoutX="25.0" layoutY="291.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
-                                    <Label id="lblP4" fx:id="wagonDiscover2" layoutX="191.0" layoutY="291.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
-                                    <Label id="lblP5" fx:id="boatDiscover3" layoutX="25.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
-                                    <Label id="lblP6" fx:id="wagonDiscover3" layoutX="191.0" layoutY="408.0" prefHeight="105.0" prefWidth="150.0" style="-fx-border-style: solid;" />
                                     <ImageView fitHeight="63.0" fitWidth="67.0" layoutX="201.0" layoutY="14.0" onMouseClicked="#takeHideTrainCard" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/wagon.png" />
@@ -353,7 +347,13 @@
                                        <font>
                                           <Font size="14.0" />
                                        </font>
-                                    </Label>                              
+                                    </Label>
+                                    <HBox fx:id="boatDiscover1" layoutX="47.0" layoutY="159.0" prefHeight="99.0" prefWidth="150.0" />
+                                    <HBox fx:id="boatDiscover2" layoutX="47.0" layoutY="282.0" prefHeight="99.0" prefWidth="150.0" />
+                                    <HBox fx:id="boatDiscover3" layoutX="47.0" layoutY="404.0" prefHeight="99.0" prefWidth="150.0" />
+                                    <HBox fx:id="wagonDiscover1" layoutX="233.0" layoutY="159.0" prefHeight="99.0" prefWidth="150.0" />
+                                    <HBox fx:id="wagonDiscover2" layoutX="233.0" layoutY="282.0" prefHeight="99.0" prefWidth="150.0" />
+                                    <HBox fx:id="wagonDiscover3" layoutX="233.0" layoutY="404.0" prefHeight="99.0" prefWidth="150.0" />                              
                                  </children>
                                  </AnchorPane>
                           </items>

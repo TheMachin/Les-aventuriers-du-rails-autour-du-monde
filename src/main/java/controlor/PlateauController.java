@@ -1,6 +1,7 @@
 package controlor;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
@@ -96,12 +98,42 @@ public class PlateauController extends Thread{
 		int i=0;
 		Set cles = listClientsServer.keySet();
 		Iterator it = cles.iterator();
+		
+		ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+		ArrayList<Boat> pBoat = new ArrayList<Boat>();
+		Wagon w1 = plateauJeu.getPaquet().piocheWagon();
+		Wagon w2 = plateauJeu.getPaquet().piocheWagon();
+		Wagon w3 = plateauJeu.getPaquet().piocheWagon();
+		pWagon.add(w1);
+		pWagon.add(w2);
+		pWagon.add(w3);
+		plateauView.setCardWagonInWagonDiscover1(w1);
+		plateauView.setCardWagonInWagonDiscover2(w2);
+		plateauView.setCardWagonInWagonDiscover3(w3);
+		
+		Boat b1 = plateauJeu.getPaquet().piocheBoat();
+		Boat b2 = plateauJeu.getPaquet().piocheBoat();
+		Boat b3 = plateauJeu.getPaquet().piocheBoat();
+		pBoat.add(b1);
+		pBoat.add(b2);
+		pBoat.add(b3);
+		plateauView.setCardBoatInBoatDiscover1(b1);
+		plateauView.setCardBoatInBoatDiscover2(b2);
+		plateauView.setCardBoatInBoatDiscover3(b3);
+		
 		while (it.hasNext()){
 		   int cle = (int) it.next();
 		   
 		   json = new JSONObject();
 		   jsonA = new JSONArray();
 		   gson = new Gson();
+		   try {
+			json.put("visibleWagon", gson.toJson(pWagon));
+			json.put("visibleBoat", gson.toJson(pBoat));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 			for(i=0;i<3;i++){
 				Wagon w = plateauJeu.getPaquet().piocheWagon();
 				jsonA.put(gson.toJson(w));
@@ -178,6 +210,7 @@ public class PlateauController extends Thread{
 		}
 		
 		server.setPlateauControllerAtThread(listClientsServer, this);
+		
 		
 	}
 	
@@ -659,7 +692,7 @@ public class PlateauController extends Thread{
 			int no = plateauJeu.whoIsNext();
 			String notification="";
 			boolean endGame=false;
-			if(plateauJeu.checkIfGameWillBeEnd()){
+			/*if(plateauJeu.checkIfGameWillBeEnd()){
 				if(!plateauJeu.endGame()){
 					notification="Il reste moins de 2 tours";
 				}else{
@@ -667,7 +700,7 @@ public class PlateauController extends Thread{
 					endGame=true;
 				}
 				plateauView.printNotification(notification);
-			}
+			}*/
 			if(endGame){
 				JSONObject json = new JSONObject();
 				try {
@@ -1243,6 +1276,34 @@ public class PlateauController extends Thread{
 				try {
 					String msg = json.getString("msg");
 					plateauView.printNotification(msg);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(json.has("visibleWagon")){
+				try {
+					String visibleWagon = json.getString("visibleWagon");
+					Type type = new TypeToken<List<Wagon>>(){}.getType();
+					List<Wagon> listFxId = gson.fromJson(visibleWagon, type);
+					int i;
+					plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
+					plateauView.setCardWagonInWagonDiscover2(listFxId.get(1));
+					plateauView.setCardWagonInWagonDiscover3(listFxId.get(2));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(json.has("visibleBoat")){
+				try {
+					String visibleBoat = json.getString("visibleBoat");
+					Type type = new TypeToken<List<Boat>>(){}.getType();
+					List<Boat> listFxId = gson.fromJson(visibleBoat, type);
+					int i;
+					plateauView.setCardBoatInBoatDiscover1(listFxId.get(0));
+					plateauView.setCardBoatInBoatDiscover2(listFxId.get(1));
+					plateauView.setCardBoatInBoatDiscover3(listFxId.get(2));
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
