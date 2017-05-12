@@ -52,14 +52,6 @@ public class Client extends Thread{
     }
     
     public String getIpAdress(){
-		/*InetAddress ipAddr = null;
-		try {
-			ipAddr = Inet4Address.getLocalHost();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        return ipAddr.getHostAddress();*/
     	InetAddress ip = socket.getInetAddress();
     	return ip.getHostName();
 	}
@@ -67,6 +59,7 @@ public class Client extends Thread{
     public void deconnection(){
     	try {
 			socket.close();
+			cancelTimer();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,9 +128,11 @@ public class Client extends Thread{
     }
     
     public void cancelTimer(){
-    	t.cancel();
-    	tt.cancel();
-    	t.cancel();
+    	if(t!=null){
+	    	t.cancel();
+	    	tt.cancel();
+	    	t.cancel();
+    	}
     	t=null;
     }
     

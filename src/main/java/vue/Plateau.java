@@ -10,6 +10,7 @@ import controlor.PlateauController;
 import ennumeration.EnumCouleur;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.MainMenu;
 import metier.Boat;
 import metier.Carte;
@@ -1329,6 +1331,18 @@ public class Plateau {
 
 	public void setMain(MainMenu main) {
 		this.main = main;
+		main.getStage().setOnCloseRequest(new EventHandler<WindowEvent>(){
+			@Override
+			public void handle(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				System.out.println("Le joueur effectue un rage-quit");
+				if(plateauControlle!=null){
+					plateauControlle.deconnexion();
+				}
+				Platform.exit();
+			}
+			 
+		 });
 	}
 
 	public void setPlateauController(PlateauController plateauControlle) {
@@ -1337,6 +1351,13 @@ public class Plateau {
 	 
 	 public PlateauController getPlateauControlle() {
 			return plateauControlle;
+	 }
+	 
+	 public void closeStage(){
+		 if(stageScore.isShowing()){
+			 stageScore.close();
+		 }
+		 main.getStage().close();
 	 }
 	 
 	 public void pionChoix(){

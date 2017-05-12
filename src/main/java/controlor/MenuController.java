@@ -101,15 +101,25 @@ public class MenuController {
 					menuView.setMsgAdressIp("Problème de connexion avec le serveur.");
 				}
 				if(json!=null){
-					try {
-						id=json.getInt("id");
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						menuView.setMsgAdressIp("Le transfert de donnée a échouée");
+					if(json.has("id")){
+						try {
+							id=json.getInt("id");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							menuView.setMsgAdressIp("Le transfert de donnée a échouée");
+						}
+						menuView.setAdressIP("IP : "+client.getIpAdress()+" port : "+port);
+						menuView.setPanePseudo();
+						menuView.setCombobox(id);
+					}else if(json.has("refus")){
+						try {
+							menuView.setMsgAdressIp(json.getString("refus"));
+							client.deconnection();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-					menuView.setAdressIP("IP : "+client.getIpAdress()+" port : "+port);
-					menuView.setPanePseudo();
-					menuView.setCombobox(id);
 				}else{
 					
 				}
@@ -167,6 +177,30 @@ public class MenuController {
 		plateauController.waitServerMsg();
 	}
 	
+	public void deconnexion(){
+		System.out.println("fenetre fermé");
+		if(server!=null){
+			JSONObject json=new JSONObject();
+			try {
+				json.put("serverLeave", true);
+				t.interrupt();
+				System.out.println(listClientsServer.size());
+				if(listClientsServer.size()>=1){
+					server.broadcast(listClientsServer, json);
+				}
+				server.closeAccess();
+				server.closeAllThread();
+				server.closeServer();
+				
+			} catch (JSONException | IOException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(client!=null){
+			client.deconnection();
+		}
+	}
+	
 	/**
 	 * On ajoute un nouveau joueur dans la partie
 	 * @param nb
@@ -190,6 +224,13 @@ public class MenuController {
 		}else if(json.has("plateau")){
 			client.cancelTimer();
 			menuView.setVisibleButtunStartGame();
+		}else if(json.has("serverLeave")){
+			boolean b = json.getBoolean("serverLeave");
+			if(b){
+				client.cancelTimer();
+				client.deconnection();
+				menuView.setMsgError("Le joueur hébergeant la partie a quitté. Veuillez relancer le jeu");
+			}
 		}else{
 			jsonInformationGame(json);
 		}

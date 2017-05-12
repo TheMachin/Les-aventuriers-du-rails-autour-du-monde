@@ -12,6 +12,7 @@ import controlor.PlateauController;
 import ennumeration.EnumCouleur;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.MainMenu;
 import metier.Joueur;
 import server.Client;
@@ -34,7 +36,7 @@ public class Menu{
 
 	private MainMenu main;
 	private MenuController menuController = new MenuController(this);
-    
+	
 	@FXML
 	private Label lblMsgError, lblMsgIp, lblIP;
 	
@@ -322,7 +324,7 @@ public class Menu{
 	
 	public Plateau changerPlateau(PlateauController plateauController){
 		
-		Stage stage = (Stage) lblMsgError.getScene().getWindow();
+		Stage stage = main.getStage();
 		
 		Parent root = null;
 		Plateau plateau = new Plateau(plateauController);
@@ -379,13 +381,22 @@ public class Menu{
 	
 	public void setMain(MainMenu main){
 		 this.main=main;
-		 if(main==null){
-			 System.out.println("le main est nulle");
-		 }
+		 main.getStage().setOnCloseRequest(new EventHandler<WindowEvent>(){
+
+			@Override
+			public void handle(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				if(menuController!=null){
+					menuController.deconnexion();
+				}
+				Platform.exit();
+			}
+			 
+		 });
 	 }
 	
-	public void setMenuController(MenuController main){
-		 this.menuController=main;
+	public void setMenuController(MenuController menuController){
+		 this.menuController=menuController;
 	 }
-
+	
 }

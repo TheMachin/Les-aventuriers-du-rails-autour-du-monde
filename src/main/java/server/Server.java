@@ -60,6 +60,10 @@ public class Server implements Runnable{
 		menuBoolean=false;
 	}
 	
+	public void closeAccess(){
+		menuBoolean=false;
+	}
+	
 	public void setPlateauControllerAtThread(Map<Integer,MyThreadHandler> listClient, PlateauController plateau){
 		Set cles = listClient.keySet();
 		Iterator it = cles.iterator();
@@ -207,10 +211,19 @@ public class Server implements Runnable{
             System.out.println(noDispo.toString());
             if(noDispo.size()>=1){
         		no=noDispo.get(0);
-        		noDispo.remove(noDispo.get(0));
+        		if(no!=0){
+        			noDispo.remove(noDispo.get(0));
+        		}else{
+        			try {
+						refuseConnection("La partie est pleine");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        		}
         	}else{
             	try {
-					closeSocket();
+            		refuseConnection("La partie est pleine");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -249,6 +262,18 @@ public class Server implements Runnable{
                 }
             }
         }
+		
+		public void refuseConnection(String msg) throws IOException{
+			JSONObject json = new JSONObject();
+			try {
+				json.put("refus", msg);
+				sendJSON(json);
+			} catch (JSONException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			closeSocket();
+		}
 
         public void closeSocket() throws IOException {
         	System.out.println("socket fermé");
@@ -257,7 +282,9 @@ public class Server implements Runnable{
         		if(menuBoolean){
         			menu.clientDeconnecter(no);
         		}else{
-        			plateau.clientDeconnecter(no);
+        			if(plateau!=null){
+        				plateau.clientDeconnecter(no);
+        			}
         		}
 
     			noDispo.add(no);
@@ -265,6 +292,8 @@ public class Server implements Runnable{
         		System.out.println(noDispo.toString());
         		socket.close();
         		
+        	}else{
+        		socket.close();
         	}
             
         }
@@ -312,7 +341,9 @@ public class Server implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			this.start(port);
+			if(menuBoolean){
+				this.start(port);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

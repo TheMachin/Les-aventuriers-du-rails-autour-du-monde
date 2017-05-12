@@ -91,6 +91,37 @@ public class PlateauController extends Thread{
 		this.plateauJeu = plateauJeu;
 		this.plateauJeu.setAllPlayerNotReady();
 	}
+	
+	public void deconnexion() {
+		// TODO Auto-generated method stub
+		if(server!=null){
+			JSONObject json=new JSONObject();
+			try {
+				json.put("serverLeave", true);
+				System.out.println(listClientsServer.size());
+				plateauView.closeStage();
+				if(listClientsServer.size()>=1){
+					server.broadcast(listClientsServer, json);
+				}
+				server.closeAccess();
+				server.closeAllThread();
+				server.closeServer();
+				
+			} catch (JSONException | IOException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(client!=null){
+			client.deconnection();
+		}
+	}
+	
+	public void clientDeconnecte(){
+		tour=false;
+		plateauView.printMsgGame("Le joueur hébergant la partie a quitté.");
+		plateauView.printNotification("La partie est terminée");
+		client.deconnection();
+	}
 
 	public void sendFirstCards(){
 		JSONObject json;
@@ -190,6 +221,9 @@ public class PlateauController extends Thread{
 			plateauJeu.getJoueur(no).setStart(false);
 			if(plateauJeu.getNbPlayerActif()<=1){
 				server.closeServer();
+				plateauView.printMsgGame("La partie est fini");
+			}else{
+				plateauView.printNotification("Le client "+plateauJeu.getJoueur(no).getName()+" a quitté la partie");
 			}
 		}else{
 			client.deconnection();
@@ -873,7 +907,9 @@ public class PlateauController extends Thread{
 					json.put("fxId", gson.toJson(listFxId));
 					client.sendJSON(json);
 					json = client.receiveJSON();
-					if(json.has("routePrise")){
+					if(json.has("serverLeave")){
+						clientDeconnecte();
+					}else if(json.has("routePrise")){
 						int score = json.getInt("score");
 						routePort=true;
 						plateauJeu.getJoueur(id).setScore(score);
@@ -978,7 +1014,9 @@ public class PlateauController extends Thread{
 					json.put("id", no);
 					client.sendJSON(json);
 					json = client.receiveJSON();
-					if(json.has("checkPionRoad")){
+					if(json.has("serverLeave")){
+						clientDeconnecte();
+					}else if(json.has("checkPionRoad")){
 						if(json.getBoolean("checkPionRoad")){
 							return true;
 						}else if(no==id){
@@ -1112,6 +1150,9 @@ public class PlateauController extends Thread{
 			try {
 				client.sendJSON(json);
 				json = client.receiveJSON();
+				if(json.has("serverLeave")){
+					clientDeconnecte();
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1188,6 +1229,9 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}
+		if(json.has("serverLeave")){
+			clientDeconnecte();
+		}
 		if(json.has("fin")){
 			Gson gson = new Gson();
 			String jsonTxt;
@@ -1221,7 +1265,9 @@ public class PlateauController extends Thread{
 			e.printStackTrace();
 		}
 		if(json!=null){
-			if(json.has("wagon")){
+			if(json.has("serverLeave")){
+				clientDeconnecte();
+			}else if(json.has("wagon")){
 				int i = 0;
 				try {
 					jsonA = json.getJSONArray("wagon");
@@ -1300,5 +1346,7 @@ public class PlateauController extends Thread{
 			plateauJeu.calculAllScore();
 		}
 	}
+
+	
 	
 }
