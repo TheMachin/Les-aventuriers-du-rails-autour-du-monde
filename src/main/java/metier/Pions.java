@@ -10,7 +10,9 @@ import visitor.Visitor;
 public class Pions implements Visitable{
 	private EnumCouleur couleur;
 	private int nbWagon;
+	private int nbWagonRestant;
 	private int nbBoat;
+	private int nbBoatRestant;
 	private int nbPort=3;
 	private ArrayList<Ville> ports = new ArrayList<Ville>();
 	private ArrayList<RouteTerrestre> routeTerreste = new ArrayList<RouteTerrestre>();
@@ -26,6 +28,8 @@ public class Pions implements Visitable{
 		this.couleur = couleur;
 		this.nbWagon = nbWagon;
 		this.nbBoat = nbBoat;
+		this.nbBoatRestant=Math.abs(nbBoat-50);
+		this.nbWagonRestant=Math.abs(nbWagon-25);
 	}
 	
 	
@@ -46,6 +50,18 @@ public class Pions implements Visitable{
 	}
 	public int getNbPort() {
 		return nbPort;
+	}
+	public int getNbWagonRestant() {
+		return nbWagonRestant;
+	}
+	public void setNbWagonRestant(int nbWagonRestant) {
+		this.nbWagonRestant = nbWagonRestant;
+	}
+	public int getNbBoatRestant() {
+		return nbBoatRestant;
+	}
+	public void setNbBoatRestant(int nbBoatRestant) {
+		this.nbBoatRestant = nbBoatRestant;
 	}
 
 
@@ -86,6 +102,32 @@ public class Pions implements Visitable{
 
 	public void setRouteMartime(ArrayList<RouteMartime> routeMartime) {
 		this.routeMartime = routeMartime;
+	}
+	
+	
+	public String choicePion(int wagon,int boat){
+		if(wagon>25){
+			return "Le nombre de pion wagon est limité à 25";
+		}else{
+			this.nbWagon=wagon;
+			this.nbWagonRestant=Math.abs(wagon-25);
+		}
+		if(boat>50){
+			return "Le nombre de pion bateau est limité à 50";
+		}else{
+			this.nbBoat=boat;
+			this.nbBoatRestant=Math.abs(boat-50);
+		}
+		return "ok";
+	}
+	
+	public int exchangePion(int wagon, int boat, int wR, int bR){
+		int pointPerdu = Math.abs(this.nbWagon-wagon);
+		this.nbWagon=wagon;
+		this.nbWagonRestant=wR;
+		this.nbBoat=boat;
+		this.nbBoatRestant=bR;
+		return -pointPerdu;
 	}
 	
 	/**

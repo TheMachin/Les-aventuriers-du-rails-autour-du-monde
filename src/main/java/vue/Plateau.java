@@ -39,7 +39,7 @@ public class Plateau {
 
 	
 	@FXML 
-	private Label lblDeckBoat, lblMsgGame, lblMsgNotification;
+	private Label lblDeckBoat, lblMsgGame, lblMsgNotification, lblBateauRestant, lblWagonRestant, lblMsgPion;
 	
 	@FXML 
 	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore, lblPionPort;
@@ -175,8 +175,8 @@ public class Plateau {
 	}
 	
 	@FXML
-	private void scorelive(ActionEvent e){
-		plateauControlle.scoreLive();
+	private void exchangePion(){
+		plateauControlle.exchangePion();
 	}
 	
 	
@@ -1360,19 +1360,37 @@ public class Plateau {
 		 main.getStage().close();
 	 }
 	 
-	 public void pionChoix(){
+	 /**
+	  * Affiche un pane invitant à choisir le nombre de wagon/bateau
+	  * @param wagon
+	  * @param wRestant
+	  * @param boat
+	  * @param bRestant
+	  * @param perte : Permet d'afficher ou non la perte de point
+	  */
+	 public void pionChoix(int wagon, int wRestant, int boat, int bRestant, boolean perte){
 		 panePion.toFront();
-		 lblSelectNbBoat.setText("40");
-		 lblSelectNbWagon.setText("20");
+		 lblSelectNbBoat.setText(String.valueOf(boat));
+		 lblBateauRestant.setText(String.valueOf(bRestant));
+		 lblSelectNbWagon.setText(String.valueOf(wagon));
+		 lblWagonRestant.setText(String.valueOf(wRestant));
+	 }
+	 
+	 public void printMsgPion(String msg){
+		 lblMsgPion.setText(msg);
 	 }
 	 
 	 @FXML
 	 private void addPionWagon(ActionEvent e){
 		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>=0&&boat>0){
+		 int wR = Integer.parseInt(lblWagonRestant.getText());
+		 int bR = Integer.parseInt(lblBateauRestant.getText());
+		 if(wagon>=0&&boat>0&&wR>0&&bR>=0){
 			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
 			 lblSelectNbBoat.setText(String.valueOf(boat-1));
+			 lblBateauRestant.setText(String.valueOf(bR+1));
+			 lblWagonRestant.setText(String.valueOf(wR-1));
 		 }
 	 }
 	 
@@ -1380,9 +1398,13 @@ public class Plateau {
 	 private void removePionWagon(ActionEvent e){
 		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>0&&boat>=0){
+		 int wR = Integer.parseInt(lblWagonRestant.getText());
+		 int bR = Integer.parseInt(lblBateauRestant.getText());
+		 if(wagon>0&&boat>=00&&wR>=0&&bR>0){
 			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
 			 lblSelectNbBoat.setText(String.valueOf(boat+1));
+			 lblBateauRestant.setText(String.valueOf(bR-1));
+			 lblWagonRestant.setText(String.valueOf(wR+1));
 		 }
 	 }
 	 
@@ -1390,9 +1412,13 @@ public class Plateau {
 	 private void addPionWBoat(ActionEvent e){
 		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>0&&boat>=0){
+		 int wR = Integer.parseInt(lblWagonRestant.getText());
+		 int bR = Integer.parseInt(lblBateauRestant.getText());
+		 if(wagon>0&&boat>=00&&wR>=0&&bR>0){
 			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
 			 lblSelectNbBoat.setText(String.valueOf(boat+1));
+			 lblBateauRestant.setText(String.valueOf(bR-1));
+			 lblWagonRestant.setText(String.valueOf(wR+1));
 		 }
 	 }
 	 
@@ -1400,25 +1426,31 @@ public class Plateau {
 	 private void removePionBoat(ActionEvent e){
 		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>=0&&boat>0){
+		 int wR = Integer.parseInt(lblWagonRestant.getText());
+		 int bR = Integer.parseInt(lblBateauRestant.getText());
+		 if(wagon>=0&&boat>0&&wR>0&&bR>=0){
 			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
 			 lblSelectNbBoat.setText(String.valueOf(boat-1));
+			 lblBateauRestant.setText(String.valueOf(bR+1));
+			 lblWagonRestant.setText(String.valueOf(wR-1));
 		 }
 	 }
 	 
 	 @FXML
 	 private void confirmPion(ActionEvent e){
-		 panePion.toBack();
 		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
 		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 
-		 plateauControlle.setPion(wagon, boat);
-		 printPion(wagon, boat, 3);
-		 
-		
+		 int wR = Integer.parseInt(lblWagonRestant.getText());
+		 int bR = Integer.parseInt(lblBateauRestant.getText());
+		 plateauControlle.setPion(wagon, boat, wR, bR);
+	 }
+	 
+	 public void closePanePion(){
+		 panePion.toBack();
 	 }
 	 
 	 public void printPion(int wagon, int boat, int port){
+		 
 		 lblPionWagon.setText(String.valueOf(wagon));
 		 lblPionBoat.setText(String.valueOf(boat));
 		 lblPionPort.setText(String.valueOf(port));

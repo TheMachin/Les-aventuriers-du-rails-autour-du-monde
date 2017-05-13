@@ -17,7 +17,7 @@
    <children>
       <Pane fx:id="panePion" layoutX="10.0" layoutY="10.0" prefHeight="358.0" prefWidth="634.0" style="-fx-background-color: LightGray; -fx-border-color: black;" AnchorPane.leftAnchor="700.0" AnchorPane.topAnchor="200.0">
          <children>
-            <Label layoutX="150.0" layoutY="28.0" prefHeight="17.0" prefWidth="309.0" text="Veuillez sélectionner des pions (60 pions au total)" />
+            <Label fx:id="lblMsgPion" layoutX="162.0" layoutY="23.0" prefHeight="17.0" prefWidth="309.0" text="Veuillez sélectionner des pions (60 pions au total)" />
             <Button layoutX="457.0" layoutY="300.0" mnemonicParsing="false" onAction="#confirmPion" prefHeight="25.0" prefWidth="133.0" text="Valider" />
             <ImageView fitHeight="91.0" fitWidth="91.0" layoutX="96.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -59,6 +59,17 @@
                   <Font size="18.0" />
                </font>
             </Button>
+            <Label fx:id="lblWagonRestant" layoutX="435.0" layoutY="95.0" prefHeight="35.0" prefWidth="46.0" text="0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblBateauRestant" layoutX="435.0" layoutY="210.0" prefHeight="35.0" prefWidth="46.0" text="0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="393.0" layoutY="50.0" prefHeight="35.0" prefWidth="111.0" text="Pion(s) restant(s)" />
          </children>
       </Pane>
       <Pane fx:id="paneDestination" prefHeight="409.0" prefWidth="860.0" style="-fx-background-color: LightGray; -fx-border-color: black;" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="200.0">
@@ -436,7 +447,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <Button layoutX="1811.0" layoutY="84.0" mnemonicParsing="false" onAction="#scorelive" text="Button" />
+                        <Button layoutX="1811.0" layoutY="91.0" mnemonicParsing="false" onAction="#exchangePion" text="Echanger" />
                      </children></AnchorPane>
               </items>
             </SplitPane>

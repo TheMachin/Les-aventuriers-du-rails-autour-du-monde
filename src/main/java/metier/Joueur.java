@@ -40,7 +40,7 @@ public class Joueur implements Visitable{
 		this.score = score;
 		this.bonus = bonus;
 		this.malus = malus;
-		pions = new Pions(couleur, 0, 0);
+		pions = new Pions(couleur, 20, 40);
 	}
 	
 	public Joueur(String name, EnumCouleur couleur, int score, int bonus, int malus,boolean start) {
@@ -51,7 +51,7 @@ public class Joueur implements Visitable{
 		this.bonus = bonus;
 		this.malus = malus;
 		this.start=start;
-		pions = new Pions(couleur, 0, 0);
+		pions = new Pions(couleur, 20, 40);
 	}
 	
 	public String getName() {

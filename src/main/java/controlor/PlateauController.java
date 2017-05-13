@@ -255,6 +255,24 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 			
+		}else if(json.has("pionEchange")){
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				JSONObject json2 = new JSONObject();
+				json.put("boat", plateauJeu.getJoueur(no).getPions().getNbBoat());
+				json.put("wagon", plateauJeu.getJoueur(no).getPions().getNbWagon());
+				json.put("boatR", plateauJeu.getJoueur(no).getPions().getNbBoatRestant());
+				json.put("wagonR", plateauJeu.getJoueur(no).getPions().getNbWagonRestant());
+				String msg = "Le joueur "+plateauJeu.getJoueur(no).getName()+" effectue un échange de pion";
+				json2.put("msg", msg);
+				plateauView.printNotification(msg);
+				server.broadcastExceptOne(listClientsServer, json2, no);
+				return json;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else if(json.has("pioche")){
 			try {
 				int no = json.getInt("id");
@@ -518,15 +536,44 @@ public class PlateauController extends Thread{
 				int no = json.getInt("id");
 				int boat = json.getInt("pionBateau");
 				int wagon = json.getInt("pionWagon");
-				plateauJeu.getListJoueur().get(no).getPions().setNbBoat(boat);
-				plateauJeu.getListJoueur().get(no).getPions().setNbWagon(wagon);
+				int wR = json.getInt("pionWR");
+				int bR = json.getInt("pionBR");
+				boolean init = json.getBoolean("init");
 				json = new JSONObject();
-				json.put("pion", true);
-				plateauJeu.getListJoueur().get(no).setStart(true);
-				if(plateauJeu.checkIfAllPlayerAreReady()){
-					this.endTurn();
-					
+				String msg="";
+				int lostPoint=0;
+				if(init){
+					msg = plateauJeu.getJoueur(no).getPions().choicePion(wagon, boat);
+				}else{
+					msg="Pas d'échange effectué";
+					lostPoint=plateauJeu.getJoueur(no).getPions().exchangePion(wagon, boat, wR, bR);
 				}
+				if(msg.equals("ok")||lostPoint<0){
+					json.put("ok", true);
+					json.put("boat", plateauJeu.getJoueur(no).getPions().getNbBoat());
+					json.put("wagon", plateauJeu.getJoueur(no).getPions().getNbWagon());
+					json.put("boatR", plateauJeu.getJoueur(no).getPions().getNbBoatRestant());
+					json.put("wagonR", plateauJeu.getJoueur(no).getPions().getNbWagonRestant());
+					json.put("pionPort", plateauJeu.getJoueur(no).getPions().getNbPort());
+					if(init)
+					{
+						plateauJeu.getListJoueur().get(no).setStart(true);
+						if(plateauJeu.checkIfAllPlayerAreReady()){
+							System.out.println("gogogo");
+							this.endTurn();
+						}
+					}else{
+						plateauJeu.getJoueur(no).setScore(plateauJeu.getJoueur(no).getScore()+lostPoint);
+						json.put("point", plateauJeu.getJoueur(no).getScore());
+					}
+					
+				}else{
+					json.put("ok", false);
+					json.put("msg", msg);
+				}
+				
+				
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -632,32 +679,133 @@ public class PlateauController extends Thread{
 		
 	}
 	
-	public void setPion(int wagon, int boat){
+	public void setPion(int wagon, int boat, int wR, int bR){
 		if(server==null){
 			JSONObject json = new JSONObject();
 			try {
 				json.put("pionBateau", boat);
 				json.put("pionWagon", wagon);
+				json.put("pionBR", bR);
+				json.put("pionWR", wR);
 				json.put("id", id);
+				if(initGame){
+					json.put("init", true);
+				}else{
+					json.put("init", false);
+				}
 				client.sendJSON(json);
 				json = client.receiveJSON();
+				if(json.has("ok")){
+					boolean ok = json.getBoolean("ok");
+					if(ok){
+						int port = json.getInt("pionPort");
+						plateauView.printPion(wagon, boat, port);
+						plateauJeu.getListJoueur().get(id).getPions().setNbBoat(boat);
+						plateauJeu.getListJoueur().get(id).getPions().setNbWagon(wagon);
+						plateauJeu.getListJoueur().get(id).getPions().setNbWagonRestant(wR);
+						plateauJeu.getListJoueur().get(id).getPions().setNbBoatRestant(bR);
+						if(!initGame){
+							int score = json.getInt("point");
+							plateauJeu.getJoueur(id).setScore(score);
+							plateauView.printScore(plateauJeu.getJoueur(id).getScore());
+						}
+						plateauView.closePanePion();
+						if(initGame){
+							waitStartGame();
+							System.out.println("en attente");
+						}else{
+							endTurn();
+							System.out.println("fin du tour");
+						}
+					}else{
+						String msg = json.getString("msg");
+						plateauView.printMsgPion(msg);
+						if(!initGame){
+							tour=true;
+							plateauView.closePanePion();
+						}
+					}
+				}else{
+					if(!initGame){
+						tour=true;
+					}
+				}
 			} catch (JSONException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			waitStartGame();
 		}else{
-			plateauJeu.getListJoueur().get(id).getPions().setNbBoat(boat);
-			plateauJeu.getListJoueur().get(id).getPions().setNbWagon(wagon);
-			plateauJeu.getListJoueur().get(id).setStart(true);
-			
-			waitStartGame();
-			
+			String msg="";
+			int lostPoint=0;
+			if(initGame){
+				msg = plateauJeu.getJoueur(id).getPions().choicePion(wagon, boat);
+			}else{
+				lostPoint=plateauJeu.getJoueur(id).getPions().exchangePion(wagon, boat, wR, bR);
+			}
+			if(msg.equals("ok")||lostPoint<0){
+				plateauJeu.getListJoueur().get(id).getPions().setNbBoat(boat);
+				plateauJeu.getListJoueur().get(id).getPions().setNbWagon(wagon);
+				plateauJeu.getListJoueur().get(id).getPions().setNbBoatRestant(bR);
+				plateauJeu.getListJoueur().get(id).getPions().setNbWagonRestant(wR);
+				plateauJeu.getListJoueur().get(id).setStart(true);
+				plateauView.printPion(wagon, boat, plateauJeu.getListJoueur().get(id).getPions().getNbPort());
+				if(!initGame){
+					plateauJeu.getJoueur(id).setScore(plateauJeu.getJoueur(id).getScore()+lostPoint);
+					plateauView.printScore(plateauJeu.getJoueur(id).getScore());
+				}
+				plateauView.closePanePion();
+				if(initGame){
+					waitStartGame();
+					System.out.println("en attente");
+				}else{
+					endTurn();
+				}
+				plateauView.closePanePion();
+			}else{
+				plateauView.printMsgPion(msg);
+				if(!initGame){
+					tour=true;
+					plateauView.closePanePion();
+				}
+			}
 			/*SaveJsonVisitor sv = new SaveJsonVisitor();
 			plateauJeu.accept(sv);*/
 			
 		}
 		
+	}
+	
+	public void exchangePion(){
+		if(tour){
+			if(server!=null){
+				plateauView.pionChoix(plateauJeu.getJoueur(id).getPions().getNbWagon(),plateauJeu.getJoueur(id).getPions().getNbWagonRestant(),plateauJeu.getJoueur(id).getPions().getNbBoat(),plateauJeu.getJoueur(id).getPions().getNbBoatRestant(),false);
+			}else if(client!=null){
+				JSONObject json = new JSONObject();
+				try {
+					json.put("pionEchange", true);
+					json.put("id", id);
+					client.sendJSON(json);
+					json= client.receiveJSON();
+					if(json.has("wagon")&&json.has("boat")){
+						int wagon = json.getInt("wagon");
+						int boat = json.getInt("boat");
+						int boatR = json.getInt("boatR");
+						int wagonR = json.getInt("wagonR");
+						plateauView.pionChoix(wagon, wagonR, boat, boatR, true);
+					}else if(json.has("serverLeave")){
+						clientDeconnecte();
+					}else{
+						plateauView.printNotification("Erreur de traitement. Veuillez recommencer.");
+					}
+				} catch (JSONException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		}else{
+			plateauView.printNotification("Ce n'est pas votre tour");
+		}
 	}
 	
 	public void waitStartGame(){
@@ -1175,7 +1323,7 @@ public class PlateauController extends Thread{
 		plateauView.putDestinationInMainOfPlayer(destSelect, iteSelectm);
 		plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
 		if(initGame){
-			plateauView.pionChoix();
+			plateauView.pionChoix(plateauJeu.getJoueur(id).getPions().getNbWagon(),plateauJeu.getJoueur(id).getPions().getNbWagonRestant(),plateauJeu.getJoueur(id).getPions().getNbBoat(),plateauJeu.getJoueur(id).getPions().getNbBoatRestant(),false);
 		}
 	}
 	
@@ -1341,11 +1489,7 @@ public class PlateauController extends Thread{
 		}
 	}
 	
-	public void scoreLive(){
-		if(server!=null){
-			plateauJeu.calculAllScore();
-		}
-	}
+	
 
 	
 	
