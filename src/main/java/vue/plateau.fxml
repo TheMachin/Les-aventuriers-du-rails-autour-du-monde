@@ -313,7 +313,7 @@
                                     </ScrollPane>
                                  </children>
                               </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                            <AnchorPane fx:id="anchorRight" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
                                     <Label fx:id="lblDeckBoat" layoutY="7.0" onMouseClicked="#takeHideBoatCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: DeepSkyBlue;" />
                                     <Label fx:id="lblDeckWagon" layoutX="157.0" layoutY="7.0" onMouseClicked="#takeHideTrainCard" prefHeight="105.0" prefWidth="157.0" style="-fx-border-style: solid; -fx-background-color: orange;" />

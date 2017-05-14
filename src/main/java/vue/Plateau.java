@@ -18,13 +18,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import main.MainMenu;
 import metier.Boat;
-import metier.Carte;
 import metier.Destination;
 import metier.Iteneraire;
 import metier.Joueur;
@@ -43,7 +43,7 @@ public class Plateau {
 	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore, lblPionPort;
 	
 	@FXML 
-	private Label lblDeckDestination, lblSelectDestination;
+	private Label lblDeckDestination, lblSelectDestination, labl, wagon1, wagon2;
 	
 	@FXML 
 	private HBox boatDiscover1, boatDiscover2, boatDiscover3;
@@ -59,6 +59,9 @@ public class Plateau {
 
 	@FXML
 	private Pane paneDestination, panePion;
+	
+	@FXML
+	private AnchorPane anchorRight;
 	
 
 	// villes
@@ -150,7 +153,16 @@ public class Plateau {
 	
 	@FXML
 	private void takeCardWagon1(MouseEvent e){
-				
+		plateauControlle.deleteCard();
+		//lbl.setOnMouseClicked(this::deSelectionCard);
+		//HboxMain.getChildren().add(lbl);
+		//plateauControlle.piocheCards("wagonDiscover");
+	}
+	
+	public void deleteCardWagon1(){
+		Platform.runLater(() -> {
+			wagonDiscover1.getChildren().clear();
+		 });
 	}
 	
 	public void setCardWagonInWagonDiscover2(Wagon w){
@@ -161,13 +173,15 @@ public class Plateau {
         imageView.setFitHeight(99);
 	    lbl.setGraphic(imageView);
 	    lbl.setOnMouseClicked(this::takeCardWagon2);
+	    lbl.setId("wagon2");
 	    this.wagonDiscover2.getChildren().add(lbl);
 	    this.carteWD.put(lbl, w);
 	}
 	
 	@FXML
 	private void takeCardWagon2(MouseEvent e){
-				
+		Label lbl = (Label) e.getSource();
+		wagonDiscover2.getChildren().remove(0);
 	}
 	
 	public void setCardWagonInWagonDiscover3(Wagon w){
@@ -184,7 +198,8 @@ public class Plateau {
 	
 	@FXML
 	private void takeCardWagon3(MouseEvent e){
-				
+		Label lbl = (Label) e.getSource();
+		wagonDiscover3.getChildren().remove(lbl);
 	}
 	
 	public void setCardBoatInBoatDiscover1(Boat b){
@@ -201,7 +216,9 @@ public class Plateau {
 	
 	@FXML
 	private void takeCardBoat1(MouseEvent e){
-				
+		Label lbl = (Label) e.getSource();
+		boatDiscover1.getChildren().remove(lbl);
+		
 	}
 	
 	public void setCardBoatInBoatDiscover2(Boat b){
@@ -218,7 +235,8 @@ public class Plateau {
 	
 	@FXML
 	private void takeCardBoat2(MouseEvent e){
-				
+		Label lbl = (Label) e.getSource();
+		boatDiscover2.getChildren().remove(lbl);
 	}
 	
 	public void setCardBoatInBoatDiscover3(Boat b){
@@ -235,7 +253,8 @@ public class Plateau {
 	
 	@FXML
 	private void takeCardBoat3(MouseEvent e){
-				
+		Label lbl = (Label) e.getSource();
+		boatDiscover3.getChildren().remove(lbl);
 	}
 	
 	public void setCardsWagonInMainOfPlayer(Wagon w){

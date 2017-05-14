@@ -20,7 +20,10 @@ import com.google.gson.reflect.TypeToken;
 
 import ennumeration.EnumCarte;
 import ennumeration.EnumCouleur;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import metier.Boat;
 import metier.Carte;
 import metier.Destination;
@@ -35,25 +38,23 @@ import server.Server;
 import server.Server.MyThreadHandler;
 import vue.Plateau;
 
-public class PlateauController extends Thread{
+public class PlateauController extends Thread {
 
-	private Server server=null;
-	private Client client=null;
-	private Map<Integer,MyThreadHandler> listClientsServer = new HashMap<Integer,MyThreadHandler>();
+	private Server server = null;
+	private Client client = null;
+	private Map<Integer, MyThreadHandler> listClientsServer = new HashMap<Integer, MyThreadHandler>();
 	private int id;
 	private Plateau plateauView;
 	private PlateauJeu plateauJeu = new PlateauJeu(5);
-	
+
 	private boolean initGame = true;
-	private boolean tour=false;
-	private int nbCartes=0;
-	private boolean carteTransport=false;
-	private boolean routePort=false;
-	private boolean carteDestination=false;
-	private boolean choixCarteDestination=false;
-	
-	
-	
+	private boolean tour = false;
+	private int nbCartes = 0;
+	private boolean carteTransport = false;
+	private boolean routePort = false;
+	private boolean carteDestination = false;
+	private boolean choixCarteDestination = false;
+
 	public PlateauController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -70,10 +71,10 @@ public class PlateauController extends Thread{
 		this.listClientsServer = listClientsServer;
 	}
 
-	public int getIdPlayer(){
+	public int getIdPlayer() {
 		return this.id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -81,7 +82,7 @@ public class PlateauController extends Thread{
 	public void setPlateauView(Plateau plateauView) {
 		this.plateauView = plateauView;
 	}
-	
+
 	public PlateauJeu getPlateauJeu() {
 		return plateauJeu;
 	}
@@ -91,14 +92,14 @@ public class PlateauController extends Thread{
 		this.plateauJeu.setAllPlayerNotReady();
 	}
 
-	public void sendFirstCards(){
+	public void sendFirstCards() {
 		JSONObject json;
 		JSONArray jsonA;
 		Gson gson;
-		int i=0;
+		int i = 0;
 		Set cles = listClientsServer.keySet();
 		Iterator it = cles.iterator();
-		
+
 		ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
 		ArrayList<Boat> pBoat = new ArrayList<Boat>();
 		Wagon w1 = plateauJeu.getPaquet().piocheWagon();
@@ -110,7 +111,7 @@ public class PlateauController extends Thread{
 		plateauView.setCardWagonInWagonDiscover1(w1);
 		plateauView.setCardWagonInWagonDiscover2(w2);
 		plateauView.setCardWagonInWagonDiscover3(w3);
-		
+
 		Boat b1 = plateauJeu.getPaquet().piocheBoat();
 		Boat b2 = plateauJeu.getPaquet().piocheBoat();
 		Boat b3 = plateauJeu.getPaquet().piocheBoat();
@@ -120,21 +121,21 @@ public class PlateauController extends Thread{
 		plateauView.setCardBoatInBoatDiscover1(b1);
 		plateauView.setCardBoatInBoatDiscover2(b2);
 		plateauView.setCardBoatInBoatDiscover3(b3);
-		
-		while (it.hasNext()){
-		   int cle = (int) it.next();
-		   
-		   json = new JSONObject();
-		   jsonA = new JSONArray();
-		   gson = new Gson();
-		   try {
-			json.put("visibleWagon", gson.toJson(pWagon));
-			json.put("visibleBoat", gson.toJson(pBoat));
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-			for(i=0;i<3;i++){
+
+		while (it.hasNext()) {
+			int cle = (int) it.next();
+
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleWagon", gson.toJson(pWagon));
+				json.put("visibleBoat", gson.toJson(pBoat));
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for (i = 0; i < 3; i++) {
 				Wagon w = plateauJeu.getPaquet().piocheWagon();
 				jsonA.put(gson.toJson(w));
 				plateauJeu.getJoueur(cle).addWagon(w);
@@ -146,7 +147,7 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 			jsonA = new JSONArray();
-			for(i=0;i<7;i++){
+			for (i = 0; i < 7; i++) {
 				Boat b = plateauJeu.getPaquet().piocheBoat();
 				System.out.println(plateauJeu.getPaquet().getpBoat().size());
 				jsonA.put(gson.toJson(b));
@@ -158,16 +159,16 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			JSONArray jsonAD = new JSONArray();
 			JSONArray jsonAI = new JSONArray();
-			for(i=0;i<5;i++){
+			for (i = 0; i < 5; i++) {
 				Object o = plateauJeu.getPaquet().piocheDesination();
 				Carte c = (Carte) o;
-				if(c.getName().equals(EnumCarte.DESTINATION)){
+				if (c.getName().equals(EnumCarte.DESTINATION)) {
 					Destination d = (Destination) o;
 					jsonAD.put(gson.toJson(d));
-				}else{
+				} else {
 					Iteneraire ite = (Iteneraire) o;
 					jsonAI.put(gson.toJson(ite));
 				}
@@ -179,65 +180,85 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			try {
 				server.sendMessage(listClientsServer.get(cle), json);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
-		for(i=0;i<3;i++){
+		for (i = 0; i < 3; i++) {
 			plateauView.setCardsWagonInMainOfPlayer((plateauJeu.getPaquet().piocheWagon()));
 		}
-		for(i=0;i<7;i++){
+		for (i = 0; i < 7; i++) {
 			plateauView.setCardsBoatInMainOfPlayer((plateauJeu.getPaquet().piocheBoat()));
 			System.out.println(plateauJeu.getPaquet().getpBoat().size());
 		}
 		plateauView.printMsgDestination("Veuillez choisir au moins 3 cartes");
-		for(i=0;i<5;i++){
+		for (i = 0; i < 5; i++) {
 			Object o = plateauJeu.getPaquet().piocheDesination();
 			Carte c = (Carte) o;
-			if(c.getName().equals(EnumCarte.DESTINATION)){
+			if (c.getName().equals(EnumCarte.DESTINATION)) {
 				Destination d = (Destination) o;
 				plateauView.setCardsDestinationForChoice(d);
-			}else{
+			} else {
 				Iteneraire ite = (Iteneraire) o;
 				plateauView.setCardsIteneraireForChoice(ite);
 			}
-			
+
 		}
-		
+
 		server.setPlateauControllerAtThread(listClientsServer, this);
-		
-		
+
 	}
-	
-	
-	public void clientDeconnecter(int no){
-		if(server!=null){
+
+	public void deleteCard() {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			Gson gson = new Gson();
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.deleteCardWagon1();
+			try {
+				json.put("wagonDelete", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void clientDeconnecter(int no) {
+		if (server != null) {
 			plateauJeu.getJoueur(no).setStart(false);
-			if(plateauJeu.getNbPlayerActif()<=1){
+			if (plateauJeu.getNbPlayerActif() <= 1) {
 				server.closeServer();
 			}
-		}else{
+		} else {
 			client.deconnection();
 		}
 	}
-	
+
 	/**
 	 * On appelle cette fonction quand le serveur reçoit les paquets du client
+	 * 
 	 * @param json
 	 * @return
 	 * @throws IOException
 	 */
-	public synchronized JSONObject getJSONFromClient(JSONObject json) throws IOException{
+	public synchronized JSONObject getJSONFromClient(JSONObject json) throws IOException {
 		Gson gson = new Gson();
 		JSONArray jsonA = null;
-		if(json==null){
-			
-		}else if(json.has("checkPionRoad")){
+		if (json == null) {
+
+		} else if (json.has("checkPionRoad")) {
 			try {
 				int no = json.getInt("id");
 				int wagon = json.getInt("wagon");
@@ -249,76 +270,76 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}else if(json.has("pioche")){
+
+		} else if (json.has("pioche")) {
 			try {
 				int no = json.getInt("id");
 				String pioche = json.getString("pioche");
 				json = new JSONObject();
 				JSONObject json2 = new JSONObject();
-				String msg="";
+				String msg = "";
 				jsonA = new JSONArray();
-				switch(pioche){
-					case "bateau" :
-						Boat b = plateauJeu.getPaquet().piocheBoat();
-						if(b!=null){
-							plateauJeu.getJoueur(no).addBoat(b);
-							json.put("bateau", jsonA.put(gson.toJson(b)));
-							json.put("msg", "Vous avez piocher une carte bateau");
-							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte bateau";
-						}else{
-							json.put("error", "La pioche bateau est vide");
-						}
-						break;
-					case "wagon":
-						Wagon w = plateauJeu.getPaquet().piocheWagon();
-						if(w!=null){
-							plateauJeu.getJoueur(no).addWagon(w);
-							json.put("wagon", jsonA.put(gson.toJson(w)));
-							json.put("msg", "Vous avez piocher une carte wagon");
-							msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte wagon";
-						}else{
-							json.put("error", "La pioche wagon est vide");
-						}
-						break;
-					case "destination":
-						JSONArray jsonAD = new JSONArray();
-						JSONArray jsonAI = new JSONArray();
-						int i;
-						for(i=0;i<4;i++){
-							Object o = plateauJeu.getPaquet().piocheDesination();
-							Carte c = (Carte) o;
-							if(c!=null){
-								if(c.getName().equals(EnumCarte.DESTINATION)){
-									Destination d = (Destination) o;
-									jsonAD.put(gson.toJson(d));
-								}else{
-									Iteneraire ite = (Iteneraire) o;
-									jsonAI.put(gson.toJson(ite));
-								}
-							}else{
-								json.put("error", "La pioche destination est vide");
-							}
-						}
+				switch (pioche) {
+				case "bateau":
+					Boat b = plateauJeu.getPaquet().piocheBoat();
+					if (b != null) {
+						plateauJeu.getJoueur(no).addBoat(b);
+						json.put("bateau", jsonA.put(gson.toJson(b)));
 						json.put("msg", "Vous avez piocher une carte bateau");
-						msg="Le joueur "+plateauJeu.getJoueur(no).getName()+" a pioché une carte destination";
-						try {
-							json.put("destination", jsonAD);
-							json.put("iteneraire", jsonAI);
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						msg = "Le joueur " + plateauJeu.getJoueur(no).getName() + " a pioché une carte bateau";
+					} else {
+						json.put("error", "La pioche bateau est vide");
+					}
+					break;
+				case "wagon":
+					Wagon w = plateauJeu.getPaquet().piocheWagon();
+					if (w != null) {
+						plateauJeu.getJoueur(no).addWagon(w);
+						json.put("wagon", jsonA.put(gson.toJson(w)));
+						json.put("msg", "Vous avez piocher une carte wagon");
+						msg = "Le joueur " + plateauJeu.getJoueur(no).getName() + " a pioché une carte wagon";
+					} else {
+						json.put("error", "La pioche wagon est vide");
+					}
+					break;
+				case "destination":
+					JSONArray jsonAD = new JSONArray();
+					JSONArray jsonAI = new JSONArray();
+					int i;
+					for (i = 0; i < 4; i++) {
+						Object o = plateauJeu.getPaquet().piocheDesination();
+						Carte c = (Carte) o;
+						if (c != null) {
+							if (c.getName().equals(EnumCarte.DESTINATION)) {
+								Destination d = (Destination) o;
+								jsonAD.put(gson.toJson(d));
+							} else {
+								Iteneraire ite = (Iteneraire) o;
+								jsonAI.put(gson.toJson(ite));
+							}
+						} else {
+							json.put("error", "La pioche destination est vide");
 						}
-						break;
-					default:
-						json.put("error", "Erreur de traitement");
-						break;
+					}
+					json.put("msg", "Vous avez piocher une carte bateau");
+					msg = "Le joueur " + plateauJeu.getJoueur(no).getName() + " a pioché une carte destination";
+					try {
+						json.put("destination", jsonAD);
+						json.put("iteneraire", jsonAI);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				default:
+					json.put("error", "Erreur de traitement");
+					break;
 				}
-				
+
 				json2.put("msg", msg);
 				plateauView.printNotification(msg);
 				server.broadcastExceptOne(listClientsServer, json2, no);
-				
+
 				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -330,18 +351,18 @@ public class PlateauController extends Thread{
 					e1.printStackTrace();
 				}
 			}
-		}else if(json.has("route")){
+		} else if (json.has("route")) {
 			try {
 				RouteTerrestre rt = null;
-				RouteMartime rm =null;
+				RouteMartime rm = null;
 				Ville port = null;
-				if(json.has("routeTerrestre")){
-					rt = gson.fromJson((String) json.get("routeTerrestre"),RouteTerrestre.class);
-				}else if(json.has("routeMaritime")){
-					rm = gson.fromJson((String) json.get("routeMaritime"),RouteMartime.class);
-				}else if(json.has("port")){
-					port = gson.fromJson((String) json.get("port"),Ville.class);
-				}else{
+				if (json.has("routeTerrestre")) {
+					rt = gson.fromJson((String) json.get("routeTerrestre"), RouteTerrestre.class);
+				} else if (json.has("routeMaritime")) {
+					rm = gson.fromJson((String) json.get("routeMaritime"), RouteMartime.class);
+				} else if (json.has("port")) {
+					port = gson.fromJson((String) json.get("port"), Ville.class);
+				} else {
 					json = new JSONObject();
 					json.put("error", "Pas de route saisie");
 					return json;
@@ -349,72 +370,71 @@ public class PlateauController extends Thread{
 				int no = json.getInt("id");
 				String fxId = json.getString("fxId");
 				json = new JSONObject();
-				
-				int longueurRoad=0;
+
+				int longueurRoad = 0;
 				String msg = "";
-				if(rt!=null){
-					if(checkTakeRoadWagon(rt,no)){
+				if (rt != null) {
+					if (checkTakeRoadWagon(rt, no)) {
 						json.put("error", "La route a déjà été prise");
 						return json;
 					}
-					msg="La route "+rt.getV1().getName()+"-"+rt.getV2().getName()+" est prise par "+plateauJeu.getJoueur(no).getName();
+					msg = "La route " + rt.getV1().getName() + "-" + rt.getV2().getName() + " est prise par "
+							+ plateauJeu.getJoueur(no).getName();
 					plateauJeu.getJoueur(no).getPions().addRouteTerrestre(rt);
-					longueurRoad=rt.getNbPion();
-				}else if(rm!=null){
-					if(checkTakeRoadBoat(rm,no)){
+					longueurRoad = rt.getNbPion();
+				} else if (rm != null) {
+					if (checkTakeRoadBoat(rm, no)) {
 						json.put("error", "La route a déjà été prise");
 						return json;
 					}
-					msg="La route "+rm.getV1().getName()+"-"+rm.getV2().getName()+" est prise par "+plateauJeu.getJoueur(no).getName();
+					msg = "La route " + rm.getV1().getName() + "-" + rm.getV2().getName() + " est prise par "
+							+ plateauJeu.getJoueur(no).getName();
 					plateauJeu.getJoueur(no).getPions().addRouteMaritime(rm);
-					longueurRoad=rm.getNbPion();
-				}else if(port!=null){
-					if(checkTakePort(port)){
+					longueurRoad = rm.getNbPion();
+				} else if (port != null) {
+					if (checkTakePort(port)) {
 						json.put("error", "Le port a déjà été pris");
 						return json;
 					}
-					if(!plateauJeu.getJoueur(no).getPions().checkCityIsConnectedToRoad(port)){
+					if (!plateauJeu.getJoueur(no).getPions().checkCityIsConnectedToRoad(port)) {
 						json.put("error", "La ville n'est pas connectée à une de vos route");
 						return json;
 					}
-					msg="Le port de "+port.getName()+" est pris par "+plateauJeu.getJoueur(no).getName();
+					msg = "Le port de " + port.getName() + " est pris par " + plateauJeu.getJoueur(no).getName();
 					plateauJeu.getJoueur(no).getPions().addPort(port);
-				}else{
+				} else {
 					json.put("error", "Erreur de traitement. Veuillez recommencer");
 					return json;
 				}
 				jsonA = new JSONArray();
 				json.put("routePrise", true);
 				json.put("msg", msg);
-				json.put("id",no);
+				json.put("id", no);
 				json.put("couleur", gson.toJson(plateauJeu.getJoueur(no).getCouleur()));
 				plateauJeu.getJoueur(no).calculScoreTakeRoad(longueurRoad);
 				int score = plateauJeu.getJoueur(no).getScore();
 				json.put("score", score);
 				json.put("fxId", fxId);
-				//envoyer à tout le monde sauf à celui qui a pris la route
+				// envoyer à tout le monde sauf à celui qui a pris la route
 				server.broadcastExceptOne(listClientsServer, json, no);
 				plateauView.printNotification(msg);
-				List<String> listFxID =  gson.fromJson(fxId, ArrayList.class);
-				plateauView.colorRoadOrPort(plateauJeu.getJoueur(no).getCouleur(),listFxID);
+				List<String> listFxID = gson.fromJson(fxId, ArrayList.class);
+				plateauView.colorRoadOrPort(plateauJeu.getJoueur(no).getCouleur(), listFxID);
 				plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 				return json;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
-			
-		}else if(json.has("defausse")){
+
+		} else if (json.has("defausse")) {
 			int i;
 			int no;
-			
-			if(json.has("defausseDestination")){
+
+			if (json.has("defausseDestination")) {
 				try {
 					jsonA = json.getJSONArray("defausseDestination");
-					for(i=0;i<jsonA.length();i++){
+					for (i = 0; i < jsonA.length(); i++) {
 						Destination d = gson.fromJson(jsonA.get(i).toString(), Destination.class);
 						plateauJeu.getPaquet().addDestinationDefausse((d));
 					}
@@ -422,12 +442,12 @@ public class PlateauController extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
-			if(json.has("defausseIteneraire")){
+			if (json.has("defausseIteneraire")) {
 				try {
 					jsonA = json.getJSONArray("defausseIteneraire");
-					for(i=0;i<jsonA.length();i++){
+					for (i = 0; i < jsonA.length(); i++) {
 						Iteneraire ite = gson.fromJson(jsonA.get(i).toString(), Iteneraire.class);
 						plateauJeu.getPaquet().addDestinationDefausse((ite));
 					}
@@ -436,70 +456,71 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("selectionDestination")){
+			if (json.has("selectionDestination")) {
 				try {
 					jsonA = json.getJSONArray("selectionDestination");
 					no = json.getInt("id");
-					for(i=0;i<jsonA.length();i++){
-						plateauJeu.getListJoueur().get(no).addDestination((gson.fromJson(jsonA.get(i).toString(), Destination.class)));
+					for (i = 0; i < jsonA.length(); i++) {
+						plateauJeu.getListJoueur().get(no)
+								.addDestination((gson.fromJson(jsonA.get(i).toString(), Destination.class)));
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			if(json.has("selectionIteneraire")){
+			if (json.has("selectionIteneraire")) {
 				try {
 					jsonA = json.getJSONArray("selectionDestination");
 					no = json.getInt("id");
-					for(i=0;i<jsonA.length();i++){
-						plateauJeu.getListJoueur().get(no).addIteneraire((gson.fromJson(jsonA.get(i).toString(), Iteneraire.class)));
+					for (i = 0; i < jsonA.length(); i++) {
+						plateauJeu.getListJoueur().get(no)
+								.addIteneraire((gson.fromJson(jsonA.get(i).toString(), Iteneraire.class)));
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
-			
-			if(json.has("defausseWagon") || json.has("defausseBoat")){
-				List<Wagon> listW =null;
-				List<Boat> listB =null;
-					try {
-						if(json.has("defausseWagon")){
-							String jsonTxt = (String) json.get("defausseWagon");
-							Wagon[] mcArray = gson.fromJson(jsonTxt, Wagon[].class);
-							listW = new ArrayList<Wagon>(Arrays.asList(mcArray));
-						}
-						if(json.has("defausseBoat")){
-							String jsonTxt = (String) json.get("defausseBoat");
-							Boat[] mcArray = gson.fromJson(jsonTxt, Boat[].class);
-							listB = new ArrayList<Boat>(Arrays.asList(mcArray));
-						}
-						
-						no = json.getInt("id");
-						
-						traitementDiscardingWagonBoat(listW, listB, no);
-						
-						int wagon = plateauJeu.getJoueur(no).getPions().getNbWagon();
-						int boat = plateauJeu.getJoueur(no).getPions().getNbBoat();
-						int port = plateauJeu.getJoueur(no).getPions().getNbPort();
-						json = new JSONObject();
-						json.put("pion", true);
-						json.put("Pwagon", wagon);
-						json.put("Pboat", boat);
-						json.put("Pport", port);
-						return json; 
-					} catch (JsonSyntaxException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
+			if (json.has("defausseWagon") || json.has("defausseBoat")) {
+				List<Wagon> listW = null;
+				List<Boat> listB = null;
+				try {
+					if (json.has("defausseWagon")) {
+						String jsonTxt = (String) json.get("defausseWagon");
+						Wagon[] mcArray = gson.fromJson(jsonTxt, Wagon[].class);
+						listW = new ArrayList<Wagon>(Arrays.asList(mcArray));
 					}
-				
+					if (json.has("defausseBoat")) {
+						String jsonTxt = (String) json.get("defausseBoat");
+						Boat[] mcArray = gson.fromJson(jsonTxt, Boat[].class);
+						listB = new ArrayList<Boat>(Arrays.asList(mcArray));
+					}
+
+					no = json.getInt("id");
+
+					traitementDiscardingWagonBoat(listW, listB, no);
+
+					int wagon = plateauJeu.getJoueur(no).getPions().getNbWagon();
+					int boat = plateauJeu.getJoueur(no).getPions().getNbBoat();
+					int port = plateauJeu.getJoueur(no).getPions().getNbPort();
+					json = new JSONObject();
+					json.put("pion", true);
+					json.put("Pwagon", wagon);
+					json.put("Pboat", boat);
+					json.put("Pport", port);
+					return json;
+				} catch (JsonSyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
-			
+
 			json = new JSONObject();
 			try {
 				json.put("defausse", true);
@@ -507,8 +528,8 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}else if(json.has("pionBateau")||json.has("pionWagon")){
+
+		} else if (json.has("pionBateau") || json.has("pionWagon")) {
 			try {
 				int no = json.getInt("id");
 				int boat = json.getInt("pionBateau");
@@ -518,27 +539,27 @@ public class PlateauController extends Thread{
 				json = new JSONObject();
 				json.put("pion", true);
 				plateauJeu.getListJoueur().get(no).setStart(true);
-				if(plateauJeu.checkIfAllPlayerAreReady()){
+				if (plateauJeu.checkIfAllPlayerAreReady()) {
 					this.endTurn();
-					
+
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else if(json.has("finTour")){
+		} else if (json.has("finTour")) {
 			endTurn();
 			return null;
 		}
-		
+
 		return json;
 	}
-	
-	public void piocheCards(String card){
-		if(tour){
-			
-			if(server==null){
-				
+
+	public void piocheCards(String card) {
+		if (tour) {
+
+			if (server == null) {
+
 				JSONObject json = new JSONObject();
 				try {
 					json.put("pioche", card);
@@ -552,63 +573,68 @@ public class PlateauController extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-			}else{
-				String msg="";
-				switch(card){
-					case "wagon":
-						Wagon w = plateauJeu.getPaquet().piocheWagon();
-						if(w!=null){
-							plateauView.setCardsWagonInMainOfPlayer(w);
-							plateauJeu.getJoueur(id).addWagon(w);
-							choixCartes(card);
-							plateauView.printNotification("Vous avez pris une carte wagon");
-							msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte wagon";
-						}else{
-							plateauView.printNotification("La pioche wagon est vide");
-						}
-						break;
-					case "bateau":
-						Boat b = plateauJeu.getPaquet().piocheBoat();
-						if(b!=null){
-							plateauView.setCardsBoatInMainOfPlayer(b);
-							plateauJeu.getJoueur(id).addBoat(b);
-							choixCartes(card);
-							plateauView.printNotification("Vous avez pris une carte bateau");
-							msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte bateau";
-						}else{
-							plateauView.printNotification("La pioche bateau est vide");
-						}
-						break;
-					case "destination":
-						int i;
-						for(i=0;i<4;i++){
-							Object o = plateauJeu.getPaquet().piocheDesination();
-							Carte c = (Carte) o;
-							if(c!=null){
-								if(c.getName().equals(EnumCarte.DESTINATION)){
-									Destination d = (Destination) o;
-									plateauView.setCardsDestinationForChoice(d);
-									plateauJeu.getJoueur(id).addDestination(d);
-								}else{
-									Iteneraire ite = (Iteneraire) o;
-									plateauView.setCardsIteneraireForChoice(ite);
-									plateauJeu.getJoueur(id).addIteneraire(ite);
-								}
-								choixCartes(card);
-								plateauView.printNotification("Vous avez choisi de prendre une ou plusieurs cartes destination");
-								msg="Le joueur "+plateauJeu.getJoueur(id).getName()+" a pris une carte destination";
-							}else{
-								plateauView.printNotification("La pioche destination est vide");
+
+			} else {
+				String msg = "";
+				switch (card) {
+				case "wagon":
+					Wagon w = plateauJeu.getPaquet().piocheWagon();
+					if (w != null) {
+						plateauView.setCardsWagonInMainOfPlayer(w);
+						plateauJeu.getJoueur(id).addWagon(w);
+						choixCartes(card);
+						plateauView.printNotification("Vous avez pris une carte wagon");
+						msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte wagon";
+					} else {
+						plateauView.printNotification("La pioche wagon est vide");
+					}
+					break;
+				case "bateau":
+					Boat b = plateauJeu.getPaquet().piocheBoat();
+					if (b != null) {
+						plateauView.setCardsBoatInMainOfPlayer(b);
+						plateauJeu.getJoueur(id).addBoat(b);
+						choixCartes(card);
+						plateauView.printNotification("Vous avez pris une carte bateau");
+						msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte bateau";
+					} else {
+						plateauView.printNotification("La pioche bateau est vide");
+					}
+					break;
+				case "destination":
+					int i;
+					for (i = 0; i < 4; i++) {
+						Object o = plateauJeu.getPaquet().piocheDesination();
+						Carte c = (Carte) o;
+						if (c != null) {
+							if (c.getName().equals(EnumCarte.DESTINATION)) {
+								Destination d = (Destination) o;
+								plateauView.setCardsDestinationForChoice(d);
+								plateauJeu.getJoueur(id).addDestination(d);
+							} else {
+								Iteneraire ite = (Iteneraire) o;
+								plateauView.setCardsIteneraireForChoice(ite);
+								plateauJeu.getJoueur(id).addIteneraire(ite);
 							}
-							
+							choixCartes(card);
+							plateauView.printNotification(
+									"Vous avez choisi de prendre une ou plusieurs cartes destination");
+							msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte destination";
+						} else {
+							plateauView.printNotification("La pioche destination est vide");
 						}
-						break;
-					default:
-						plateauView.printNotification("Auncune carte demandé. Veuillez recommencer");
-						break;
+
+					}
+					break;
+				case "wagonDiscover":
+					plateauJeu.getPaquet().piocheWagon();
+
+					break;
+				default:
+					plateauView.printNotification("Auncune carte demandé. Veuillez recommencer");
+					break;
 				}
-				if(!msg.equals("")){
+				if (!msg.equals("")) {
 					JSONObject json = new JSONObject();
 					try {
 						json.put("msg", msg);
@@ -617,20 +643,20 @@ public class PlateauController extends Thread{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 				}
 			}
-			if(checkEndOfTurn()){
+			if (checkEndOfTurn()) {
 				endTurn();
 			}
-		}else{
+		} else {
 			// ce n'est pas votre tour
 		}
-		
+
 	}
-	
-	public void setPion(int wagon, int boat){
-		if(server==null){
+
+	public void setPion(int wagon, int boat) {
+		if (server == null) {
 			JSONObject json = new JSONObject();
 			try {
 				json.put("pionBateau", boat);
@@ -643,65 +669,64 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 			waitStartGame();
-		}else{
+		} else {
 			plateauJeu.getListJoueur().get(id).getPions().setNbBoat(boat);
 			plateauJeu.getListJoueur().get(id).getPions().setNbWagon(wagon);
 			plateauJeu.getListJoueur().get(id).setStart(true);
-			
+
 			waitStartGame();
-			
-			/*SaveJsonVisitor sv = new SaveJsonVisitor();
-			plateauJeu.accept(sv);*/
-			
+
+			/*
+			 * SaveJsonVisitor sv = new SaveJsonVisitor();
+			 * plateauJeu.accept(sv);
+			 */
+
 		}
-		
+
 	}
-	
-	public void waitStartGame(){
-		initGame=false;
-		if(server!=null){
-			
-		}else{
+
+	public void waitStartGame() {
+		initGame = false;
+		if (server != null) {
+
+		} else {
 			client.timer();
 		}
-		
+
 	}
-	
-	public void beginTurn(){
-		tour=true;
-		carteDestination=false;
-		carteTransport=false;
-		choixCarteDestination=false;
-		nbCartes=0;
-		routePort=false;
+
+	public void beginTurn() {
+		tour = true;
+		carteDestination = false;
+		carteTransport = false;
+		choixCarteDestination = false;
+		nbCartes = 0;
+		routePort = false;
 		plateauView.printMsgGame("C'est à votre tour");
 	}
-	
-	public boolean checkEndOfTurn(){
-		if(choixCarteDestination||routePort||(carteTransport&&nbCartes>=2)){
-			tour=false;
+
+	public boolean checkEndOfTurn() {
+		if (choixCarteDestination || routePort || (carteTransport && nbCartes >= 2)) {
+			tour = false;
 			return true;
 		}
 		return false;
 	}
-	
-	public void endTurn(){
+
+	public void endTurn() {
 		plateauView.printMsgGame("Votre tour est terminé");
-		if(server!=null){
+		if (server != null) {
 			plateauJeu.endOfPlayerTurn();
 			int no = plateauJeu.whoIsNext();
-			String notification="";
-			boolean endGame=false;
-			/*if(plateauJeu.checkIfGameWillBeEnd()){
-				if(!plateauJeu.endGame()){
-					notification="Il reste moins de 2 tours";
-				}else{
-					notification="Le jeu est terminé";
-					endGame=true;
-				}
-				plateauView.printNotification(notification);
-			}*/
-			if(endGame){
+			String notification = "";
+			boolean endGame = false;
+			/*
+			 * if(plateauJeu.checkIfGameWillBeEnd()){ if(!plateauJeu.endGame()){
+			 * notification="Il reste moins de 2 tours"; }else{
+			 * notification="Le jeu est terminé"; endGame=true; }
+			 * plateauView.printNotification(notification); }
+			 */
+			if (endGame) {
 				JSONObject json = new JSONObject();
 				try {
 					json.put("fin", true);
@@ -715,38 +740,38 @@ public class PlateauController extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else{
-				if(no==id){
+			} else {
+				if (no == id) {
 					beginTurn();
-				}else{
-					plateauView.printMsgGame("C'est au tour du joueur "+ plateauJeu.getJoueur(no).getName() +" !");
+				} else {
+					plateauView.printMsgGame("C'est au tour du joueur " + plateauJeu.getJoueur(no).getName() + " !");
 				}
 				JSONObject json = new JSONObject();
 				try {
 					json.put("tour", no);
-					if(!notification.equals("")){
+					if (!notification.equals("")) {
 						json.put("msg", notification);
 					}
-					 Platform.runLater(() -> {
-						 try {
+					Platform.runLater(() -> {
+						try {
 							server.broadcast(listClientsServer, json);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					 });
+					});
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		}else{
+		} else {
 			JSONObject json = new JSONObject();
 			try {
 				json.put("finTour", true);
-				System.out.println("client "+json.toString());
+				System.out.println("client " + json.toString());
 				client.sendJSON(json);
-				
+
 			} catch (JSONException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -754,84 +779,86 @@ public class PlateauController extends Thread{
 			client.timer();
 		}
 	}
-	
-	public void choixCartes(String card){
-		if(!carteTransport&&!carteDestination){
-			switch(card){
-				case "wagon":
-					carteTransport=true;
-					break;
-				case "boat" :
-				case "bateau":
-					carteTransport=true;
-					break;
-				case "destination":
-					carteDestination=true;
-					break;
+
+	public void choixCartes(String card) {
+		if (!carteTransport && !carteDestination) {
+			switch (card) {
+			case "wagon":
+				carteTransport = true;
+				break;
+			case "boat":
+			case "bateau":
+				carteTransport = true;
+				break;
+			case "destination":
+				carteDestination = true;
+				break;
 			}
 		}
-		if(carteTransport){
+		if (carteTransport) {
 			nbCartes++;
 		}
 	}
-	
-	public void traitementDiscardingWagonBoat(List<Wagon> listW, List<Boat> listB, int no){
+
+	public void traitementDiscardingWagonBoat(List<Wagon> listW, List<Boat> listB, int no) {
 		int i;
-		int doble=0;
-		for(i=0;i<listW.size();i++){
+		int doble = 0;
+		for (i = 0; i < listW.size(); i++) {
 			plateauJeu.getPaquet().addWagonDefausse(listW.get(i));
 			plateauJeu.getJoueur(no).deleteWagon(listW.get(i));
 		}
-		for(i=0;i<listB.size();i++){
+		for (i = 0; i < listB.size(); i++) {
 			plateauJeu.getPaquet().addBoatDefausse(listB.get(i));
 			plateauJeu.getJoueur(no).deleteBoat(listB.get(i));
-			if(listB.get(i).isDoubleBoat()){
+			if (listB.get(i).isDoubleBoat()) {
 				doble++;
 			}
 		}
-		plateauJeu.getJoueur(no).getPions().lessWagonBoat(listB.size()+doble, listW.size());
+		plateauJeu.getJoueur(no).getPions().lessWagonBoat(listB.size() + doble, listW.size());
 	}
-	
-	public void discardingWagonBoat(List<Wagon> listW, List<Boat> listB){
-		if(server!=null){
+
+	public void discardingWagonBoat(List<Wagon> listW, List<Boat> listB) {
+		if (server != null) {
 			int i;
-			int doble=0;
-			if(server!=null){
+			int doble = 0;
+			if (server != null) {
 				traitementDiscardingWagonBoat(listW, listB, id);
-				
-				plateauView.printPion(plateauJeu.getJoueur(id).getPions().getNbWagon(), plateauJeu.getJoueur(id).getPions().getNbBoat(), plateauJeu.getJoueur(id).getPions().getNbPort());
+
+				plateauView.printPion(plateauJeu.getJoueur(id).getPions().getNbWagon(),
+						plateauJeu.getJoueur(id).getPions().getNbBoat(),
+						plateauJeu.getJoueur(id).getPions().getNbPort());
 			}
-		}else{
+		} else {
 			JSONObject json = new JSONObject();
 			Gson gson = new Gson();
 			try {
 				json.put("id", id);
 				json.put("defausse", true);
-				if(listW!=null){
+				if (listW != null) {
 					json.put("defausseWagon", gson.toJson(listW));
 				}
-				if(listB!=null){
+				if (listB != null) {
 					json.put("defausseBoat", gson.toJson(listB));
 				}
 				System.out.println(json.toString());
 				client.sendJSON(json);
 				json = client.receiveJSON();
 				System.out.println(json.toString());
-				if(json.has("pion")){
+				if (json.has("pion")) {
 					try {
 						int wagon = json.getInt("Pwagon");
 						int boat = json.getInt("Pboat");
 						int port = json.getInt("Pport");
-						
+
 						plateauView.printPion(wagon, boat, port);
-						routePort=true;
-						
+						routePort = true;
+
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-				if(json.has("error")){
+				if (json.has("error")) {
 					try {
 						String msgError = json.getString("error");
 						plateauView.printNotification(msgError);
@@ -845,53 +872,54 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}
-		if(checkEndOfTurn()){
+		if (checkEndOfTurn()) {
 			endTurn();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Prendre une route ou construire un port
+	 * 
 	 * @param rt
 	 * @param rm
 	 * @param port
 	 * @param listFxId
 	 * @return
 	 */
-	public boolean takeRoadWagonOrBoatOrPort(RouteTerrestre rt,RouteMartime rm,Ville port, List<String> listFxId){
-		if(!routePort&&!carteDestination&&!carteTransport&&!choixCarteDestination){
-			if(client!=null){
+	public boolean takeRoadWagonOrBoatOrPort(RouteTerrestre rt, RouteMartime rm, Ville port, List<String> listFxId) {
+		if (!routePort && !carteDestination && !carteTransport && !choixCarteDestination) {
+			if (client != null) {
 				JSONObject json = new JSONObject();
 				Gson gson = new Gson();
 				try {
 					json.put("route", true);
-					if(rt!=null){
+					if (rt != null) {
 						json.put("routeTerrestre", gson.toJson(rt));
-					}else if(rm!=null){
+					} else if (rm != null) {
 						json.put("routeMaritime", gson.toJson(rm));
-					}else if(port!=null){
+					} else if (port != null) {
 						json.put("port", gson.toJson(port));
-					}else{
+					} else {
 						return false;
 					}
 					json.put("id", id);
 					json.put("fxId", gson.toJson(listFxId));
 					client.sendJSON(json);
 					json = client.receiveJSON();
-					if(json.has("routePrise")){
+					if (json.has("routePrise")) {
 						int score = json.getInt("score");
-						routePort=true;
+						routePort = true;
 						plateauJeu.getJoueur(id).setScore(score);
 						plateauView.printScore(score);
 						plateauView.printNotification("Vous avez pris la route");
 						plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
 						plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 						return true;
-					}else{
+					} else {
 						plateauView.printNotification(json.getString("error"));
 					}
-					
+
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -899,38 +927,40 @@ public class PlateauController extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}else{
+			} else {
 				try {
-					int longueurRoad=0;
+					int longueurRoad = 0;
 					String msg = "";
-					if(rt!=null){
-						if(checkTakeRoadWagon(rt,id)){
+					if (rt != null) {
+						if (checkTakeRoadWagon(rt, id)) {
 							plateauView.printNotification("La route a déjà été prise");
 							return false;
 						}
-						msg="La route "+rt.getV1().getName()+"-"+rt.getV2().getName()+" est prise par "+plateauJeu.getJoueur(id).getName();
+						msg = "La route " + rt.getV1().getName() + "-" + rt.getV2().getName() + " est prise par "
+								+ plateauJeu.getJoueur(id).getName();
 						plateauJeu.getJoueur(0).getPions().addRouteTerrestre(rt);
-						longueurRoad=rt.getNbPion();
-					}else if(rm!=null){
-						if(checkTakeRoadBoat(rm,id)){
+						longueurRoad = rt.getNbPion();
+					} else if (rm != null) {
+						if (checkTakeRoadBoat(rm, id)) {
 							plateauView.printNotification("La route a déjà été prise");
 							return false;
 						}
-						msg="La route "+rm.getV1().getName()+"-"+rm.getV2().getName()+" est prise par "+plateauJeu.getJoueur(id).getName();
+						msg = "La route " + rm.getV1().getName() + "-" + rm.getV2().getName() + " est prise par "
+								+ plateauJeu.getJoueur(id).getName();
 						plateauJeu.getJoueur(0).getPions().addRouteMaritime(rm);
-						longueurRoad=rm.getNbPion();
-					}else if(port!=null){
-						if(checkTakePort(port)){
+						longueurRoad = rm.getNbPion();
+					} else if (port != null) {
+						if (checkTakePort(port)) {
 							plateauView.printNotification("Le port a déjà été pris");
 							return false;
 						}
-						if(!plateauJeu.getJoueur(id).getPions().checkCityIsConnectedToRoad(port)){
+						if (!plateauJeu.getJoueur(id).getPions().checkCityIsConnectedToRoad(port)) {
 							plateauView.printNotification("La ville n'est pas connectée à une de vos route");
 							return false;
 						}
-						msg="Le port de "+port.getName()+" est pris par "+plateauJeu.getJoueur(id).getName();
+						msg = "Le port de " + port.getName() + " est pris par " + plateauJeu.getJoueur(id).getName();
 						plateauJeu.getJoueur(0).getPions().addPort(port);
-					}else{
+					} else {
 						plateauView.printNotification("Erreur de traitement. Veuillez recommencer");
 						return false;
 					}
@@ -939,7 +969,7 @@ public class PlateauController extends Thread{
 					Gson gson = new Gson();
 					json.put("routePrise", true);
 					json.put("msg", msg);
-					json.put("id",id);
+					json.put("id", id);
 					json.put("couleur", gson.toJson(plateauJeu.getJoueur(id).getCouleur()));
 					plateauJeu.getJoueur(id).calculScoreTakeRoad(longueurRoad);
 					int score = plateauJeu.getJoueur(id).getScore();
@@ -950,32 +980,35 @@ public class PlateauController extends Thread{
 					plateauView.printNotification("Vous avez pris la route");
 					plateauView.colorRoadOrPort(plateauJeu.getJoueur(id).getCouleur(), listFxId);
 					plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
-					routePort=true;
+					routePort = true;
 					return true;
 				} catch (JSONException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-				
-		}else{
+
+		} else {
 			endTurn();
 		}
 		return false;
 	}
-	
+
 	/**
-	 * On vérifie si le joueur a assez de pion pour prendre uen route ou construire un port
+	 * On vérifie si le joueur a assez de pion pour prendre uen route ou
+	 * construire un port
+	 * 
 	 * @param wagon
 	 * @param boat
-	 * @param no : id du joueur
+	 * @param no
+	 *            : id du joueur
 	 * @return
 	 */
-	public boolean checkIfEnoughPion(int wagon, int boat, int no){
-		if(tour&&!routePort){
-			if(server!=null){
+	public boolean checkIfEnoughPion(int wagon, int boat, int no) {
+		if (tour && !routePort) {
+			if (server != null) {
 				return plateauJeu.getJoueur(no).getPions().checkIfEnoughPion(wagon, boat);
-			}else{
+			} else {
 				JSONObject json = new JSONObject();
 				try {
 					json.put("checkPionRoad", true);
@@ -984,8 +1017,8 @@ public class PlateauController extends Thread{
 					json.put("id", no);
 					client.sendJSON(json);
 					json = client.receiveJSON();
-					if(json.has("checkPionRoad")){
-						if(json.getBoolean("checkPionRoad")){
+					if (json.has("checkPionRoad")) {
+						if (json.getBoolean("checkPionRoad")) {
 							return true;
 						}
 					}
@@ -993,100 +1026,104 @@ public class PlateauController extends Thread{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * On vérifie si la route n'a pas déjà été prise
+	 * 
 	 * @param r
 	 * @return
 	 */
-	public boolean checkTakeRoadWagon(RouteTerrestre r, int no){
+	public boolean checkTakeRoadWagon(RouteTerrestre r, int no) {
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			int cle = (int) it.next();
-			if(plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadWagon(r)){
+			if (plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadWagon(r)) {
 				return true;
 			}
 		}
-		if(plateauJeu.getJoueur(no).getPions().checkIfRoadWagonDouble(r)){
+		if (plateauJeu.getJoueur(no).getPions().checkIfRoadWagonDouble(r)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * On vérifie si la route n'a pas déjà été prise
+	 * 
 	 * @param r
 	 * @return
 	 */
-	public boolean checkTakeRoadBoat(RouteMartime r, int no){
+	public boolean checkTakeRoadBoat(RouteMartime r, int no) {
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			int cle = (int) it.next();
-			if(plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadBoat(r)){
+			if (plateauJeu.getListJoueur().get(cle).checkIfHimTakeRoadBoat(r)) {
 				return true;
 			}
 		}
-		if(plateauJeu.getJoueur(no).getPions().checkIfRoadBoatDouble(r)){
+		if (plateauJeu.getJoueur(no).getPions().checkIfRoadBoatDouble(r)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * On vérifie si le port n'a pas déjà été construit
+	 * 
 	 * @param v
 	 * @return
 	 */
-	public boolean checkTakePort(Ville v){
+	public boolean checkTakePort(Ville v) {
 		Set cles = plateauJeu.getListJoueur().keySet();
 		Iterator it = cles.iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			int cle = (int) it.next();
-			if(plateauJeu.getListJoueur().get(cle).checkIfHimTakePort(v)){
+			if (plateauJeu.getListJoueur().get(cle).checkIfHimTakePort(v)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public void takeCardsDestination(List<Destination> destSelect, List<Destination> destNoSelect, List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect){
-		if(initGame){
-			if((destSelect.size()+iteSelectm.size())>=3){
+
+	public void takeCardsDestination(List<Destination> destSelect, List<Destination> destNoSelect,
+			List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect) {
+		if (initGame) {
+			if ((destSelect.size() + iteSelectm.size()) >= 3) {
 				traitementCartesDestination(destSelect, destNoSelect, iteSelectm, iteNoSelect);
-			}else{
-				//dire qu'il y a pas assez de cartes selectionné
+			} else {
+				// dire qu'il y a pas assez de cartes selectionné
 				plateauView.printMsgDestination("Veuillez sélectionner au moins 3 carte");
 			}
-		}else if((destSelect.size()+iteSelectm.size())>=1){
+		} else if ((destSelect.size() + iteSelectm.size()) >= 1) {
 			traitementCartesDestination(destSelect, destNoSelect, iteSelectm, iteNoSelect);
-			choixCarteDestination=true;
-			if(checkEndOfTurn()){
+			choixCarteDestination = true;
+			if (checkEndOfTurn()) {
 				endTurn();
 			}
-		}else{
+		} else {
 			plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
 		}
 	}
-	
-	private void traitementCartesDestination(List<Destination> destSelect, List<Destination> destNoSelect, List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect){
+
+	private void traitementCartesDestination(List<Destination> destSelect, List<Destination> destNoSelect,
+			List<Iteneraire> iteSelectm, List<Iteneraire> iteNoSelect) {
 		int i;
-		if(server==null){
+		if (server == null) {
 			JSONArray jsonAD = new JSONArray();
 			JSONArray jsonAI = new JSONArray();
 			JSONObject json = new JSONObject();
 			Gson gson = new Gson();
-			for(i=0;i<destNoSelect.size();i++){
+			for (i = 0; i < destNoSelect.size(); i++) {
 				jsonAD.put(gson.toJson(destNoSelect.get(i)));
 			}
-			for(i=0;i<iteNoSelect.size();i++){
+			for (i = 0; i < iteNoSelect.size(); i++) {
 				jsonAI.put(gson.toJson(iteNoSelect.get(i)));
 			}
 			try {
@@ -1099,10 +1136,10 @@ public class PlateauController extends Thread{
 			}
 			jsonAD = new JSONArray();
 			jsonAI = new JSONArray();
-			for(i=0;i<destSelect.size();i++){
+			for (i = 0; i < destSelect.size(); i++) {
 				jsonAD.put(gson.toJson(destSelect.get(i)));
 			}
-			for(i=0;i<iteSelectm.size();i++){
+			for (i = 0; i < iteSelectm.size(); i++) {
 				jsonAI.put(gson.toJson(iteSelectm.get(i)));
 			}
 			try {
@@ -1120,34 +1157,35 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}else{
-			for(i=0;i<destNoSelect.size();i++){
+		} else {
+			for (i = 0; i < destNoSelect.size(); i++) {
 				plateauJeu.getPaquet().addDestinationDefausse(destNoSelect.get(i));
 			}
-			for(i=0;i<iteNoSelect.size();i++){
+			for (i = 0; i < iteNoSelect.size(); i++) {
 				plateauJeu.getPaquet().addDestinationDefausse(iteNoSelect.get(i));
 			}
-			for(i=0;i<destSelect.size();i++){
+			for (i = 0; i < destSelect.size(); i++) {
 				plateauJeu.getListJoueur().get(id).addDestination(destSelect.get(i));
 			}
-			for(i=0;i<iteSelectm.size();i++){
+			for (i = 0; i < iteSelectm.size(); i++) {
 				plateauJeu.getListJoueur().get(id).addIteneraire(iteSelectm.get(i));
 			}
 		}
-		
+
 		plateauView.putDestinationInMainOfPlayer(destSelect, iteSelectm);
 		plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
-		if(initGame){
+		if (initGame) {
 			plateauView.pionChoix();
 		}
 	}
-	
+
 	/**
 	 * Donnée reçu par le client depuis le serveur
+	 * 
 	 * @param json
 	 */
-	public void getJsonFromServer(JSONObject json){
-		if(json.has("tour")){
+	public void getJsonFromServer(JSONObject json) {
+		if (json.has("tour")) {
 			int no = 0;
 			try {
 				no = json.getInt("tour");
@@ -1155,16 +1193,16 @@ public class PlateauController extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(no==id){
+			if (no == id) {
 				beginTurn();
 				client.setTurn(true);
 				plateauView.printMsgGame("C'est à votre tour !");
-			}else{
+			} else {
 				client.setTurn(false);
-				plateauView.printMsgGame("C'est au tour du joueur "+ plateauJeu.getJoueur(no).getName() +" !");
+				plateauView.printMsgGame("C'est au tour du joueur " + plateauJeu.getJoueur(no).getName() + " !");
 			}
 		}
-		if(json.has("routePrise")){
+		if (json.has("routePrise")) {
 			int no;
 			Gson gson = new Gson();
 			try {
@@ -1175,7 +1213,7 @@ public class PlateauController extends Thread{
 				plateauJeu.getJoueur(no).setScore(score);
 				String list = (String) json.get("fxId");
 				List<String> listFxId = gson.fromJson(list, ArrayList.class);
-				
+
 				plateauView.colorRoadOrPort(color, listFxId);
 				plateauView.setListJoueurAtScoreView(plateauJeu.getListJoueur());
 			} catch (JSONException e) {
@@ -1183,7 +1221,7 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}
-		if(json.has("msg")){
+		if (json.has("msg")) {
 			try {
 				String msg = json.getString("msg");
 				plateauView.printNotification(msg);
@@ -1192,15 +1230,18 @@ public class PlateauController extends Thread{
 				e.printStackTrace();
 			}
 		}
-		
-		System.out.println("poubelle "+ json.toString());
+		if (json.has("wagonDelete")) {
+			plateauView.deleteCardWagon1();
+		}
+
+		System.out.println("poubelle " + json.toString());
 	}
-	
-	public void waitServerMsg(){
-		JSONObject json=null;
+
+	public void waitServerMsg() {
+		JSONObject json = null;
 		JSONArray jsonA = null;
 		Gson gson = new Gson();
-		if(client==null){
+		if (client == null) {
 			System.out.println("cette valeur est nulle");
 		}
 		try {
@@ -1209,12 +1250,12 @@ public class PlateauController extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(json!=null){
-			if(json.has("wagon")){
+		if (json != null) {
+			if (json.has("wagon")) {
 				int i = 0;
 				try {
 					jsonA = json.getJSONArray("wagon");
-					for(i=0;i<jsonA.length();i++){
+					for (i = 0; i < jsonA.length(); i++) {
 						plateauView.setCardsWagonInMainOfPlayer(gson.fromJson(jsonA.get(i).toString(), Wagon.class));
 					}
 					choixCartes("wagon");
@@ -1223,11 +1264,11 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("bateau")){
+			if (json.has("bateau")) {
 				int i = 0;
 				try {
 					jsonA = json.getJSONArray("bateau");
-					for(i=0;i<jsonA.length();i++){
+					for (i = 0; i < jsonA.length(); i++) {
 						plateauView.setCardsBoatInMainOfPlayer(gson.fromJson(jsonA.get(i).toString(), Boat.class));
 					}
 					choixCartes("boat");
@@ -1236,26 +1277,28 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("destination")||json.has("iteneraire")){
+			if (json.has("destination") || json.has("iteneraire")) {
 				int i = 0;
-				if(initGame){
+				if (initGame) {
 					plateauView.printMsgDestination("Veuillez sélectionner au moins 3 carte");
-				}else{
+				} else {
 					plateauView.printMsgDestination("Veuillez sélectionner au moins 1 carte");
 					choixCartes("destination");
 				}
 				try {
-					if(json.has("destination")){
+					if (json.has("destination")) {
 						jsonA = json.getJSONArray("destination");
 						System.out.println("destinationRecuCarte");
-						for(i=0;i<jsonA.length();i++){
-							plateauView.setCardsDestinationForChoice(gson.fromJson(jsonA.get(i).toString(), Destination.class));
+						for (i = 0; i < jsonA.length(); i++) {
+							plateauView.setCardsDestinationForChoice(
+									gson.fromJson(jsonA.get(i).toString(), Destination.class));
 						}
 					}
-					if(json.has("iteneraire")){
+					if (json.has("iteneraire")) {
 						jsonA = json.getJSONArray("iteneraire");
-						for(i=0;i<jsonA.length();i++){
-							plateauView.setCardsIteneraireForChoice(gson.fromJson(jsonA.get(i).toString(), Iteneraire.class));
+						for (i = 0; i < jsonA.length(); i++) {
+							plateauView.setCardsIteneraireForChoice(
+									gson.fromJson(jsonA.get(i).toString(), Iteneraire.class));
 						}
 					}
 				} catch (JsonSyntaxException | JSONException e) {
@@ -1263,7 +1306,7 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("error")){
+			if (json.has("error")) {
 				try {
 					String msgError = json.getString("error");
 					plateauView.printNotification(msgError);
@@ -1272,7 +1315,7 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("msg")){
+			if (json.has("msg")) {
 				try {
 					String msg = json.getString("msg");
 					plateauView.printNotification(msg);
@@ -1281,10 +1324,11 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("visibleWagon")){
+			if (json.has("visibleWagon")) {
 				try {
 					String visibleWagon = json.getString("visibleWagon");
-					Type type = new TypeToken<List<Wagon>>(){}.getType();
+					Type type = new TypeToken<List<Wagon>>() {
+					}.getType();
 					List<Wagon> listFxId = gson.fromJson(visibleWagon, type);
 					int i;
 					plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
@@ -1295,10 +1339,11 @@ public class PlateauController extends Thread{
 					e.printStackTrace();
 				}
 			}
-			if(json.has("visibleBoat")){
+			if (json.has("visibleBoat")) {
 				try {
 					String visibleBoat = json.getString("visibleBoat");
-					Type type = new TypeToken<List<Boat>>(){}.getType();
+					Type type = new TypeToken<List<Boat>>() {
+					}.getType();
 					List<Boat> listFxId = gson.fromJson(visibleBoat, type);
 					int i;
 					plateauView.setCardBoatInBoatDiscover1(listFxId.get(0));
