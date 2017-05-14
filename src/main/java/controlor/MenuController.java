@@ -52,8 +52,7 @@ public class MenuController {
 	/**
 	 * Un joueur a créé la partie, on créé un serveur
 	 */
-	public void createServer(){
-		int port = 42000;
+	public void createServer(int port){
 		server = new Server(port,this);
 		System.out.println("Lancement");
 		t = new Thread(server);
@@ -67,25 +66,31 @@ public class MenuController {
 		menuView.setAdressIP("IP : "+server.getIpAdress()+" port : "+port);
 	}
 	
+	/**
+	 * On enleve le joueur qui s'est déconnecté de la partie et on rafraichie la vue
+	 * @param no : id du joueur
+	 */
 	public void clientDeconnecter(int no){
 		joueurs = plateauJeu.getListJoueur();
 		if(joueurs.containsKey(no)){
 			joueurs.remove(no);
 			listClientsServer.remove(no);
 			plateauJeu.setListJoueur(joueurs);
+			putAllPseudoInView();
 		}
 	}
 	
 	/**
 	 * Le client se connecte au serveur
+	 * On vérifie si l'adresse IP est valide
+	 * On se connecte au serveur
 	 * @param ip
 	 * @throws IOException
 	 */
-	public void clientJoinServer(String ip){
+	public void clientJoinServer(String ip, int port){
 		String IP_ADDRESS_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 		Matcher matcher = Pattern.compile(IP_ADDRESS_PATTERN).matcher(ip);
 		if(matcher.find()||ip.equals(new String("localhost"))){
-			int port = 42000;
 			client = new Client(ip, port,this);
 			t = new Thread(client);
 			t.start();
@@ -151,12 +156,10 @@ public class MenuController {
 		plateauController.setPlateauView(menuView.changerPlateau(plateauController));
 		
 		JSONObject json = new JSONObject();
+		json.put("plateau", true);
 		try {
-			json.put("plateau", true);
+			
 			server.broadcast(listClientsServer, json);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -192,7 +195,7 @@ public class MenuController {
 				server.closeAllThread();
 				server.closeServer();
 				
-			} catch (JSONException | IOException | InterruptedException e) {
+			} catch (IOException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -245,95 +248,75 @@ public class MenuController {
 	public synchronized void getJSONFromClient(JSONObject json, MyThreadHandler t) throws IOException{
 		//le client a envoyé son pseudo pour l'enregistrement
 		if(json.has("pseudo")){
-			try {
-				int no = json.getInt("id");
-				String pseudo = json.getString("pseudo");
-				
-	    		if(plateauJeu.checkPseudoExists(pseudo)){
-	    			System.out.println("existe");
-	    			json=new JSONObject();
-	    			json.put("error", "Le pseudo existe déjà, veuillez saisir un autre.");
-	    			t.sendJSON(json);
-	    		}else{
-	    			System.out.println("existe pas");
-	    			plateauJeu.getListJoueur().replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
-	    			json = getInformationGame();
-	    			putAllPseudoInView();
-	    			server.broadcast(listClientsServer, json);
-	    			System.out.println("fin broascast");
-	    		}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			int no = json.getInt("id");
+			String pseudo = json.getString("pseudo");
+			
+    		if(plateauJeu.checkPseudoExists(pseudo)){
+    			System.out.println("existe");
+    			json=new JSONObject();
+    			json.put("error", "Le pseudo existe déjà, veuillez saisir un autre.");
+    			t.sendJSON(json);
+    		}else{
+    			System.out.println("existe pas");
+    			plateauJeu.getListJoueur().replace(no, new Joueur(pseudo, null, 0, 0, 0,false));
+    			json = getInformationGame();
+    			putAllPseudoInView();
+    			server.broadcast(listClientsServer, json);
+    			System.out.println("fin broascast");
+    		}
 		//le client a sélectionné une couleur
 		}else if(json.has("color")){
-				try {
-					int no = json.getInt("id");
-					String color = json.getString("color");
-					EnumCouleur colorEnum = EnumCouleur.valueOf(color);
-					if(plateauJeu.checkColorExists(colorEnum)){
-						json=new JSONObject();
-		    			json.put("error", "La couleur a déjà été choisi.");
-		    			t.sendJSON(json);
-					}else{
-						System.out.println("existe pas");
-						Joueur joueur = plateauJeu.getListJoueur().get(no);
-						joueur.setCouleur(colorEnum);
-		    			plateauJeu.getListJoueur().replace(no, joueur);
-		    			json = getInformationGame();
-		    			putAllPseudoInView();
-		    			server.broadcast(listClientsServer, json);
-		    			System.out.println("fin broascast");
-		    			
-					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			int no = json.getInt("id");
+			String color = json.getString("color");
+			EnumCouleur colorEnum = EnumCouleur.valueOf(color);
+			if(plateauJeu.checkColorExists(colorEnum)){
+				json=new JSONObject();
+    			json.put("error", "La couleur a déjà été choisi.");
+    			t.sendJSON(json);
+			}else{
+				System.out.println("existe pas");
+				Joueur joueur = plateauJeu.getListJoueur().get(no);
+				joueur.setCouleur(colorEnum);
+    			plateauJeu.getListJoueur().replace(no, joueur);
+    			json = getInformationGame();
+    			putAllPseudoInView();
+    			server.broadcast(listClientsServer, json);
+    			System.out.println("fin broascast");
+    			
+			}
 		//le client a indiqué qu'il est prêt à commencer le jeu
 		}else if(json.has("start")){
-			try {
-				int no = json.getInt("id");
-				boolean selected = json.getBoolean("start");
-				Joueur joueur = plateauJeu.getListJoueur().get(no);
-				
-				if(joueur==null){
-					json=new JSONObject();
-	    			json.put("error", "Une erreur est survenue, Veuillez relancer le jeu.");
-	    			t.sendJSON(json);
-				}
-				
-				if(joueur.getCouleur()==null&&selected==true){
-					json=new JSONObject();
-	    			json.put("error", "La couleur n'a pas été choisie.");
-	    			json.put("start", false);
-	    			t.sendJSON(json);
-				}else{
-					joueur.setStart(selected);
-	    			plateauJeu.getListJoueur().replace(no, joueur);
-	    			json = getInformationGame();
-	    			putAllPseudoInView();
-	    			server.broadcast(listClientsServer, json);
-	    			System.out.println("fin broascast");
-	    			if(plateauJeu.checkIfAllPlayerAreReady()){
-	    				menuView.setButtonStart(false);
-	    			}else{
-	    				menuView.setButtonStart(true);
-	    			}
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			int no = json.getInt("id");
+			boolean selected = json.getBoolean("start");
+			Joueur joueur = plateauJeu.getListJoueur().get(no);
+			
+			if(joueur==null){
+				json=new JSONObject();
+    			json.put("error", "Une erreur est survenue, Veuillez relancer le jeu.");
+    			t.sendJSON(json);
+			}
+			
+			if(joueur.getCouleur()==null&&selected==true){
+				json=new JSONObject();
+    			json.put("error", "La couleur n'a pas été choisie.");
+    			json.put("start", false);
+    			t.sendJSON(json);
+			}else{
+				joueur.setStart(selected);
+    			plateauJeu.getListJoueur().replace(no, joueur);
+    			json = getInformationGame();
+    			putAllPseudoInView();
+    			server.broadcast(listClientsServer, json);
+    			System.out.println("fin broascast");
+    			if(plateauJeu.checkIfAllPlayerAreReady()){
+    				menuView.setButtonStart(false);
+    			}else{
+    				menuView.setButtonStart(true);
+    			}
 			}
 		}
 		json = new JSONObject();
-		try {
-			json.put("error", "Le serveur n'a pas saisi les données qui ont été envoyé.");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		json.put("error", "Le serveur n'a pas saisi les données qui ont été envoyé.");
 	}
 	
 	
@@ -378,14 +361,8 @@ public class MenuController {
 	public void selectColorPlayer(String color) throws IOException{
 		if(server==null){
 			JSONObject json = new JSONObject();
-			
-			try {
-				json.put("id", id);
-				json.put("color", color);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			json.put("id", id);
+			json.put("color", color);
 			//on envoie au serveur
 			client.sendJSON(json);
 			
@@ -418,13 +395,8 @@ public class MenuController {
 	public void setReadyGame(boolean selected){
 		if(server==null){
 			JSONObject json = new JSONObject();
-			try {
-				json.put("start", selected);
-				json.put("id", id);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			json.put("start", selected);
+			json.put("id", id);
 			try {
 				client.sendJSON(json);
 			} catch (IOException e) {
@@ -432,8 +404,6 @@ public class MenuController {
 				e.printStackTrace();
 				menuView.setMsgError("Echec d'envoie de données au serveur");
 			}
-		}else{
-			
 		}
 	}
 	
@@ -447,22 +417,17 @@ public class MenuController {
 		JSONArray listId=new JSONArray();
 		//permet de sérializer une classe
 		Gson gson;
-        try {
-        	Set cles = plateauJeu.getListJoueur().keySet();
-    		Iterator it = cles.iterator();
-    		while (it.hasNext()){
-    		   int cle = (int) it.next();
-    		   gson = new Gson();
-    		   listId.put(cle);
-    		   //sérialization
-    		   listJoueur.put(gson.toJson(plateauJeu.getListJoueur().get(cle)));
-    		}
-    		json.put("ids", listId);
-			json.put("joueurs", listJoueur);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+    	Set cles = plateauJeu.getListJoueur().keySet();
+		Iterator it = cles.iterator();
+		while (it.hasNext()){
+		   int cle = (int) it.next();
+		   gson = new Gson();
+		   listId.put(cle);
+		   //sérialization
+		   listJoueur.put(gson.toJson(plateauJeu.getListJoueur().get(cle)));
 		}
+		json.put("ids", listId);
+		json.put("joueurs", listJoueur);
         System.out.println(json.toString());
         return json;
 	}
@@ -472,14 +437,9 @@ public class MenuController {
 	 * @param json
 	 */
 	public void jsonGetMsgError(JSONObject json){
-		try {
-			menuView.setMsgError(json.getString("error"));
-			if(json.has("start")){
-				menuView.setSelectedCheckBox(false);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		menuView.setMsgError(json.getString("error"));
+		if(json.has("start")){
+			menuView.setSelectedCheckBox(false);
 		}
 	}
 	
@@ -489,42 +449,40 @@ public class MenuController {
 	 * @param json
 	 */
 	public void jsonInformationGame(JSONObject json){
-		try {
-			System.out.println("jsoninformationgame");
-			JSONArray jsonArrayJ = json.getJSONArray("joueurs");
-			JSONArray jsonArrayI = json.getJSONArray("ids");
-			Gson gson = new Gson();
-			joueurs = new HashMap<Integer,Joueur>();
-			int i = 0;
-			for(i=0;i<jsonArrayI.length();i++){
-				joueurs.put(jsonArrayI.getInt(i), gson.fromJson(jsonArrayJ.get(i).toString(), Joueur.class));
-			}
-			plateauJeu.setListJoueur(joueurs);
-			putAllPseudoInView();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		JSONArray jsonArrayJ = json.getJSONArray("joueurs");
+		JSONArray jsonArrayI = json.getJSONArray("ids");
+		Gson gson = new Gson();
+		joueurs = new HashMap<Integer,Joueur>();
+		int i = 0;
+		for(i=0;i<jsonArrayI.length();i++){
+			joueurs.put(jsonArrayI.getInt(i), gson.fromJson(jsonArrayJ.get(i).toString(), Joueur.class));
 		}
+		plateauJeu.setListJoueur(joueurs);
+		putAllPseudoInView();
 	}
 	
 	/**
 	 * Mettre à jour la vue
 	 */
 	public void putAllPseudoInView(){
-		Set cles = plateauJeu.getListJoueur().keySet();
-		Iterator it = cles.iterator();
-		while (it.hasNext()){
-		   int cle = (int) it.next();
-		   menuView.setTxtInTextField(cle, plateauJeu.getListJoueur().get(cle).getName());
-		   if((plateauJeu.getListJoueur().get(cle).getCouleur()!=null)&&(cle!=id)){
-			   menuView.setSelectedElementCombobox(cle, plateauJeu.getListJoueur().get(cle).getCouleur().name());
-		   }
-		   if(cle!=0){
-			   System.out.println("cle : "+cle+ " "+plateauJeu.getListJoueur().get(cle).isStart());
-			   if(cle==id){
-				   menuView.setSelectedCheckBox(plateauJeu.getListJoueur().get(cle).isStart());
-			   }
-		   }
+		int i,cle;
+		for(i=0;i<5;i++){
+			cle=i;
+			if(plateauJeu.getJoueur(cle)!=null){
+				menuView.setTxtInTextField(cle, plateauJeu.getListJoueur().get(cle).getName());
+				if((plateauJeu.getListJoueur().get(cle).getCouleur()!=null)&&(cle!=id)){
+				   menuView.setSelectedElementCombobox(cle, plateauJeu.getListJoueur().get(cle).getCouleur().name());
+				}
+				if(cle!=0){
+				   System.out.println("cle : "+cle+ " "+plateauJeu.getListJoueur().get(cle).isStart());
+				   if(cle==id){
+					   menuView.setSelectedCheckBox(plateauJeu.getListJoueur().get(cle).isStart());
+				   }
+				}
+			}else{
+				menuView.setTxtInTextField(cle, "");
+				menuView.setSelectedElementCombobox(cle, "");
+			}
 		}
 	}
 	

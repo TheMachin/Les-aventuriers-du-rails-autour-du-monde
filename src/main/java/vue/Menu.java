@@ -56,7 +56,7 @@ public class Menu{
 	private StackPane stackPane;
 	
 	@FXML
-	private TextField txtAdressIP;
+	private TextField txtAdressIP, txtPort;
 	
 	@FXML
 	private TextField txtJ1, txtJ11;
@@ -98,7 +98,7 @@ public class Menu{
 	private CheckBox checkReady;
 	
 	@FXML
-	private Button btnStart;
+	private Button btnStart, btnPartie;
 	
 	public Menu() {
 		super();
@@ -225,19 +225,47 @@ public class Menu{
 	
 	@FXML
 	private void handleButtonCreatGameFromMenu(ActionEvent e){
-		this.menuController.createServer();
+		//this.menuController.createServer();
+		txtAdressIP.setDisable(true);
+		joinsGame.toFront();
+		btnPartie.setText("Création de la partie");
+		
 	}
 	
 	@FXML
 	private void handleButtonJoinGameFromMenu(ActionEvent e){
 		
 		String ip = txtAdressIP.getText();
+		String port = txtPort.getText();
+		int p=0;
 		lblMsgIp.setText("");
-		if(ip!=""){
-			this.menuController.clientJoinServer(ip);
+		if(btnPartie.getText().equals("Création de la partie")){
+			if(isInteger(port)){
+				p=Integer.parseInt(port);
+				this.menuController.createServer(p);
+			}else{
+				lblMsgIp.setText("Veuillez saisir un port valide.");
+			}
 		}else{
-			lblMsgIp.setText("Veuillez saisir une adresse IP.");
+			if(ip!=""&&isInteger(port)){
+				p=Integer.parseInt(port);
+				this.menuController.clientJoinServer(ip,p);
+			}else{
+				lblMsgIp.setText("Veuillez saisir une adresse IP ou un port valide.");
+			}
 		}
+	}
+	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    } catch(NullPointerException e) {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
 	}
 	
 	public void setMsgAdressIp(String msg){
@@ -251,6 +279,8 @@ public class Menu{
 	@FXML
 	private void handleButtonJoinsGameFromMenu(ActionEvent e){
 		joinsGame.toFront();
+		txtAdressIP.setDisable(false);
+		btnPartie.setText("Rejoindre la partie");
 	}
 	
 	@FXML
