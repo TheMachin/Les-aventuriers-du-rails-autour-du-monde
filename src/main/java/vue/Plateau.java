@@ -128,6 +128,7 @@ public class Plateau {
 	private Map<Label,Destination> carteD = new HashMap<Label,Destination>();
 	private Map<Label,Iteneraire> carteI = new HashMap<Label,Iteneraire>();
 	private Map<Label,Wagon> carteWD = new HashMap<Label,Wagon>();
+	private Map<Label,Wagon> carteWD1 = new HashMap<Label,Wagon>();
 	private Map<Label,Boat> carteBD = new HashMap<Label,Boat>();
 	private List<Label> carteCSelect = new ArrayList<Label>();
 	private String themeUrl = getClass().getResource("plateau.css").toExternalForm();
@@ -149,17 +150,18 @@ public class Plateau {
 		    lbl.setGraphic(imageView);
 		    lbl.setOnMouseClicked(this::takeCardWagon1);
 		    this.wagonDiscover1.getChildren().add(lbl);
-		    this.carteWD.put(lbl, w);
+		    this.carteWD1.put(lbl, w);
 		 });
 	}
 	
 	@FXML
 	private void takeCardWagon1(MouseEvent e){
 		Label lbl = (Label) e.getSource();
-		plateauControlle.deleteCardWagon1();
-		lbl.setOnMouseClicked(this::deSelectionCard);
-		HboxMain.getChildren().add(lbl);
-		plateauControlle.cardWagon1();
+		if (carteWD1.containsKey(wagonDiscover1.getChildren().get(0))) {
+			Wagon c = carteWD1.get(wagonDiscover1.getChildren().get(0));
+			plateauControlle.deleteCardWagon1(c);
+			plateauControlle.cardWagon1();
+		}	
 	}
 	
 	public void deleteCardWagon1(){

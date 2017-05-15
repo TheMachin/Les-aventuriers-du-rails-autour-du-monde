@@ -214,11 +214,13 @@ public class PlateauController extends Thread {
 
 	}
 
-	public void deleteCardWagon1() {
+	public void deleteCardWagon1(Wagon w) {
 		if (client != null) {
 			JSONObject json = new JSONObject();
 			JSONArray jsonA = new JSONArray();
-			//plateauView.deleteCardWagon1();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
+			plateauView.deleteCardWagon1();
 			try {
 				json.put("id", id);
 				json.put("wagonDelete1", 1);
@@ -236,6 +238,8 @@ public class PlateauController extends Thread {
 		} else {
 			JSONObject json = new JSONObject();
 			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
 			plateauView.deleteCardWagon1();
 			try {
 				json.put("wagonDelete1", 1);
@@ -249,8 +253,8 @@ public class PlateauController extends Thread {
 			}
 		}
 	}
-	
-	public void cardWagon1(){
+
+	public void cardWagon1() {
 		JSONObject json;
 		JSONArray jsonA;
 		Gson gson;
@@ -261,7 +265,7 @@ public class PlateauController extends Thread {
 			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
 			Wagon w1 = plateauJeu.getPaquet().piocheWagon();
 			pWagon.add(w1);
-			//plateauView.setCardWagonInWagonDiscover1(w1);
+			// plateauView.setCardWagonInWagonDiscover1(w1);
 			try {
 				json.put("visibleWagon1", gson.toJson(pWagon));
 				json.put("id", id);
@@ -614,8 +618,7 @@ public class PlateauController extends Thread {
 		} else if (json.has("finTour")) {
 			endTurn();
 			return null;
-		}
-		else if (json.has("wagonDelete1")) {
+		} else if (json.has("wagonDelete1")) {
 			try {
 				int no = json.getInt("id");
 				json = new JSONObject();
@@ -626,8 +629,7 @@ public class PlateauController extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		else if (json.has("visibleWagon1")) {
+		} else if (json.has("visibleWagon1")) {
 			try {
 				int no = json.getInt("id");
 				gson = new Gson();
@@ -636,8 +638,8 @@ public class PlateauController extends Thread {
 				}.getType();
 				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
 				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
-				//json = new JSONObject();
-				//json.put("visibleWagon1", listFxId.get(0));
+				// json = new JSONObject();
+				// json.put("visibleWagon1", listFxId.get(0));
 				server.broadcastExceptOne(listClientsServer, json, no);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -648,8 +650,51 @@ public class PlateauController extends Thread {
 		return json;
 	}
 
+	/**
+	 * Vérifie si le joueur peut effectuer une action
+	 * 
+	 * @param card
+	 *            : nom d'une carte, la valeur peut être nulle
+	 * @return true si il peut continuer, false sinon.
+	 */
+	private boolean checkAction(String card) {
+		if (card == null) {
+			card = "";
+		}
+		System.out.println(tour);
+		System.out.println(carteDestination);
+		System.out.println(carteTransport);
+		if (!tour) {
+			plateauView.printNotification("Ce n'est pas votre tour");
+			return false;
+		}
+		if (carteDestination) {
+			plateauView.printNotification("Vous avez déjà piochée une carte destination");
+			return false;
+		}
+		if (carteTransport) {
+			if (card.equals("wagon") || card.equals("boat") || card.equals("bateau")) {
+				if (nbCartes >= 2) {
+					plateauView.printNotification("Vous avez déjà piochée deux cartes de transport");
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				plateauView.printNotification("Vous avez déjà piochée une carte transport");
+				return false;
+			}
+
+		}
+		if (routePort) {
+			plateauView.printNotification("Vous avez déjà pris une route");
+			return false;
+		}
+		return true;
+	}
+
 	public void piocheCards(String card) {
-		if (tour) {
+		if (checkAction(card)) {
 
 			if (server == null) {
 
@@ -668,6 +713,7 @@ public class PlateauController extends Thread {
 				}
 
 			} else {
+				choixCartes(card);
 				String msg = "";
 				switch (card) {
 				case "wagon":
@@ -675,7 +721,6 @@ public class PlateauController extends Thread {
 					if (w != null) {
 						plateauView.setCardsWagonInMainOfPlayer(w);
 						plateauJeu.getJoueur(id).addWagon(w);
-						choixCartes(card);
 						plateauView.printNotification("Vous avez pris une carte wagon");
 						msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte wagon";
 					} else {
@@ -687,7 +732,6 @@ public class PlateauController extends Thread {
 					if (b != null) {
 						plateauView.setCardsBoatInMainOfPlayer(b);
 						plateauJeu.getJoueur(id).addBoat(b);
-						choixCartes(card);
 						plateauView.printNotification("Vous avez pris une carte bateau");
 						msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte bateau";
 					} else {
@@ -703,13 +747,10 @@ public class PlateauController extends Thread {
 							if (c.getName().equals(EnumCarte.DESTINATION)) {
 								Destination d = (Destination) o;
 								plateauView.setCardsDestinationForChoice(d);
-								plateauJeu.getJoueur(id).addDestination(d);
 							} else {
 								Iteneraire ite = (Iteneraire) o;
 								plateauView.setCardsIteneraireForChoice(ite);
-								plateauJeu.getJoueur(id).addIteneraire(ite);
 							}
-							choixCartes(card);
 							plateauView.printNotification(
 									"Vous avez choisi de prendre une ou plusieurs cartes destination");
 							msg = "Le joueur " + plateauJeu.getJoueur(id).getName() + " a pris une carte destination";
@@ -739,7 +780,9 @@ public class PlateauController extends Thread {
 				endTurn();
 			}
 		} else {
-			// ce n'est pas votre tour
+			if (checkEndOfTurn()) {
+				endTurn();
+			}
 		}
 
 	}
