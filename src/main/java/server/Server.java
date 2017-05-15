@@ -326,7 +326,8 @@ public class Server implements Runnable{
 
              OutputStream out = socket.getOutputStream();
               ObjectOutputStream o = new ObjectOutputStream(out);
-             o.writeObject(jsonObject.toString());
+              o.writeObject(jsonObject.toString());
+             
               out.flush();
               System.out.println("Sent to client: " + " " + jsonObject.toString());
         }

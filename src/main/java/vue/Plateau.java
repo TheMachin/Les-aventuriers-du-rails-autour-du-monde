@@ -235,8 +235,8 @@ public class Plateau {
 		 List<Destination> desSelect = new ArrayList<Destination>();
 		 List<Iteneraire> iteNonSelect = new ArrayList<Iteneraire>();
 		 List<Destination> desNonSelect = new ArrayList<Destination>();
-		 Map<Label,Destination> carteD2 = carteD;
-		 Map<Label,Iteneraire> carteI2 = carteI;
+		 Map<Label,Destination> carteD2 = new HashMap<Label,Destination>(carteD);
+		 Map<Label,Iteneraire> carteI2 = new HashMap<Label,Iteneraire>(carteI);
 		 
 		 int i=0;
 		 int j=0;
