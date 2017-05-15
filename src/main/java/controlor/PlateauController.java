@@ -213,6 +213,14 @@ public class PlateauController extends Thread {
 		server.setPlateauControllerAtThread(listClientsServer, this);
 
 	}
+	
+	public boolean allowJoker(){
+		if (nbCartes >=1){
+			plateauView.printNotification("Vous avez déjà pris une carte !");
+			return false;
+		}
+		return true;
+	}
 
 	public void deleteCardWagon1(Wagon w) {
 		if (client != null) {
@@ -220,13 +228,13 @@ public class PlateauController extends Thread {
 			JSONArray jsonA = new JSONArray();
 			plateauView.setCardsWagonInMainOfPlayer(w);
 			plateauJeu.getJoueur(id).addWagon(w);
-			plateauView.deleteCardWagon1();
 			try {
 				json.put("id", id);
 				json.put("wagonDelete1", 1);
 				try {
 					client.sendJSON(json);
 					getJsonFromServer(client.receiveJSON());
+					//plateauView.deleteCardWagon1();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -234,6 +242,11 @@ public class PlateauController extends Thread {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			if(w.isJoker() == true){
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
 			}
 		} else {
 			JSONObject json = new JSONObject();
@@ -251,6 +264,14 @@ public class PlateauController extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(w.isJoker() == true){
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
+			}
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
 		}
 	}
 
@@ -622,7 +643,7 @@ public class PlateauController extends Thread {
 			try {
 				int no = json.getInt("id");
 				json = new JSONObject();
-				json.put("wagonDelete", 1);
+				json.put("wagonDelete1", 1);
 				plateauView.deleteCardWagon1();
 				server.broadcastExceptOne(listClientsServer, json, no);
 			} catch (JSONException e) {
@@ -657,7 +678,7 @@ public class PlateauController extends Thread {
 	 *            : nom d'une carte, la valeur peut être nulle
 	 * @return true si il peut continuer, false sinon.
 	 */
-	private boolean checkAction(String card) {
+	public boolean checkAction(String card) {
 		if (card == null) {
 			card = "";
 		}
@@ -925,6 +946,9 @@ public class PlateauController extends Thread {
 			case "destination":
 				carteDestination = true;
 				break;
+			case "joker":
+				nbCartes = nbCartes + 2;
+				carteTransport = true;
 			}
 		}
 		if (carteTransport) {

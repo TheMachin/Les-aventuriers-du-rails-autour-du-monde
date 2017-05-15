@@ -159,8 +159,18 @@ public class Plateau {
 		Label lbl = (Label) e.getSource();
 		if (carteWD1.containsKey(wagonDiscover1.getChildren().get(0))) {
 			Wagon c = carteWD1.get(wagonDiscover1.getChildren().get(0));
-			plateauControlle.deleteCardWagon1(c);
-			plateauControlle.cardWagon1();
+			if (plateauControlle.checkAction("wagon")){
+				if (c.isJoker() == true){
+					boolean pioche = plateauControlle.allowJoker();
+					if (pioche){
+						plateauControlle.deleteCardWagon1(c);
+						plateauControlle.cardWagon1();
+					}
+				} else{
+					plateauControlle.deleteCardWagon1(c);
+					plateauControlle.cardWagon1();
+				}
+			}
 		}	
 	}
 	
