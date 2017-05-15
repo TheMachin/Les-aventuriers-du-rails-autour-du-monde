@@ -224,6 +224,7 @@ public class PlateauController extends Thread {
 				json.put("wagonDelete1", 1);
 				try {
 					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -266,6 +267,7 @@ public class PlateauController extends Thread {
 				json.put("id", id);
 				try {
 					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -635,7 +637,7 @@ public class PlateauController extends Thread {
 				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
 				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
 				json = new JSONObject();
-				json.put("visibleWagon1", 1);
+				json.put("visibleWagon1", listFxId.get(0));
 				server.broadcastExceptOne(listClientsServer, json, no);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -1321,8 +1323,8 @@ public class PlateauController extends Thread {
 			plateauView.deleteCardWagon1();
 		}
 		if (json.has("visibleWagon1")) {
-			Gson gson = new Gson();
 			try {
+				Gson gson = new Gson();
 				String visibleWagon1 = json.getString("visibleWagon1");
 				Type type = new TypeToken<List<Wagon>>() {
 				}.getType();
