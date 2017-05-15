@@ -1,10 +1,14 @@
 package vue;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 
 import controlor.PlateauController;
 import ennumeration.EnumCouleur;
@@ -28,10 +32,14 @@ import metier.Carte;
 import metier.Destination;
 import metier.Iteneraire;
 import metier.Joueur;
+import metier.Paquet;
+import metier.Pions;
+import metier.PlateauJeu;
 import metier.RouteMartime;
 import metier.RouteTerrestre;
 import metier.Ville;
 import metier.Wagon;
+import visitor.SaveJsonVisitor;
 
 public class Plateau {
 
@@ -44,6 +52,9 @@ public class Plateau {
 	
 	@FXML 
 	private Label lblDeckDestination, lblSelectDestination;
+	
+	@FXML 
+	private Label lblsauvegarde;
 
 	@FXML 
 	private HBox HboxMain, hboxDestination, hboxDestinationSelect;
@@ -1466,5 +1477,55 @@ public class Plateau {
 			stageScore.showAndWait();
 			stageScore.toFront();
 	 }
+	 
+	 /**
+		 * sauvegarde
+	 * @throws IOException 
+	 * @throws JsonIOException 
+		 */
+		@FXML
+		private void save() throws JsonIOException, IOException {
+			SaveJsonVisitor visitor = new SaveJsonVisitor();
+			String output;
+			
+			PlateauJeu plateauJeu = plateauControlle.getPlateauJeu();
+			plateauJeu.accept(visitor);
+/*
+			Boat boat = null;
+			boat.accept(visitor);
+			
+			Destination destination = null;
+			destination.accept(visitor);
+			
+			Iteneraire iteneraire = null;
+			iteneraire.accept(visitor);
+
+			Joueur joueur = null;
+			joueur.accept(visitor);
+			
+			Paquet paquet = null;
+			paquet.accept(visitor);
+
+			Pions pions = null;
+			pions.accept(visitor);
+
+			RouteMartime routeM = null;
+			routeM.accept(visitor);
+
+			RouteTerrestre routeT = null;
+			routeT.accept(visitor);
+
+			Ville ville = null;
+			ville.accept(visitor);
+
+			Wagon wagon = null;
+			wagon.accept(visitor);
+*/			
+			output = visitor.getOutput();
+			
+			Gson gson = new Gson();
+			gson.toJson(output, new FileWriter("C:\\Users\\David\\Desktop\\file.json"));
+
+		}
 
 }
