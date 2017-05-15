@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import vue.Menu;
 
@@ -22,7 +23,7 @@ public class MainMenu extends Application{
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage=primaryStage;
 		this.primaryStage.setTitle("Les aventuriers du rails autour du monde");
-		
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.jpg")));
 		Parent root = null;
 		Menu menu = new Menu();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("../vue/Menu.fxml"));
@@ -35,8 +36,6 @@ public class MainMenu extends Application{
 		}
 		
 		menu.setMain(this);
-		
-        //Parent root = FXMLLoader.load(getClass().getResource("../vue/Menu.fxml"));
         
 		Scene scene = new Scene(root);
 		
