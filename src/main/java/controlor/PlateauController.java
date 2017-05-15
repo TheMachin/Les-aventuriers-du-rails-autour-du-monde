@@ -218,7 +218,7 @@ public class PlateauController extends Thread {
 		if (client != null) {
 			JSONObject json = new JSONObject();
 			JSONArray jsonA = new JSONArray();
-			plateauView.deleteCardWagon1();
+			//plateauView.deleteCardWagon1();
 			try {
 				json.put("id", id);
 				json.put("wagonDelete1", 1);
@@ -261,7 +261,7 @@ public class PlateauController extends Thread {
 			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
 			Wagon w1 = plateauJeu.getPaquet().piocheWagon();
 			pWagon.add(w1);
-			plateauView.setCardWagonInWagonDiscover1(w1);
+			//plateauView.setCardWagonInWagonDiscover1(w1);
 			try {
 				json.put("visibleWagon1", gson.toJson(pWagon));
 				json.put("id", id);
