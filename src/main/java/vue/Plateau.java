@@ -35,34 +35,32 @@ import metier.Wagon;
 
 public class Plateau {
 
-	
-	@FXML 
+	@FXML
 	private Label lblDeckBoat, lblMsgGame, lblMsgNotification;
-	
-	@FXML 
+
+	@FXML
 	private Label lblDeckWagon, lblSelectNbWagon, lblSelectNbBoat, lblPionBoat, lblPionWagon, lblScore, lblPionPort;
-	
-	@FXML 
+
+	@FXML
 	private Label lblDeckDestination, lblSelectDestination, labl, wagon1, wagon2;
-	
-	@FXML 
+
+	@FXML
 	private HBox boatDiscover1, boatDiscover2, boatDiscover3;
-	
-	@FXML 
+
+	@FXML
 	private HBox wagonDiscover1, wagonDiscover2, wagonDiscover3;
 
-	@FXML 
+	@FXML
 	private HBox HboxMain, hboxDestination, hboxDestinationSelect;
-	
-	@FXML 
+
+	@FXML
 	private HBox HboxSelect;
 
 	@FXML
 	private Pane paneDestination, panePion;
-	
+
 	@FXML
 	private AnchorPane anchorRight;
-	
 
 	// villes
 	Ville anchorage = new Ville("Anchorage", true);
@@ -115,314 +113,400 @@ public class Plateau {
 	Ville winnipeg = new Ville("Winnipeg", false);
 
 	private PlateauController plateauControlle = new PlateauController();
-	
-
 
 	private MainMenu main;
-	
+
 	private Stage stageScore = new Stage();
 	private Score score = null;
-	
-	private Map<Label,Wagon> carteW = new HashMap<Label,Wagon>();
-	private Map<Label,Boat> carteB = new HashMap<Label,Boat>();
-	private Map<Label,Destination> carteD = new HashMap<Label,Destination>();
-	private Map<Label,Iteneraire> carteI = new HashMap<Label,Iteneraire>();
-	private Map<Label,Wagon> carteWD = new HashMap<Label,Wagon>();
-	private Map<Label,Wagon> carteWD1 = new HashMap<Label,Wagon>();
-	private Map<Label,Boat> carteBD = new HashMap<Label,Boat>();
+
+	private Map<Label, Wagon> carteW = new HashMap<Label, Wagon>();
+	private Map<Label, Boat> carteB = new HashMap<Label, Boat>();
+	private Map<Label, Destination> carteD = new HashMap<Label, Destination>();
+	private Map<Label, Iteneraire> carteI = new HashMap<Label, Iteneraire>();
+	private Map<Label, Wagon> carteWD = new HashMap<Label, Wagon>();
+	private Map<Label, Wagon> carteWD1 = new HashMap<Label, Wagon>();
+	private Map<Label, Wagon> carteWD2 = new HashMap<Label, Wagon>();
+	private Map<Label, Wagon> carteWD3 = new HashMap<Label, Wagon>();
+	private Map<Label, Boat> carteBD = new HashMap<Label, Boat>();
+	private Map<Label, Boat> carteBD1 = new HashMap<Label, Boat>();
+	private Map<Label, Boat> carteBD2 = new HashMap<Label, Boat>();
+	private Map<Label, Boat> carteBD3 = new HashMap<Label, Boat>();
 	private List<Label> carteCSelect = new ArrayList<Label>();
 	private String themeUrl = getClass().getResource("plateau.css").toExternalForm();
-	
+
 	public Plateau(PlateauController plateauController) {
 		super();
-		this.plateauControlle=plateauController;
+		this.plateauControlle = plateauController;
 		HboxMain = new HBox();
 		HboxSelect = new HBox();
 	}
-	
-	public void setCardWagonInWagonDiscover1(Wagon w){
+
+	public void setCardWagonInWagonDiscover1(Wagon w) {
 		Platform.runLater(() -> {
 			Label lbl = new Label();
 			Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
 			ImageView imageView = new ImageView(image);
-			imageView.setFitWidth(150); 
-	        imageView.setFitHeight(99);
-		    lbl.setGraphic(imageView);
-		    lbl.setOnMouseClicked(this::takeCardWagon1);
-		    this.wagonDiscover1.getChildren().add(lbl);
-		    this.carteWD1.put(lbl, w);
-		 });
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardWagon1);
+			this.wagonDiscover1.getChildren().add(lbl);
+			this.carteWD1.put(lbl, w);
+		});
 	}
-	
+
 	@FXML
-	private void takeCardWagon1(MouseEvent e){
+	private void takeCardWagon1(MouseEvent e) {
 		Label lbl = (Label) e.getSource();
 		if (carteWD1.containsKey(wagonDiscover1.getChildren().get(0))) {
 			Wagon c = carteWD1.get(wagonDiscover1.getChildren().get(0));
-			if (plateauControlle.checkAction("wagon")){
-				if (c.isJoker() == true){
+			if (plateauControlle.checkAction("wagon")) {
+				if (c.isJoker() == true) {
 					boolean pioche = plateauControlle.allowJoker();
-					if (pioche){
+					if (pioche) {
 						plateauControlle.deleteCardWagon1(c);
 						plateauControlle.cardWagon1();
 					}
-				} else{
+				} else {
 					plateauControlle.deleteCardWagon1(c);
 					plateauControlle.cardWagon1();
 				}
 			}
-		}	
+		}
 	}
-	
-	public void deleteCardWagon1(){
+
+	public void deleteCardWagon1() {
 		Platform.runLater(() -> {
 			wagonDiscover1.getChildren().clear();
-		 });
+		});
+	}
+
+	public void setCardWagonInWagonDiscover2(Wagon w) {
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardWagon2);
+			this.wagonDiscover2.getChildren().add(lbl);
+			this.carteWD2.put(lbl, w);
+		});
+	}
+
+	@FXML
+	private void takeCardWagon2(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteWD2.containsKey(wagonDiscover2.getChildren().get(0))) {
+			Wagon c = carteWD2.get(wagonDiscover2.getChildren().get(0));
+			if (plateauControlle.checkAction("wagon")) {
+				if (c.isJoker() == true) {
+					boolean pioche = plateauControlle.allowJoker();
+					if (pioche) {
+						plateauControlle.deleteCardWagon2(c);
+						plateauControlle.cardWagon2();
+					}
+				} else {
+					plateauControlle.deleteCardWagon2(c);
+					plateauControlle.cardWagon2();
+				}
+			}
+		}
+	}
+
+	public void deleteCardWagon2() {
+		Platform.runLater(() -> {
+			wagonDiscover2.getChildren().clear();
+		});
+	}
+
+	public void setCardWagonInWagonDiscover3(Wagon w) {
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardWagon3);
+			this.wagonDiscover3.getChildren().add(lbl);
+			this.carteWD3.put(lbl, w);
+		});
+	}
+
+	@FXML
+	private void takeCardWagon3(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteWD3.containsKey(wagonDiscover3.getChildren().get(0))) {
+			Wagon c = carteWD3.get(wagonDiscover3.getChildren().get(0));
+			if (plateauControlle.checkAction("wagon")) {
+				if (c.isJoker() == true) {
+					boolean pioche = plateauControlle.allowJoker();
+					if (pioche) {
+						plateauControlle.deleteCardWagon3(c);
+						plateauControlle.cardWagon3();
+					}
+				} else {
+					plateauControlle.deleteCardWagon3(c);
+					plateauControlle.cardWagon3();
+				}
+			}
+		}
+	}
+
+	public void deleteCardWagon3() {
+		Platform.runLater(() -> {
+			wagonDiscover3.getChildren().clear();
+		});
+	}
+
+	public void setCardBoatInBoatDiscover1(Boat b) {
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardBoat1);
+			this.boatDiscover1.getChildren().add(lbl);
+			this.carteBD1.put(lbl, b);
+		});
+	}
+
+	@FXML
+	private void takeCardBoat1(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteBD1.containsKey(boatDiscover1.getChildren().get(0))) {
+			Boat c = carteBD1.get(boatDiscover1.getChildren().get(0));
+			if (plateauControlle.checkAction("boat")) {
+				plateauControlle.deleteCardBoat1(c);
+				plateauControlle.cardBoat1();
+			}
+		}
 	}
 	
-	public void setCardWagonInWagonDiscover2(Wagon w){
+	public void deleteCardBoat1() {
+		Platform.runLater(() -> {
+			boatDiscover1.getChildren().clear();
+		});
+	}
+
+	public void setCardBoatInBoatDiscover2(Boat b) {
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardBoat2);
+			this.boatDiscover2.getChildren().add(lbl);
+			this.carteBD2.put(lbl, b);
+		});
+	}
+
+	@FXML
+	private void takeCardBoat2(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteBD2.containsKey(boatDiscover2.getChildren().get(0))) {
+			Boat c = carteBD2.get(boatDiscover2.getChildren().get(0));
+			if (plateauControlle.checkAction("boat")) {
+				plateauControlle.deleteCardBoat2(c);
+				plateauControlle.cardBoat2();
+			}
+		}
+	}
+	
+	public void deleteCardBoat2() {
+		Platform.runLater(() -> {
+			boatDiscover2.getChildren().clear();
+		});
+	}
+
+	public void setCardBoatInBoatDiscover3(Boat b) {
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150);
+			imageView.setFitHeight(99);
+			lbl.setGraphic(imageView);
+			lbl.setOnMouseClicked(this::takeCardBoat3);
+			this.boatDiscover3.getChildren().add(lbl);
+			this.carteBD3.put(lbl, b);
+		});
+	}
+
+	@FXML
+	private void takeCardBoat3(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteBD3.containsKey(boatDiscover3.getChildren().get(0))) {
+			Boat c = carteBD3.get(boatDiscover3.getChildren().get(0));
+			if (plateauControlle.checkAction("boat")) {
+				plateauControlle.deleteCardBoat3(c);
+				plateauControlle.cardBoat3();
+			}
+		}
+	}
+	
+	public void deleteCardBoat3() {
+		Platform.runLater(() -> {
+			boatDiscover3.getChildren().clear();
+		});
+	}
+
+	public void setCardsWagonInMainOfPlayer(Wagon w) {
 		Label lbl = new Label();
 		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardWagon2);
-	    lbl.setId("wagon2");
-	    this.wagonDiscover2.getChildren().add(lbl);
-	    this.carteWD.put(lbl, w);
+		lbl.setGraphic(new ImageView(image));
+		lbl.setOnMouseClicked(this::selectionCard);
+		this.HboxMain.getChildren().add(lbl);
+		this.carteW.put(lbl, w);
+		System.out.println(this.carteW.size());
 	}
-	
-	@FXML
-	private void takeCardWagon2(MouseEvent e){
-		Label lbl = (Label) e.getSource();
-		wagonDiscover2.getChildren().remove(0);
-	}
-	
-	public void setCardWagonInWagonDiscover3(Wagon w){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardWagon3);
-	    this.wagonDiscover3.getChildren().add(lbl);
-	    this.carteWD.put(lbl, w);
-	}
-	
-	@FXML
-	private void takeCardWagon3(MouseEvent e){
-		Label lbl = (Label) e.getSource();
-		wagonDiscover3.getChildren().remove(lbl);
-	}
-	
-	public void setCardBoatInBoatDiscover1(Boat b){
+
+	public void setCardsBoatInMainOfPlayer(Boat b) {
 		Label lbl = new Label();
 		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardBoat1);
-	    this.boatDiscover1.getChildren().add(lbl);
-	    this.carteBD.put(lbl, b);
+		lbl.setGraphic(new ImageView(image));
+		lbl.setOnMouseClicked(this::selectionCard);
+		this.HboxMain.getChildren().add(lbl);
+		this.carteB.put(lbl, b);
+		System.out.println(this.carteB.size());
 	}
-	
-	@FXML
-	private void takeCardBoat1(MouseEvent e){
-		Label lbl = (Label) e.getSource();
-		boatDiscover1.getChildren().remove(lbl);
-		
-	}
-	
-	public void setCardBoatInBoatDiscover2(Boat b){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardBoat2);
-	    this.boatDiscover2.getChildren().add(lbl);
-	    this.carteBD.put(lbl, b);
-	}
-	
-	@FXML
-	private void takeCardBoat2(MouseEvent e){
-		Label lbl = (Label) e.getSource();
-		boatDiscover2.getChildren().remove(lbl);
-	}
-	
-	public void setCardBoatInBoatDiscover3(Boat b){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardBoat3);
-	    this.boatDiscover3.getChildren().add(lbl);
-	    this.carteBD.put(lbl, b);
-	}
-	
-	@FXML
-	private void takeCardBoat3(MouseEvent e){
-		Label lbl = (Label) e.getSource();
-		boatDiscover3.getChildren().remove(lbl);
-	}
-	
-	public void setCardsWagonInMainOfPlayer(Wagon w){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCard);
-	    this.HboxMain.getChildren().add(lbl);
-	    this.carteW.put(lbl, w);
-	    System.out.println(this.carteW.size());
-	}
-	
-	public void setCardsBoatInMainOfPlayer(Boat b){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(b.getLienImage()));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCard);
-	    this.HboxMain.getChildren().add(lbl);
-	    this.carteB.put(lbl, b);
-	    System.out.println(this.carteB.size());
-	}
-	
-	public void setCardsDestinationForChoice(Destination destination){
+
+	public void setCardsDestinationForChoice(Destination destination) {
 		paneDestination.toFront();
 		Label lbl = new Label();
 		lbl.getStylesheets().add(themeUrl);
 		Image image = new Image(getClass().getResourceAsStream(destination.getLienImage()));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCardDestination);
-	    carteD.put(lbl, destination);
+		lbl.setGraphic(new ImageView(image));
+		lbl.setOnMouseClicked(this::selectionCardDestination);
+		carteD.put(lbl, destination);
 		hboxDestinationSelect.getChildren().add(lbl);
-		
+
 	}
-	
-	public void setCardsIteneraireForChoice(Iteneraire ite){
+
+	public void setCardsIteneraireForChoice(Iteneraire ite) {
 		paneDestination.toFront();
 		Label lbl = new Label();
 		lbl.getStylesheets().add(themeUrl);
 		Image image = new Image(getClass().getResourceAsStream(ite.getLienImage()));
-	    lbl.setGraphic(new ImageView(image));
-	    lbl.setOnMouseClicked(this::selectionCardDestination);
-	    carteI.put(lbl, ite);
+		lbl.setGraphic(new ImageView(image));
+		lbl.setOnMouseClicked(this::selectionCardDestination);
+		carteI.put(lbl, ite);
 		hboxDestinationSelect.getChildren().add(lbl);
-		
+
 	}
-	
-	public void discoverCard(){
-		//TODO pour voir les cartes à découvert
+
+	public void discoverCard() {
+		// TODO pour voir les cartes à découvert
 	}
-	
-	
-	 /**
-	  * Permet de piocher une carte bateau
-	  * @param e
-	  */
-	 @FXML
-	 private void takeHideBoatCard(MouseEvent e) {
+
+	/**
+	 * Permet de piocher une carte bateau
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void takeHideBoatCard(MouseEvent e) {
 		System.out.println("clicked boat");
-		plateauControlle.piocheCards("bateau");		
-	 }
-	 
-	 
-	 /**
-	  * Permet de piocher une carte train
-	  * @param e
-	  */
-	 @FXML
-	 private void takeHideTrainCard(MouseEvent e) {
-		 plateauControlle.piocheCards("wagon");		
-	 }
-	 
-	 
-	 @FXML
-	 private void takeHideDestinationCard(MouseEvent e) {
-		//Appel fonction pioche dans metier
-		 plateauControlle.piocheCards("destination");		
-	 }
-	
-	 /**
-	  * Permet de prendre la carte de la main du joueur pour pouvoir la jouer
-	  * @param e
-	  */
-	 @FXML
-	 private void selectionCard(MouseEvent e){
-		 Label lbl = (Label) e.getSource();
-		 HboxMain.getChildren().remove(lbl);
-		 lbl.setOnMouseClicked(this::deSelectionCard);
-		 HboxSelect.getChildren().add(lbl);
-		 
-	 }
-	 
-	 @FXML
-	 private void selectionCardDestination(MouseEvent e){
-		 Label lbl = (Label) e.getSource();
-		 carteCSelect.add(lbl);
-		 lbl.setOnMouseClicked(this::deSelectionCardDestination);
-		 lbl.getStyleClass().clear();
-		 lbl.getStyleClass().add("lblCadre");
-	 }
-	 
-	 @FXML
-	 private void confirmeChoiceDestination(ActionEvent e){
-		 List<Iteneraire> iteSelect = new ArrayList<Iteneraire>();
-		 List<Destination> desSelect = new ArrayList<Destination>();
-		 List<Iteneraire> iteNonSelect = new ArrayList<Iteneraire>();
-		 List<Destination> desNonSelect = new ArrayList<Destination>();
-		 Map<Label,Destination> carteD2 = carteD;
-		 Map<Label,Iteneraire> carteI2 = carteI;
-		 
-		 int i=0;
-		 int j=0;
-		 for(i=0;i<carteCSelect.size();i++){
-			 if(carteD.containsKey(carteCSelect.get(i))){
-				 Destination d = carteD.get(carteCSelect.get(i));
-				 desSelect.add(d);
-				 carteD2.remove(carteCSelect.get(i));
-			 }else if(carteI.containsKey(carteCSelect.get(i))){
-				 Iteneraire ite = carteI.get(carteCSelect.get(i));
-				 iteSelect.add(ite);
-				 carteI2.remove(carteCSelect.get(i));
-			 }
-		 }
-		 for(i=0;i<carteD2.size();i++){
-			 desNonSelect.add(carteD2.get(i));
-		 }
-		 for(i=0;i<carteI2.size();i++){
-			 iteNonSelect.add(carteI2.get(i));
-		 }
-		 
-		 
-		 System.out.println("go controller "+desSelect.size()+" "+iteSelect.size());
-		 plateauControlle.takeCardsDestination(desSelect, desNonSelect, iteSelect, iteNonSelect);
-	 }
-	 
-	 
-	 /**
-	  * Remettre la carte dans la main du joueur à partir de la carte sélectionnée par la souris
-	  */
-	 @FXML
-	 private void deSelectionCard(MouseEvent e){
-		 Label lbl = (Label) e.getSource();
-		 deSelectionCard(lbl);
-	 }
-	 
-	 @FXML
-	 private void deSelectionCardDestination(MouseEvent e){
-		 Label lbl = (Label) e.getSource();
-		 if(carteCSelect.contains(lbl)){
-			 carteCSelect.remove(lbl);
-		 }
-		 lbl.setOnMouseClicked(this::selectionCardDestination);
-		 lbl.getStyleClass().clear();
-	 }
+		plateauControlle.piocheCards("bateau");
+	}
+
+	/**
+	 * Permet de piocher une carte train
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void takeHideTrainCard(MouseEvent e) {
+		plateauControlle.piocheCards("wagon");
+	}
+
+	@FXML
+	private void takeHideDestinationCard(MouseEvent e) {
+		// Appel fonction pioche dans metier
+		plateauControlle.piocheCards("destination");
+	}
+
+	/**
+	 * Permet de prendre la carte de la main du joueur pour pouvoir la jouer
+	 * 
+	 * @param e
+	 */
+	@FXML
+	private void selectionCard(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		HboxMain.getChildren().remove(lbl);
+		lbl.setOnMouseClicked(this::deSelectionCard);
+		HboxSelect.getChildren().add(lbl);
+
+	}
+
+	@FXML
+	private void selectionCardDestination(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		carteCSelect.add(lbl);
+		lbl.setOnMouseClicked(this::deSelectionCardDestination);
+		lbl.getStyleClass().clear();
+		lbl.getStyleClass().add("lblCadre");
+	}
+
+	@FXML
+	private void confirmeChoiceDestination(ActionEvent e) {
+		List<Iteneraire> iteSelect = new ArrayList<Iteneraire>();
+		List<Destination> desSelect = new ArrayList<Destination>();
+		List<Iteneraire> iteNonSelect = new ArrayList<Iteneraire>();
+		List<Destination> desNonSelect = new ArrayList<Destination>();
+		Map<Label, Destination> carteD2 = carteD;
+		Map<Label, Iteneraire> carteI2 = carteI;
+
+		int i = 0;
+		int j = 0;
+		for (i = 0; i < carteCSelect.size(); i++) {
+			if (carteD.containsKey(carteCSelect.get(i))) {
+				Destination d = carteD.get(carteCSelect.get(i));
+				desSelect.add(d);
+				carteD2.remove(carteCSelect.get(i));
+			} else if (carteI.containsKey(carteCSelect.get(i))) {
+				Iteneraire ite = carteI.get(carteCSelect.get(i));
+				iteSelect.add(ite);
+				carteI2.remove(carteCSelect.get(i));
+			}
+		}
+		for (i = 0; i < carteD2.size(); i++) {
+			desNonSelect.add(carteD2.get(i));
+		}
+		for (i = 0; i < carteI2.size(); i++) {
+			iteNonSelect.add(carteI2.get(i));
+		}
+
+		System.out.println("go controller " + desSelect.size() + " " + iteSelect.size());
+		plateauControlle.takeCardsDestination(desSelect, desNonSelect, iteSelect, iteNonSelect);
+	}
+
+	/**
+	 * Remettre la carte dans la main du joueur à partir de la carte
+	 * sélectionnée par la souris
+	 */
+	@FXML
+	private void deSelectionCard(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		deSelectionCard(lbl);
+	}
+
+	@FXML
+	private void deSelectionCardDestination(MouseEvent e) {
+		Label lbl = (Label) e.getSource();
+		if (carteCSelect.contains(lbl)) {
+			carteCSelect.remove(lbl);
+		}
+		lbl.setOnMouseClicked(this::selectionCardDestination);
+		lbl.getStyleClass().clear();
+	}
 
 	public void putDestinationInMainOfPlayer(List<Destination> listDes, List<Iteneraire> listIte) {
 		int i;
@@ -470,12 +554,12 @@ public class Plateau {
 	}
 
 	public void mettreCarteDansDefausse(int nb, List<Label> listLbl) {
-		int i=0;
+		int i = 0;
 		List<Wagon> listW = new ArrayList<Wagon>();
 		List<Boat> listB = new ArrayList<Boat>();
-		System.out.println("label "+nb+ " taille"+listLbl.size());
-		for(i=0;i<nb;i++) {
-			if(listLbl.get(i)!=null){
+		System.out.println("label " + nb + " taille" + listLbl.size());
+		for (i = 0; i < nb; i++) {
+			if (listLbl.get(i) != null) {
 				Label lbl = listLbl.get(i);
 				HboxSelect.getChildren().remove(lbl);
 				if (carteW.containsKey(lbl)) {
@@ -486,7 +570,7 @@ public class Plateau {
 				} else if (carteB.containsKey(lbl)) {
 					Boat b = carteB.get(lbl);
 					listB.add(b);
-					if(b.isDoubleBoat()){
+					if (b.isDoubleBoat()) {
 						nb--;
 					}
 					// mettre carte bateau dans la défausse
@@ -592,7 +676,7 @@ public class Plateau {
 		case "ntp2":
 		case "ntp3":
 			r = new RouteMartime(7, EnumCouleur.NOIR, tiksi, petropavlovsk);
-			
+
 			listFxId.add("ntp1");
 			listFxId.add("ntp2");
 			listFxId.add("ntp3");
@@ -809,11 +893,10 @@ public class Plateau {
 			break;
 		}
 
-		
 		int carte = 0;
-		int doubleBoat = 0 ;
+		int doubleBoat = 0;
 		int joker = 0;
-		EnumCouleur color=null;
+		EnumCouleur color = null;
 		RouteMartime routeM = r;
 		List<Label> listLbl = new ArrayList<Label>();
 		List<Wagon> listW = new ArrayList<Wagon>();
@@ -822,9 +905,9 @@ public class Plateau {
 		for (i = 0; i < HboxSelect.getChildren().size(); i++) {
 			if (carteB.containsKey(HboxSelect.getChildren().get(i))) {
 				Boat b = carteB.get(HboxSelect.getChildren().get(i));
-				if(r.getCouleur()==EnumCouleur.GRIS){
-					if(color==null){
-						color=b.getCouleur();
+				if (r.getCouleur() == EnumCouleur.GRIS) {
+					if (color == null) {
+						color = b.getCouleur();
 					}
 				}
 				if (b.getCouleur() == routeM.getCouleur() || b.getCouleur() == color) {
@@ -847,8 +930,9 @@ public class Plateau {
 			}
 		}
 
-		if ((joker + carte + doubleBoat) >= r.getNbPion() && plateauControlle.checkIfEnoughPion(joker, carte+doubleBoat, plateauControlle.getIdPlayer())) {
-			if(plateauControlle.takeRoadWagonOrBoatOrPort(null, r, null, listFxId)){
+		if ((joker + carte + doubleBoat) >= r.getNbPion()
+				&& plateauControlle.checkIfEnoughPion(joker, carte + doubleBoat, plateauControlle.getIdPlayer())) {
+			if (plateauControlle.takeRoadWagonOrBoatOrPort(null, r, null, listFxId)) {
 				System.out.println("route prise");
 				mettreCarteDansDefausse(r.getNbPion(), listLbl);
 			}
@@ -870,348 +954,350 @@ public class Plateau {
 		Rectangle rect = (Rectangle) e.getSource();
 		List<String> listFxId = new ArrayList<String>();
 		RouteTerrestre r = null;
-		//RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null, null);
+		// RouteTerrestre r = new RouteTerrestre(7, EnumCouleur.VIOLET, null,
+		// null);
 		int carte = 0;
 		int joker = 0;
 
 		switch (rect.getId()) {
-			case "jvw":
-				r = new RouteTerrestre(2, EnumCouleur.JAUNE, vancouver, winnipeg);
-				listFxId.add("jvw");
-				break;
-			case "vwny":
-				r = new RouteTerrestre(2, EnumCouleur.VERT, winnipeg, ny);
-				listFxId.add("vwny");
-				break;
-			case "rvla":
-				r = new RouteTerrestre(1, EnumCouleur.ROUGE, vancouver, losAngeles);
-				listFxId.add("rvla");
-				break;
-			case "vvla":
-				r = new RouteTerrestre(1, EnumCouleur.VERT, vancouver, losAngeles);
-				listFxId.add("vvla");
-				break;
-			case "glaw":
-				r = new RouteTerrestre(3, EnumCouleur.GRIS, losAngeles, winnipeg);
-				listFxId.add("glaw");
-				break;
-			case "rpd":
-				r = new RouteTerrestre(2, EnumCouleur.ROUGE, perth, darwin);
-				listFxId.add("rpd");
-				break;
-			case "vds":
-				r = new RouteTerrestre(2, EnumCouleur.VERT, darwin, sydney);
-				listFxId.add("vds");
-				break;
-			case "bps":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, perth, sydney);
-				listFxId.add("bps");
-				break;
-			case "jps":
-				r = new RouteTerrestre(2, EnumCouleur.JAUNE, perth, sydney);
-				listFxId.add("jps");
-				break;
-			case "blam":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, losAngeles, mexico);
-				listFxId.add("blam");
-				break;
-			case "jlam":
-				r = new RouteTerrestre(2, EnumCouleur.JAUNE, losAngeles, mexico);
-				listFxId.add("jlam");
-				break;
-			case "vlany":
-				r = new RouteTerrestre(4, EnumCouleur.VIOLET, losAngeles, ny);
-				listFxId.add("vlany");
-				break;
-			case "nlany":
-				r = new RouteTerrestre(4, EnumCouleur.NOIR, losAngeles, ny);
-				listFxId.add("nlany");
-				break;
-			case "vimc":
-				r = new RouteTerrestre(3, EnumCouleur.VIOLET, mexico, caracas);
-				listFxId.add("vimc");
-				break;
-			case "rmc":
-				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mexico, caracas);
-				listFxId.add("rmc");
-				break;
-			case "bmny1":
-			case "bmny2":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, miami, ny);
-				listFxId.add("bmny1");
-				listFxId.add("bmny2");
-				break;
-			case "jlc":
-				r = new RouteTerrestre(2, EnumCouleur.JAUNE, lima, caracas);
-				listFxId.add("jlc");
-				break;
-			case "blc":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, lima, caracas);
-				listFxId.add("blc");
-				break;
-			case "vcrdj1":
-			case "vcrdj2":
-			case "vcrdj3":
-				r = new RouteTerrestre(4, EnumCouleur.VERT, caracas, rio);
-				listFxId.add("vcrdj1");
-				listFxId.add("vcrdj2");
-				listFxId.add("vcrdj3");
-				break;
-			case "ncrdj1":
-			case "ncrdj2":
-			case "ncrdj3":
-				r = new RouteTerrestre(4, EnumCouleur.NOIR, caracas, rio);
-				listFxId.add("ncrdj1");
-				listFxId.add("ncrdj2");
-				listFxId.add("ncrdj3");
-				break;
-			case "glvg":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
-				listFxId.add("glvg");
-				break;
-			case "glvd":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
-				listFxId.add("glvd");
-				break;
-			case "bbardj":
-				r = new RouteTerrestre(1, EnumCouleur.BLANC, buenos, rio);
-				listFxId.add("bbardj");
-				break;
-			case "rbardj":
-				r = new RouteTerrestre(1, EnumCouleur.ROUGE, buenos, rio);
-				listFxId.add("rbardj");
-				break;
-			case "vectdes":
-				r = new RouteTerrestre(3, EnumCouleur.VERT, capeTown, darEsSalaam);
-				listFxId.add("vectdes");
-				break;
-			case "victdes":
-				r = new RouteTerrestre(3, EnumCouleur.VIOLET, capeTown, darEsSalaam);
-				listFxId.add("victdes");
-				break;
-			case "glct":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, capeTown);
-				listFxId.add("glct");
-				break;
-			case "jll":
-				r = new RouteTerrestre(1, EnumCouleur.JAUNE, lagos, luanda);
-				listFxId.add("jll");
-				break;
-			case "vll":
-				r = new RouteTerrestre(1, EnumCouleur.VIOLET, lagos, luanda);
-				listFxId.add("vll");
-				break;
-			case "gcl1":
-			case "gcl2":
-				r = new RouteTerrestre(4, EnumCouleur.GRIS, casablanca, lagos);
-				listFxId.add("gcl1");
-				listFxId.add("gcl2");
-				break;
-			case "gcaq":
-				r = new RouteTerrestre(3, EnumCouleur.GRIS, casablanca, alqahira);
-				listFxId.add("gcaq");
-				break;
-			case "raqd":
-				r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
-				listFxId.add("raqd");
-				break;
-			case "vhkm":
-				r = new RouteTerrestre(2, EnumCouleur.VIOLET, hongkong, manila);
-				listFxId.add("vhkm");
-				break;
-			case "baqd":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
-				listFxId.add("baqd");
-				break;
-			case "rddes":
-				r = new RouteTerrestre(1, EnumCouleur.ROUGE, djibouti, darEsSalaam);
-				listFxId.add("rddes");
-				break;
-			case "nddes":
-				r = new RouteTerrestre(1, EnumCouleur.NOIR, djibouti, darEsSalaam);
-				listFxId.add("nddes");
-				break;
-			case "rmh":
-				r = new RouteTerrestre(1, EnumCouleur.ROUGE, marseille, hamburg);
-				listFxId.add("rmh");
-				break;
-			case "vmh":
-				r = new RouteTerrestre(1, EnumCouleur.VIOLET, marseille, hamburg);
-				listFxId.add("vmh");
-				break;
-			case "romt":
-				r = new RouteTerrestre(3, EnumCouleur.ROUGE, moskva, tehran);
-				listFxId.add("romt");
-				break;
-			case "vmm":
-				r = new RouteTerrestre(2, EnumCouleur.VIOLET, murmansk, moskva);
-				listFxId.add("vmm");
-				break;
-			case "vha1":
-			case "vha2":
-				r = new RouteTerrestre(2, EnumCouleur.VERT, hamburg, athina);
-				listFxId.add("vha1");
-				listFxId.add("vha2");
-				break;
-			case "gat":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
-				listFxId.add("gat");
-				break;
-			case "bhm":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, hamburg, moskva);
-				listFxId.add("bhm");
-				break;
-			case "nhm":
-				r = new RouteTerrestre(2, EnumCouleur.NOIR, hamburg, moskva);
-				listFxId.add("nhm");
-				break;
-			case "vmn":
-				r = new RouteTerrestre(4, EnumCouleur.VERT, moskva, novosibirsk);
-				listFxId.add("vmn");
-				break;
-			case "jmn":
-				r = new RouteTerrestre(4, EnumCouleur.JAUNE, moskva, novosibirsk);
-				listFxId.add("jmn");
-				break;
-			case "rnb":
-				r = new RouteTerrestre(3, EnumCouleur.ROUGE, novosibirsk, beijing);
-				listFxId.add("rnb");
-				break;
-			case "nnb":
-				r = new RouteTerrestre(3, EnumCouleur.NOIR, novosibirsk, beijing);
-				listFxId.add("nnb");
-				break;
-			case "bbhk":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, beijing, hongkong);
-				listFxId.add("bbhk");
-				break;
-			case "vbhk":
-				r = new RouteTerrestre(2, EnumCouleur.VERT, beijing, hongkong);
-				listFxId.add("vbhk");
-				break;
-			case "gnt":
-				r = new RouteTerrestre(3, EnumCouleur.GRIS, novosibirsk, tiksi);
-				listFxId.add("gnt");
-				break;
-			case "vny":
-				r = new RouteTerrestre(3, EnumCouleur.VIOLET, novosibirsk, yakutsk);
-				listFxId.add("vny");
-				break;
-			case "vty":
-				r = new RouteTerrestre(1, EnumCouleur.VERT, tiksi, yakutsk);
-				listFxId.add("vty");
-				break;
-			case "bnl":
-				r = new RouteTerrestre(2, EnumCouleur.BLANC, novosibirsk, lahore);
-				listFxId.add("bnl");
-				break;
-			case "jyb":
-				r = new RouteTerrestre(3, EnumCouleur.JAUNE, yakutsk, beijing);
-				listFxId.add("jyb");
-				break;
-			case "byp":
-				r = new RouteTerrestre(3, EnumCouleur.BLANC, yakutsk, petropavlovsk);
-				listFxId.add("byp");
-				break;
-			case "nlm":
-				r = new RouteTerrestre(1, EnumCouleur.NOIR, lahore, mumbai);
-				listFxId.add("nlm");
-				break;
-			case "vlm":
-				r = new RouteTerrestre(1, EnumCouleur.VERT, lahore, mumbai);
-				listFxId.add("vlm");
-				break;
-			case "nwcb":
-				r = new RouteTerrestre(4, EnumCouleur.NOIR, winnipeg, cambridgeBay);
-				listFxId.add("nwcb");
-				break;
-			case "btm1":
-			case "btm2":
-			case "btm3":
-				r = new RouteTerrestre(3, EnumCouleur.BLANC, tehran, mumbai);
-				listFxId.add("btm1");
-				listFxId.add("btm2");
-				listFxId.add("btm3");
-				break;
-			case "vtm1":
-			case "vtm2":
-			case "vtm3":
-				r = new RouteTerrestre(3, EnumCouleur.VIOLET, tehran, mumbai);
-				listFxId.add("vtm1");
-				listFxId.add("vtm2");
-				listFxId.add("vtm3");
-				break;
-			case "rmb1":
-			case "rmb2":
-			case "rmb3":
-				r = new RouteTerrestre(3, EnumCouleur.ROUGE, mumbai, bangkok);
-				listFxId.add("rmb1");
-				listFxId.add("rmb2");
-				listFxId.add("rmb3");
-				break;
-			case "jmb1":
-			case "jmb2":
-			case "jmb3":
-				r = new RouteTerrestre(3, EnumCouleur.JAUNE, mumbai, bangkok);
-				listFxId.add("jmb1");
-				listFxId.add("jmb2");
-				listFxId.add("jmb3");
-				break;
-			case "vhkb":
-				r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, bangkok);
-				listFxId.add("vhkb");
-				break;
-			case "nhkb":
-				r = new RouteTerrestre(1, EnumCouleur.NOIR, hongkong, bangkok);
-				listFxId.add("nhkb");
-				break;
-			case "dcm":
-				r = new RouteTerrestre(1, EnumCouleur.GRIS, casablanca, marseille, true);
-				listFxId.add("dcm");
-				break;
-			case "dldes":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, darEsSalaam, true);
-				listFxId.add("dldes");
-				break;
-			case "dtl":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, tehran, lahore, true);
-				listFxId.add("dtl");
-				break;
-			case "dlb":
-				r = new RouteTerrestre(3, EnumCouleur.GRIS, lahore, beijing, true);
-				listFxId.add("dlb");
-				break;
-			case "jaqt":
-				r = new RouteTerrestre(1, EnumCouleur.JAUNE, alqahira, tehran);
-				listFxId.add("jaqt");
-				break;
-			case "naqt":
-				r = new RouteTerrestre(1, EnumCouleur.NOIR, alqahira, tehran);
-				listFxId.add("naqt");
-				break;
-			case "dva1":
-			case "dva2":
-				r = new RouteTerrestre(2, EnumCouleur.GRIS, vancouver, anchorage, true);
-				listFxId.add("dva1");
-				listFxId.add("dva2");
-				break;
+		case "jvw":
+			r = new RouteTerrestre(2, EnumCouleur.JAUNE, vancouver, winnipeg);
+			listFxId.add("jvw");
+			break;
+		case "vwny":
+			r = new RouteTerrestre(2, EnumCouleur.VERT, winnipeg, ny);
+			listFxId.add("vwny");
+			break;
+		case "rvla":
+			r = new RouteTerrestre(1, EnumCouleur.ROUGE, vancouver, losAngeles);
+			listFxId.add("rvla");
+			break;
+		case "vvla":
+			r = new RouteTerrestre(1, EnumCouleur.VERT, vancouver, losAngeles);
+			listFxId.add("vvla");
+			break;
+		case "glaw":
+			r = new RouteTerrestre(3, EnumCouleur.GRIS, losAngeles, winnipeg);
+			listFxId.add("glaw");
+			break;
+		case "rpd":
+			r = new RouteTerrestre(2, EnumCouleur.ROUGE, perth, darwin);
+			listFxId.add("rpd");
+			break;
+		case "vds":
+			r = new RouteTerrestre(2, EnumCouleur.VERT, darwin, sydney);
+			listFxId.add("vds");
+			break;
+		case "bps":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, perth, sydney);
+			listFxId.add("bps");
+			break;
+		case "jps":
+			r = new RouteTerrestre(2, EnumCouleur.JAUNE, perth, sydney);
+			listFxId.add("jps");
+			break;
+		case "blam":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, losAngeles, mexico);
+			listFxId.add("blam");
+			break;
+		case "jlam":
+			r = new RouteTerrestre(2, EnumCouleur.JAUNE, losAngeles, mexico);
+			listFxId.add("jlam");
+			break;
+		case "vlany":
+			r = new RouteTerrestre(4, EnumCouleur.VIOLET, losAngeles, ny);
+			listFxId.add("vlany");
+			break;
+		case "nlany":
+			r = new RouteTerrestre(4, EnumCouleur.NOIR, losAngeles, ny);
+			listFxId.add("nlany");
+			break;
+		case "vimc":
+			r = new RouteTerrestre(3, EnumCouleur.VIOLET, mexico, caracas);
+			listFxId.add("vimc");
+			break;
+		case "rmc":
+			r = new RouteTerrestre(3, EnumCouleur.ROUGE, mexico, caracas);
+			listFxId.add("rmc");
+			break;
+		case "bmny1":
+		case "bmny2":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, miami, ny);
+			listFxId.add("bmny1");
+			listFxId.add("bmny2");
+			break;
+		case "jlc":
+			r = new RouteTerrestre(2, EnumCouleur.JAUNE, lima, caracas);
+			listFxId.add("jlc");
+			break;
+		case "blc":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, lima, caracas);
+			listFxId.add("blc");
+			break;
+		case "vcrdj1":
+		case "vcrdj2":
+		case "vcrdj3":
+			r = new RouteTerrestre(4, EnumCouleur.VERT, caracas, rio);
+			listFxId.add("vcrdj1");
+			listFxId.add("vcrdj2");
+			listFxId.add("vcrdj3");
+			break;
+		case "ncrdj1":
+		case "ncrdj2":
+		case "ncrdj3":
+			r = new RouteTerrestre(4, EnumCouleur.NOIR, caracas, rio);
+			listFxId.add("ncrdj1");
+			listFxId.add("ncrdj2");
+			listFxId.add("ncrdj3");
+			break;
+		case "glvg":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+			listFxId.add("glvg");
+			break;
+		case "glvd":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, lima, valparaiso);
+			listFxId.add("glvd");
+			break;
+		case "bbardj":
+			r = new RouteTerrestre(1, EnumCouleur.BLANC, buenos, rio);
+			listFxId.add("bbardj");
+			break;
+		case "rbardj":
+			r = new RouteTerrestre(1, EnumCouleur.ROUGE, buenos, rio);
+			listFxId.add("rbardj");
+			break;
+		case "vectdes":
+			r = new RouteTerrestre(3, EnumCouleur.VERT, capeTown, darEsSalaam);
+			listFxId.add("vectdes");
+			break;
+		case "victdes":
+			r = new RouteTerrestre(3, EnumCouleur.VIOLET, capeTown, darEsSalaam);
+			listFxId.add("victdes");
+			break;
+		case "glct":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, capeTown);
+			listFxId.add("glct");
+			break;
+		case "jll":
+			r = new RouteTerrestre(1, EnumCouleur.JAUNE, lagos, luanda);
+			listFxId.add("jll");
+			break;
+		case "vll":
+			r = new RouteTerrestre(1, EnumCouleur.VIOLET, lagos, luanda);
+			listFxId.add("vll");
+			break;
+		case "gcl1":
+		case "gcl2":
+			r = new RouteTerrestre(4, EnumCouleur.GRIS, casablanca, lagos);
+			listFxId.add("gcl1");
+			listFxId.add("gcl2");
+			break;
+		case "gcaq":
+			r = new RouteTerrestre(3, EnumCouleur.GRIS, casablanca, alqahira);
+			listFxId.add("gcaq");
+			break;
+		case "raqd":
+			r = new RouteTerrestre(2, EnumCouleur.ROUGE, alqahira, djibouti);
+			listFxId.add("raqd");
+			break;
+		case "vhkm":
+			r = new RouteTerrestre(2, EnumCouleur.VIOLET, hongkong, manila);
+			listFxId.add("vhkm");
+			break;
+		case "baqd":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, alqahira, djibouti);
+			listFxId.add("baqd");
+			break;
+		case "rddes":
+			r = new RouteTerrestre(1, EnumCouleur.ROUGE, djibouti, darEsSalaam);
+			listFxId.add("rddes");
+			break;
+		case "nddes":
+			r = new RouteTerrestre(1, EnumCouleur.NOIR, djibouti, darEsSalaam);
+			listFxId.add("nddes");
+			break;
+		case "rmh":
+			r = new RouteTerrestre(1, EnumCouleur.ROUGE, marseille, hamburg);
+			listFxId.add("rmh");
+			break;
+		case "vmh":
+			r = new RouteTerrestre(1, EnumCouleur.VIOLET, marseille, hamburg);
+			listFxId.add("vmh");
+			break;
+		case "romt":
+			r = new RouteTerrestre(3, EnumCouleur.ROUGE, moskva, tehran);
+			listFxId.add("romt");
+			break;
+		case "vmm":
+			r = new RouteTerrestre(2, EnumCouleur.VIOLET, murmansk, moskva);
+			listFxId.add("vmm");
+			break;
+		case "vha1":
+		case "vha2":
+			r = new RouteTerrestre(2, EnumCouleur.VERT, hamburg, athina);
+			listFxId.add("vha1");
+			listFxId.add("vha2");
+			break;
+		case "gat":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, athina, tehran);
+			listFxId.add("gat");
+			break;
+		case "bhm":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, hamburg, moskva);
+			listFxId.add("bhm");
+			break;
+		case "nhm":
+			r = new RouteTerrestre(2, EnumCouleur.NOIR, hamburg, moskva);
+			listFxId.add("nhm");
+			break;
+		case "vmn":
+			r = new RouteTerrestre(4, EnumCouleur.VERT, moskva, novosibirsk);
+			listFxId.add("vmn");
+			break;
+		case "jmn":
+			r = new RouteTerrestre(4, EnumCouleur.JAUNE, moskva, novosibirsk);
+			listFxId.add("jmn");
+			break;
+		case "rnb":
+			r = new RouteTerrestre(3, EnumCouleur.ROUGE, novosibirsk, beijing);
+			listFxId.add("rnb");
+			break;
+		case "nnb":
+			r = new RouteTerrestre(3, EnumCouleur.NOIR, novosibirsk, beijing);
+			listFxId.add("nnb");
+			break;
+		case "bbhk":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, beijing, hongkong);
+			listFxId.add("bbhk");
+			break;
+		case "vbhk":
+			r = new RouteTerrestre(2, EnumCouleur.VERT, beijing, hongkong);
+			listFxId.add("vbhk");
+			break;
+		case "gnt":
+			r = new RouteTerrestre(3, EnumCouleur.GRIS, novosibirsk, tiksi);
+			listFxId.add("gnt");
+			break;
+		case "vny":
+			r = new RouteTerrestre(3, EnumCouleur.VIOLET, novosibirsk, yakutsk);
+			listFxId.add("vny");
+			break;
+		case "vty":
+			r = new RouteTerrestre(1, EnumCouleur.VERT, tiksi, yakutsk);
+			listFxId.add("vty");
+			break;
+		case "bnl":
+			r = new RouteTerrestre(2, EnumCouleur.BLANC, novosibirsk, lahore);
+			listFxId.add("bnl");
+			break;
+		case "jyb":
+			r = new RouteTerrestre(3, EnumCouleur.JAUNE, yakutsk, beijing);
+			listFxId.add("jyb");
+			break;
+		case "byp":
+			r = new RouteTerrestre(3, EnumCouleur.BLANC, yakutsk, petropavlovsk);
+			listFxId.add("byp");
+			break;
+		case "nlm":
+			r = new RouteTerrestre(1, EnumCouleur.NOIR, lahore, mumbai);
+			listFxId.add("nlm");
+			break;
+		case "vlm":
+			r = new RouteTerrestre(1, EnumCouleur.VERT, lahore, mumbai);
+			listFxId.add("vlm");
+			break;
+		case "nwcb":
+			r = new RouteTerrestre(4, EnumCouleur.NOIR, winnipeg, cambridgeBay);
+			listFxId.add("nwcb");
+			break;
+		case "btm1":
+		case "btm2":
+		case "btm3":
+			r = new RouteTerrestre(3, EnumCouleur.BLANC, tehran, mumbai);
+			listFxId.add("btm1");
+			listFxId.add("btm2");
+			listFxId.add("btm3");
+			break;
+		case "vtm1":
+		case "vtm2":
+		case "vtm3":
+			r = new RouteTerrestre(3, EnumCouleur.VIOLET, tehran, mumbai);
+			listFxId.add("vtm1");
+			listFxId.add("vtm2");
+			listFxId.add("vtm3");
+			break;
+		case "rmb1":
+		case "rmb2":
+		case "rmb3":
+			r = new RouteTerrestre(3, EnumCouleur.ROUGE, mumbai, bangkok);
+			listFxId.add("rmb1");
+			listFxId.add("rmb2");
+			listFxId.add("rmb3");
+			break;
+		case "jmb1":
+		case "jmb2":
+		case "jmb3":
+			r = new RouteTerrestre(3, EnumCouleur.JAUNE, mumbai, bangkok);
+			listFxId.add("jmb1");
+			listFxId.add("jmb2");
+			listFxId.add("jmb3");
+			break;
+		case "vhkb":
+			r = new RouteTerrestre(1, EnumCouleur.VIOLET, hongkong, bangkok);
+			listFxId.add("vhkb");
+			break;
+		case "nhkb":
+			r = new RouteTerrestre(1, EnumCouleur.NOIR, hongkong, bangkok);
+			listFxId.add("nhkb");
+			break;
+		case "dcm":
+			r = new RouteTerrestre(1, EnumCouleur.GRIS, casablanca, marseille, true);
+			listFxId.add("dcm");
+			break;
+		case "dldes":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, luanda, darEsSalaam, true);
+			listFxId.add("dldes");
+			break;
+		case "dtl":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, tehran, lahore, true);
+			listFxId.add("dtl");
+			break;
+		case "dlb":
+			r = new RouteTerrestre(3, EnumCouleur.GRIS, lahore, beijing, true);
+			listFxId.add("dlb");
+			break;
+		case "jaqt":
+			r = new RouteTerrestre(1, EnumCouleur.JAUNE, alqahira, tehran);
+			listFxId.add("jaqt");
+			break;
+		case "naqt":
+			r = new RouteTerrestre(1, EnumCouleur.NOIR, alqahira, tehran);
+			listFxId.add("naqt");
+			break;
+		case "dva1":
+		case "dva2":
+			r = new RouteTerrestre(2, EnumCouleur.GRIS, vancouver, anchorage, true);
+			listFxId.add("dva1");
+			listFxId.add("dva2");
+			break;
 		}
-		EnumCouleur color=null;
+		EnumCouleur color = null;
 		List<Label> listLbl = new ArrayList<Label>();
-		if(r.isPair()){
-			int i,j,k;
-			
-			//pour chaque voie
-			for(i=0;i<r.getNbPion();i++){
+		if (r.isPair()) {
+			int i, j, k;
+
+			// pour chaque voie
+			for (i = 0; i < r.getNbPion(); i++) {
 				color = null;
 				int voie = 0;
-				for(j=0;j<2 && voie<2;j++){
+				for (j = 0; j < 2 && voie < 2; j++) {
 					for (k = 0; k < HboxSelect.getChildren().size(); k++) {
-						if (carteW.containsKey(HboxSelect.getChildren().get(k)) && !listLbl.contains(HboxSelect.getChildren().get(k))) {
+						if (carteW.containsKey(HboxSelect.getChildren().get(k))
+								&& !listLbl.contains(HboxSelect.getChildren().get(k))) {
 							Wagon c = carteW.get(HboxSelect.getChildren().get(k));
-			
-							if(color==null){
-								color=c.getCouleur();
+
+							if (color == null) {
+								color = c.getCouleur();
 							}
 							if (c.getCouleur().name() == color.name() && !c.isJoker()) {
 								System.out.println(c.getCouleur().name());
@@ -1232,27 +1318,27 @@ public class Plateau {
 					}
 				}
 			}
-		}else{
+		} else {
 			int i = 0;
 			for (i = 0; i < HboxSelect.getChildren().size(); i++) {
 				if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
 					Wagon c = carteW.get(HboxSelect.getChildren().get(i));
-					if(r.getCouleur().name()!=EnumCouleur.GRIS.name()){
+					if (r.getCouleur().name() != EnumCouleur.GRIS.name()) {
 						if (c.getCouleur().name() == r.getCouleur().name() && !c.isJoker()) {
 							carte++;
 							listLbl.add((Label) HboxSelect.getChildren().get(i));
-						}else if (c.isJoker()) {
+						} else if (c.isJoker()) {
 							joker++;
 							listLbl.add((Label) HboxSelect.getChildren().get(i));
 						}
-					}else{
-						if(color==null){
-							color=c.getCouleur();
+					} else {
+						if (color == null) {
+							color = c.getCouleur();
 						}
 						if (c.getCouleur().name() == color.name() && !c.isJoker()) {
 							carte++;
 							listLbl.add((Label) HboxSelect.getChildren().get(i));
-						}else if (c.isJoker()) {
+						} else if (c.isJoker()) {
 							joker++;
 							listLbl.add((Label) HboxSelect.getChildren().get(i));
 						}
@@ -1261,11 +1347,12 @@ public class Plateau {
 			}
 		}
 		int nbPion = r.getNbPion();
-		if(r.isPair()){
-			nbPion = r.getNbPion()*2;
+		if (r.isPair()) {
+			nbPion = r.getNbPion() * 2;
 		}
-		if ((joker + carte) >= nbPion && plateauControlle.checkIfEnoughPion(carte+joker, 0, plateauControlle.getIdPlayer())) {
-			if(plateauControlle.takeRoadWagonOrBoatOrPort(r, null, null, listFxId)){
+		if ((joker + carte) >= nbPion
+				&& plateauControlle.checkIfEnoughPion(carte + joker, 0, plateauControlle.getIdPlayer())) {
+			if (plateauControlle.takeRoadWagonOrBoatOrPort(r, null, null, listFxId)) {
 				System.out.println("route prise");
 				mettreCarteDansDefausse(nbPion, listLbl);
 			}
@@ -1275,15 +1362,16 @@ public class Plateau {
 		deSelectionAllCard();
 	}
 
-	public void colorRoadOrPort(EnumCouleur color, List<String> listFxId){
+	public void colorRoadOrPort(EnumCouleur color, List<String> listFxId) {
 		Scene scene = lblScore.getScene();
 		int i;
-		for(i=0;i<listFxId.size();i++){
-			Rectangle rectangle = (Rectangle) scene.lookup("#"+listFxId.get(i));
+		for (i = 0; i < listFxId.size(); i++) {
+			Rectangle rectangle = (Rectangle) scene.lookup("#" + listFxId.get(i));
 			rectangle.setOpacity(100);
 			rectangle.setFill(color.getColor(color));
 		}
 	}
+
 	/**
 	 * Construction d'un port Il faut 2 cartes bateau et 2 cartes wagon avec le
 	 * sigle port Une ou plusieurs cartes joker peuvent remplacer une carte
@@ -1293,126 +1381,126 @@ public class Plateau {
 	 */
 	@FXML
 	private void buildPort(MouseEvent e) {
-		//Ville v = new Ville("Marseille", true);
+		// Ville v = new Ville("Marseille", true);
 		Rectangle rect = (Rectangle) e.getSource();
 		List<String> listFxId = new ArrayList<String>();
 		Ville v = null;
 
 		switch (rect.getId()) {
-			case "pmarseille":
-				v = marseille;
-				break;
-			case "phamburg":
-				v = hamburg;
-				break;
-			case "pvanc":
-				v = vancouver;
-				break;
-			case "pla":
-				v = losAngeles;
-				break;
-			case "pny":
-				v = ny;
-				break;
-			case "pmiami":
-				v = miami;
-				break;
-			case "pcaracas":
-				v = caracas;
-				break;
-			case "plima":
-				v = lima;
-				break;
-			case "pvalparaiso":
-				v = valparaiso;
-				break;
-			case "pba":
-				v = buenos;
-				break;
-			case "prdj":
-				v = rio;
-				break;
-			case "pct":
-				v = capeTown;
-				break;
-			case "pluanda":
-				v = luanda;
-				break;
-			case "plagos":
-				v = lagos;
-				break;
-			case "pcasablanca":
-				v = casablanca;
-				break;
-			case "paq":
-				v = alqahira;
-				break;
-			case "pdes":
-				v = darEsSalaam;
-				break;
-			case "ptoamasina":
-				v = toamasina;
-				break;
-			case "pathina":
-				v = athina;
-				break;
-			case "pedinburgh":
-				v = edinburgh;
-				break;
-			case "prey":
-				v = reykjavik;
-				break;
-			case "pmurmansk":
-				v = murmansk;
-				break;
-			case "pmumbai":
-				v = mumbai;
-				break;
-			case "pbangkok":
-				v = bangkok;
-				break;
-			case "ptiksi":
-				v = tiksi;
-				break;
-			case "panchorage":
-				v = anchorage;
-				break;
-			case "ppetropavlovsk":
-				v = petropavlovsk;
-				break;
-			case "ptokyo":
-				v = tokyo;
-				break;
-			case "phk":
-				v = hongkong;
-				break;
-			case "pmanila":
-				v = manila;
-				break;
-			case "pjakarta":
-				v = jakarta;
-				break;
-			case "phonolulu":
-				v = honolulu;
-				break;
-			case "ppm":
-				v = portMoresby;
-				break;
-			case "pdarwin":
-				v = darwin;
-				break;
-			case "pperth":
-				v = perth;
-				break;
-			case "psydney":
-				v = sydney;
-				break;
-			case "pchristchurch":
-				v = christchurch;
-				break;
-			case "pcb":
-				v = cambridgeBay;
-				break;
+		case "pmarseille":
+			v = marseille;
+			break;
+		case "phamburg":
+			v = hamburg;
+			break;
+		case "pvanc":
+			v = vancouver;
+			break;
+		case "pla":
+			v = losAngeles;
+			break;
+		case "pny":
+			v = ny;
+			break;
+		case "pmiami":
+			v = miami;
+			break;
+		case "pcaracas":
+			v = caracas;
+			break;
+		case "plima":
+			v = lima;
+			break;
+		case "pvalparaiso":
+			v = valparaiso;
+			break;
+		case "pba":
+			v = buenos;
+			break;
+		case "prdj":
+			v = rio;
+			break;
+		case "pct":
+			v = capeTown;
+			break;
+		case "pluanda":
+			v = luanda;
+			break;
+		case "plagos":
+			v = lagos;
+			break;
+		case "pcasablanca":
+			v = casablanca;
+			break;
+		case "paq":
+			v = alqahira;
+			break;
+		case "pdes":
+			v = darEsSalaam;
+			break;
+		case "ptoamasina":
+			v = toamasina;
+			break;
+		case "pathina":
+			v = athina;
+			break;
+		case "pedinburgh":
+			v = edinburgh;
+			break;
+		case "prey":
+			v = reykjavik;
+			break;
+		case "pmurmansk":
+			v = murmansk;
+			break;
+		case "pmumbai":
+			v = mumbai;
+			break;
+		case "pbangkok":
+			v = bangkok;
+			break;
+		case "ptiksi":
+			v = tiksi;
+			break;
+		case "panchorage":
+			v = anchorage;
+			break;
+		case "ppetropavlovsk":
+			v = petropavlovsk;
+			break;
+		case "ptokyo":
+			v = tokyo;
+			break;
+		case "phk":
+			v = hongkong;
+			break;
+		case "pmanila":
+			v = manila;
+			break;
+		case "pjakarta":
+			v = jakarta;
+			break;
+		case "phonolulu":
+			v = honolulu;
+			break;
+		case "ppm":
+			v = portMoresby;
+			break;
+		case "pdarwin":
+			v = darwin;
+			break;
+		case "pperth":
+			v = perth;
+			break;
+		case "psydney":
+			v = sydney;
+			break;
+		case "pchristchurch":
+			v = christchurch;
+			break;
+		case "pcb":
+			v = cambridgeBay;
+			break;
 		}
 		listFxId.add(rect.getId());
 
@@ -1428,11 +1516,11 @@ public class Plateau {
 			if (carteW.containsKey(HboxSelect.getChildren().get(i))) {
 				Wagon c = carteW.get(HboxSelect.getChildren().get(i));
 
-				if (c.isPort()&&!c.isJoker()) {
-					if(color==null){
-						color=c.getCouleur();
+				if (c.isPort() && !c.isJoker()) {
+					if (color == null) {
+						color = c.getCouleur();
 					}
-					if(color.name()==c.getCouleur().name()){
+					if (color.name() == c.getCouleur().name()) {
 						carteWagon++;
 						listLbl.add((Label) HboxSelect.getChildren().get(i));
 					}
@@ -1448,26 +1536,28 @@ public class Plateau {
 				 * être siglé port
 				 */
 				if (!b.isDoubleBoat() && b.isPort()) {
-					if(color==null){
-						color=b.getCouleur();
+					if (color == null) {
+						color = b.getCouleur();
 					}
-					if(color.name()==b.getCouleur().name()){
+					if (color.name() == b.getCouleur().name()) {
 						carteBoat++;
 						listLbl.add((Label) HboxSelect.getChildren().get(i));
 					}
-					
+
 				}
 
 			}
-			
+
 		}
-		System.out.println(carteBoat+" "+carteWagon+" "+jokerWagon);
-		if ((carteBoat + carteWagon + jokerWagon >= 4) && (carteWagon <= 2) && (carteBoat <= 2) && (jokerWagon <= 4) && plateauControlle.checkIfEnoughPion(carteWagon+jokerWagon, carteBoat, plateauControlle.getIdPlayer())) {
-			if(plateauControlle.takeRoadWagonOrBoatOrPort(null, null, v, listFxId)){
+		System.out.println(carteBoat + " " + carteWagon + " " + jokerWagon);
+		if ((carteBoat + carteWagon + jokerWagon >= 4) && (carteWagon <= 2) && (carteBoat <= 2) && (jokerWagon <= 4)
+				&& plateauControlle.checkIfEnoughPion(carteWagon + jokerWagon, carteBoat,
+						plateauControlle.getIdPlayer())) {
+			if (plateauControlle.takeRoadWagonOrBoatOrPort(null, null, v, listFxId)) {
 				System.out.println("route prise");
 				mettreCarteDansDefausse(4, listLbl);
 			}
-		}else{
+		} else {
 			printMsgGame("Pas assez de cartes pour construire un port");
 		}
 		deSelectionAllCard();
@@ -1479,135 +1569,133 @@ public class Plateau {
 
 	public void setPlateauController(PlateauController plateauControlle) {
 		this.plateauControlle = plateauControlle;
-	 }
-	 
-	 public PlateauController getPlateauControlle() {
-			return plateauControlle;
-	 }
-	 
-	 public void pionChoix(){
-		 panePion.toFront();
-		 lblSelectNbBoat.setText("35");
-		 lblSelectNbWagon.setText("25");
-	 }
-	 
-	 @FXML
-	 private void addPionWagon(ActionEvent e){
-		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
-		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>=0&&boat>0){
-			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
-			 lblSelectNbBoat.setText(String.valueOf(boat-1));
-		 }
-	 }
-	 
-	 @FXML
-	 private void removePionWagon(ActionEvent e){
-		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
-		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>0&&boat>=0){
-			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
-			 lblSelectNbBoat.setText(String.valueOf(boat+1));
-		 }
-	 }
-	 
-	 @FXML
-	 private void addPionWBoat(ActionEvent e){
-		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
-		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>0&&boat>=0){
-			 lblSelectNbWagon.setText(String.valueOf(wagon-1));
-			 lblSelectNbBoat.setText(String.valueOf(boat+1));
-		 }
-	 }
-	 
-	 @FXML
-	 private void removePionBoat(ActionEvent e){
-		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
-		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 if(wagon>=0&&boat>0){
-			 lblSelectNbWagon.setText(String.valueOf(wagon+1));
-			 lblSelectNbBoat.setText(String.valueOf(boat-1));
-		 }
-	 }
-	 
-	 @FXML
-	 private void confirmPion(ActionEvent e){
-		 panePion.toBack();
-		 int wagon = Integer.parseInt(lblSelectNbWagon.getText());
-		 int boat = Integer.parseInt(lblSelectNbBoat.getText());
-		 
-		 plateauControlle.setPion(wagon, boat);
-		 printPion(wagon, boat, 3);
-		 
-		
-	 }
-	 
-	 public void printPion(int wagon, int boat, int port){
-		 lblPionWagon.setText(String.valueOf(wagon));
-		 lblPionBoat.setText(String.valueOf(boat));
-		 lblPionPort.setText(String.valueOf(port));
-	 }
-	 
-	 public void printScore(int score){
-		 lblScore.setText(String.valueOf(score));
-	 }
-	 
-	 public void printMsgGame(String msg){
-		 Platform.runLater(() -> {
-			 lblMsgGame.setText(msg);
-			});
-	 }
-	 
-	 public void printNotification(String msg){
-		 Platform.runLater(() -> {
-			 lblMsgNotification.setText(msg);
-			});
-	 }
-	 
-	 @FXML
-	 private void printAllScore(ActionEvent e){
-		 
-		 
-		 if(stageScore.isShowing()){
-			 stageScore.close();
-		 }
-		 Platform.runLater(() -> {
-			 windowsScore(plateauControlle.getPlateauJeu().getListJoueur());
-		 });
-	 }
-	 
-	 public void setListJoueurAtScoreView(Map<Integer,Joueur> listJoueurs){
-		 Platform.runLater(() -> {
-			 if(score!=null){
-				 score.setListJoueur(listJoueurs);
-			 }else{
-				 windowsScore(listJoueurs);
-			 }
-		 });
-	 }
-	 
-	 private void windowsScore(Map<Integer,Joueur> listJoueurs){
-			
-			Parent root = null;
-			score = new Score();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Score.fxml"));
-			loader.setController(score);
-			try {
-				root = loader.load();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	}
+
+	public PlateauController getPlateauControlle() {
+		return plateauControlle;
+	}
+
+	public void pionChoix() {
+		panePion.toFront();
+		lblSelectNbBoat.setText("35");
+		lblSelectNbWagon.setText("25");
+	}
+
+	@FXML
+	private void addPionWagon(ActionEvent e) {
+		int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		if (wagon >= 0 && boat > 0) {
+			lblSelectNbWagon.setText(String.valueOf(wagon + 1));
+			lblSelectNbBoat.setText(String.valueOf(boat - 1));
+		}
+	}
+
+	@FXML
+	private void removePionWagon(ActionEvent e) {
+		int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		if (wagon > 0 && boat >= 0) {
+			lblSelectNbWagon.setText(String.valueOf(wagon - 1));
+			lblSelectNbBoat.setText(String.valueOf(boat + 1));
+		}
+	}
+
+	@FXML
+	private void addPionWBoat(ActionEvent e) {
+		int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		if (wagon > 0 && boat >= 0) {
+			lblSelectNbWagon.setText(String.valueOf(wagon - 1));
+			lblSelectNbBoat.setText(String.valueOf(boat + 1));
+		}
+	}
+
+	@FXML
+	private void removePionBoat(ActionEvent e) {
+		int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		int boat = Integer.parseInt(lblSelectNbBoat.getText());
+		if (wagon >= 0 && boat > 0) {
+			lblSelectNbWagon.setText(String.valueOf(wagon + 1));
+			lblSelectNbBoat.setText(String.valueOf(boat - 1));
+		}
+	}
+
+	@FXML
+	private void confirmPion(ActionEvent e) {
+		panePion.toBack();
+		int wagon = Integer.parseInt(lblSelectNbWagon.getText());
+		int boat = Integer.parseInt(lblSelectNbBoat.getText());
+
+		plateauControlle.setPion(wagon, boat);
+		printPion(wagon, boat, 3);
+
+	}
+
+	public void printPion(int wagon, int boat, int port) {
+		lblPionWagon.setText(String.valueOf(wagon));
+		lblPionBoat.setText(String.valueOf(boat));
+		lblPionPort.setText(String.valueOf(port));
+	}
+
+	public void printScore(int score) {
+		lblScore.setText(String.valueOf(score));
+	}
+
+	public void printMsgGame(String msg) {
+		Platform.runLater(() -> {
+			lblMsgGame.setText(msg);
+		});
+	}
+
+	public void printNotification(String msg) {
+		Platform.runLater(() -> {
+			lblMsgNotification.setText(msg);
+		});
+	}
+
+	@FXML
+	private void printAllScore(ActionEvent e) {
+
+		if (stageScore.isShowing()) {
+			stageScore.close();
+		}
+		Platform.runLater(() -> {
+			windowsScore(plateauControlle.getPlateauJeu().getListJoueur());
+		});
+	}
+
+	public void setListJoueurAtScoreView(Map<Integer, Joueur> listJoueurs) {
+		Platform.runLater(() -> {
+			if (score != null) {
+				score.setListJoueur(listJoueurs);
+			} else {
+				windowsScore(listJoueurs);
 			}
-			Scene scene = new Scene(root);
-			score.setScene(scene);
-			score.setListJoueur(listJoueurs);
-			
-			stageScore.setScene(scene);
-			stageScore.setTitle("Score des joueurs");
-			stageScore.showAndWait();
-			stageScore.toFront();
-	 }
+		});
+	}
+
+	private void windowsScore(Map<Integer, Joueur> listJoueurs) {
+
+		Parent root = null;
+		score = new Score();
+
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("Score.fxml"));
+		loader.setController(score);
+		try {
+			root = loader.load();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Scene scene = new Scene(root);
+		score.setScene(scene);
+		score.setListJoueur(listJoueurs);
+
+		stageScore.setScene(scene);
+		stageScore.setTitle("Score des joueurs");
+		stageScore.showAndWait();
+		stageScore.toFront();
+	}
 
 }

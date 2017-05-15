@@ -213,9 +213,9 @@ public class PlateauController extends Thread {
 		server.setPlateauControllerAtThread(listClientsServer, this);
 
 	}
-	
-	public boolean allowJoker(){
-		if (nbCartes >=1){
+
+	public boolean allowJoker() {
+		if (nbCartes >= 1) {
 			plateauView.printNotification("Vous avez déjà pris une carte !");
 			return false;
 		}
@@ -234,7 +234,6 @@ public class PlateauController extends Thread {
 				try {
 					client.sendJSON(json);
 					getJsonFromServer(client.receiveJSON());
-					//plateauView.deleteCardWagon1();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -243,7 +242,7 @@ public class PlateauController extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(w.isJoker() == true){
+			if (w.isJoker() == true) {
 				choixCartes("joker");
 			} else {
 				choixCartes("wagon");
@@ -264,7 +263,7 @@ public class PlateauController extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(w.isJoker() == true){
+			if (w.isJoker() == true) {
 				choixCartes("joker");
 			} else {
 				choixCartes("wagon");
@@ -283,12 +282,8 @@ public class PlateauController extends Thread {
 			json = new JSONObject();
 			jsonA = new JSONArray();
 			gson = new Gson();
-			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
-			Wagon w1 = plateauJeu.getPaquet().piocheWagon();
-			pWagon.add(w1);
-			// plateauView.setCardWagonInWagonDiscover1(w1);
 			try {
-				json.put("visibleWagon1", gson.toJson(pWagon));
+				json.put("visibleWagon1", 1);
 				json.put("id", id);
 				try {
 					client.sendJSON(json);
@@ -311,6 +306,467 @@ public class PlateauController extends Thread {
 			plateauView.setCardWagonInWagonDiscover1(w1);
 			try {
 				json.put("visibleWagon1", gson.toJson(pWagon));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteCardWagon2(Wagon w) {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
+			try {
+				json.put("id", id);
+				json.put("wagonDelete2", 1);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (w.isJoker() == true) {
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
+			}
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
+			plateauView.deleteCardWagon2();
+			try {
+				json.put("wagonDelete2", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (w.isJoker() == true) {
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
+			}
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
+		}
+	}
+
+	public void cardWagon2() {
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleWagon2", 1);
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+			Wagon w2 = plateauJeu.getPaquet().piocheWagon();
+			pWagon.add(w2);
+			plateauView.setCardWagonInWagonDiscover2(w2);
+			try {
+				json.put("visibleWagon2", gson.toJson(pWagon));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteCardWagon3(Wagon w) {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
+			try {
+				json.put("id", id);
+				json.put("wagonDelete3", 1);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (w.isJoker() == true) {
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
+			}
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsWagonInMainOfPlayer(w);
+			plateauJeu.getJoueur(id).addWagon(w);
+			plateauView.deleteCardWagon3();
+			try {
+				json.put("wagonDelete3", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (w.isJoker() == true) {
+				choixCartes("joker");
+			} else {
+				choixCartes("wagon");
+			}
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
+		}
+	}
+
+	public void cardWagon3() {
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleWagon3", 1);
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+			Wagon w3 = plateauJeu.getPaquet().piocheWagon();
+			pWagon.add(w3);
+			plateauView.setCardWagonInWagonDiscover3(w3);
+			try {
+				json.put("visibleWagon3", gson.toJson(pWagon));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteCardBoat1(Boat b) {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			try {
+				json.put("id", id);
+				json.put("boatDelete1", 1);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			plateauView.deleteCardBoat1();
+			try {
+				json.put("boatDelete1", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
+		}
+	}
+
+	public void cardBoat1() {
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleBoat1", 1);
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Boat> pBoat = new ArrayList<Boat>();
+			Boat b1 = plateauJeu.getPaquet().piocheBoat();
+			pBoat.add(b1);
+			plateauView.setCardBoatInBoatDiscover1(b1);
+			try {
+				json.put("visibleBoat1", gson.toJson(pBoat));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void deleteCardBoat2(Boat b) {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			try {
+				json.put("id", id);
+				json.put("boatDelete2", 1);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			plateauView.deleteCardBoat2();
+			try {
+				json.put("boatDelete2", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
+		}
+	}
+
+	public void cardBoat2() {
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleBoat2", 1);
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Boat> pBoat = new ArrayList<Boat>();
+			Boat b2 = plateauJeu.getPaquet().piocheBoat();
+			pBoat.add(b2);
+			plateauView.setCardBoatInBoatDiscover2(b2);
+			try {
+				json.put("visibleBoat2", gson.toJson(pBoat));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void deleteCardBoat3(Boat b) {
+		if (client != null) {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			try {
+				json.put("id", id);
+				json.put("boatDelete3", 1);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		} else {
+			JSONObject json = new JSONObject();
+			JSONArray jsonA = new JSONArray();
+			plateauView.setCardsBoatInMainOfPlayer(b);
+			plateauJeu.getJoueur(id).addBoat(b);
+			plateauView.deleteCardBoat3();
+			try {
+				json.put("boatDelete3", 1);
+				server.broadcast(listClientsServer, json);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			choixCartes("boat");
+		}
+		if (checkEndOfTurn()) {
+			endTurn();
+		}
+	}
+
+	public void cardBoat3() {
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			try {
+				json.put("visibleBoat3", 1);
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+					getJsonFromServer(client.receiveJSON());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Boat> pBoat = new ArrayList<Boat>();
+			Boat b3 = plateauJeu.getPaquet().piocheBoat();
+			pBoat.add(b3);
+			plateauView.setCardBoatInBoatDiscover3(b3);
+			try {
+				json.put("visibleBoat3", gson.toJson(pBoat));
 				try {
 					server.broadcast(listClientsServer, json);
 				} catch (IOException e) {
@@ -652,15 +1108,150 @@ public class PlateauController extends Thread {
 			}
 		} else if (json.has("visibleWagon1")) {
 			try {
+				ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+				Wagon w1 = plateauJeu.getPaquet().piocheWagon();
+				pWagon.add(w1);
 				int no = json.getInt("id");
+				json = new JSONObject();
 				gson = new Gson();
-				String visibleWagon1 = json.getString("visibleWagon1");
-				Type type = new TypeToken<List<Wagon>>() {
-				}.getType();
-				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
-				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
-				// json = new JSONObject();
-				// json.put("visibleWagon1", listFxId.get(0));
+				json.put("visibleWagon1", gson.toJson(pWagon));
+				json.put("id", no);
+				plateauView.setCardWagonInWagonDiscover1(w1);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("wagonDelete2")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("wagonDelete2", 1);
+				plateauView.deleteCardWagon2();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("visibleWagon2")) {
+			try {
+				ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+				Wagon w2 = plateauJeu.getPaquet().piocheWagon();
+				pWagon.add(w2);
+				int no = json.getInt("id");
+				json = new JSONObject();
+				gson = new Gson();
+				json.put("visibleWagon2", gson.toJson(pWagon));
+				json.put("id", no);
+				plateauView.setCardWagonInWagonDiscover2(w2);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("wagonDelete3")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("wagonDelete3", 1);
+				plateauView.deleteCardWagon3();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("visibleWagon3")) {
+			try {
+				ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+				Wagon w3 = plateauJeu.getPaquet().piocheWagon();
+				pWagon.add(w3);
+				int no = json.getInt("id");
+				json = new JSONObject();
+				gson = new Gson();
+				json.put("visibleWagon3", gson.toJson(pWagon));
+				json.put("id", no);
+				plateauView.setCardWagonInWagonDiscover3(w3);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("boatDelete1")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("boatDelete1", 1);
+				plateauView.deleteCardBoat1();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("visibleBoat1")) {
+			try {
+				ArrayList<Boat> pBoat = new ArrayList<Boat>();
+				Boat b1 = plateauJeu.getPaquet().piocheBoat();
+				pBoat.add(b1);
+				int no = json.getInt("id");
+				json = new JSONObject();
+				gson = new Gson();
+				json.put("visibleBoat1", gson.toJson(pBoat));
+				json.put("id", no);
+				plateauView.setCardBoatInBoatDiscover1(b1);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("boatDelete2")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("boatDelete2", 1);
+				plateauView.deleteCardBoat2();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("visibleBoat2")) {
+			try {
+				ArrayList<Boat> pBoat = new ArrayList<Boat>();
+				Boat b2 = plateauJeu.getPaquet().piocheBoat();
+				pBoat.add(b2);
+				int no = json.getInt("id");
+				json = new JSONObject();
+				gson = new Gson();
+				json.put("visibleBoat2", gson.toJson(pBoat));
+				json.put("id", no);
+				plateauView.setCardBoatInBoatDiscover2(b2);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("boatDelete3")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("boatDelete3", 1);
+				plateauView.deleteCardBoat3();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (json.has("visibleBoat3")) {
+			try {
+				ArrayList<Boat> pBoat = new ArrayList<Boat>();
+				Boat b3 = plateauJeu.getPaquet().piocheBoat();
+				pBoat.add(b3);
+				int no = json.getInt("id");
+				json = new JSONObject();
+				gson = new Gson();
+				json.put("visibleBoat3", gson.toJson(pBoat));
+				json.put("id", no);
+				plateauView.setCardBoatInBoatDiscover3(b3);
 				server.broadcastExceptOne(listClientsServer, json, no);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -1397,6 +1988,86 @@ public class PlateauController extends Thread {
 				}.getType();
 				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
 				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (json.has("wagonDelete2")) {
+			plateauView.deleteCardWagon2();
+		}
+		if (json.has("visibleWagon2")) {
+			try {
+				Gson gson = new Gson();
+				String visibleWagon2 = json.getString("visibleWagon2");
+				Type type = new TypeToken<List<Wagon>>() {
+				}.getType();
+				List<Wagon> listFxId = gson.fromJson(visibleWagon2, type);
+				plateauView.setCardWagonInWagonDiscover2(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (json.has("wagonDelete3")) {
+			plateauView.deleteCardWagon3();
+		}
+		if (json.has("visibleWagon3")) {
+			try {
+				Gson gson = new Gson();
+				String visibleWagon3 = json.getString("visibleWagon3");
+				Type type = new TypeToken<List<Wagon>>() {
+				}.getType();
+				List<Wagon> listFxId = gson.fromJson(visibleWagon3, type);
+				plateauView.setCardWagonInWagonDiscover3(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (json.has("boatDelete1")) {
+			plateauView.deleteCardBoat1();
+		}
+		if (json.has("visibleBoat1")) {
+			try {
+				Gson gson = new Gson();
+				String visibleBoat1 = json.getString("visibleBoat1");
+				Type type = new TypeToken<List<Boat>>() {
+				}.getType();
+				List<Boat> listFxId = gson.fromJson(visibleBoat1, type);
+				plateauView.setCardBoatInBoatDiscover1(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (json.has("boatDelete2")) {
+			plateauView.deleteCardBoat2();
+		}
+		if (json.has("visibleBoat2")) {
+			try {
+				Gson gson = new Gson();
+				String visibleBoat2 = json.getString("visibleBoat2");
+				Type type = new TypeToken<List<Boat>>() {
+				}.getType();
+				List<Boat> listFxId = gson.fromJson(visibleBoat2, type);
+				plateauView.setCardBoatInBoatDiscover2(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (json.has("boatDelete3")) {
+			plateauView.deleteCardBoat3();
+		}
+		if (json.has("visibleBoat3")) {
+			try {
+				Gson gson = new Gson();
+				String visibleBoat3 = json.getString("visibleBoat3");
+				Type type = new TypeToken<List<Boat>>() {
+				}.getType();
+				List<Boat> listFxId = gson.fromJson(visibleBoat3, type);
+				plateauView.setCardBoatInBoatDiscover3(listFxId.get(0));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
