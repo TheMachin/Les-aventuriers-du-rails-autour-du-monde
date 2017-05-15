@@ -140,23 +140,26 @@ public class Plateau {
 	}
 	
 	public void setCardWagonInWagonDiscover1(Wagon w){
-		Label lbl = new Label();
-		Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
-		ImageView imageView = new ImageView(image);
-		imageView.setFitWidth(150); 
-        imageView.setFitHeight(99);
-	    lbl.setGraphic(imageView);
-	    lbl.setOnMouseClicked(this::takeCardWagon1);
-	    this.wagonDiscover1.getChildren().add(lbl);
-	    this.carteWD.put(lbl, w);
+		Platform.runLater(() -> {
+			Label lbl = new Label();
+			Image image = new Image(getClass().getResourceAsStream(w.getLienImage()));
+			ImageView imageView = new ImageView(image);
+			imageView.setFitWidth(150); 
+	        imageView.setFitHeight(99);
+		    lbl.setGraphic(imageView);
+		    lbl.setOnMouseClicked(this::takeCardWagon1);
+		    this.wagonDiscover1.getChildren().add(lbl);
+		    this.carteWD.put(lbl, w);
+		 });
 	}
 	
 	@FXML
 	private void takeCardWagon1(MouseEvent e){
-		plateauControlle.deleteCard();
-		//lbl.setOnMouseClicked(this::deSelectionCard);
-		//HboxMain.getChildren().add(lbl);
-		//plateauControlle.piocheCards("wagonDiscover");
+		Label lbl = (Label) e.getSource();
+		plateauControlle.deleteCardWagon1();
+		lbl.setOnMouseClicked(this::deSelectionCard);
+		HboxMain.getChildren().add(lbl);
+		plateauControlle.cardWagon1();
 	}
 	
 	public void deleteCardWagon1(){

@@ -214,21 +214,83 @@ public class PlateauController extends Thread {
 
 	}
 
-	public void deleteCard() {
+	public void deleteCardWagon1() {
 		if (client != null) {
 			JSONObject json = new JSONObject();
-			Gson gson = new Gson();
+			JSONArray jsonA = new JSONArray();
+			plateauView.deleteCardWagon1();
+			try {
+				json.put("id", id);
+				json.put("wagonDelete1", 1);
+				try {
+					client.sendJSON(json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			JSONObject json = new JSONObject();
 			JSONArray jsonA = new JSONArray();
 			plateauView.deleteCardWagon1();
 			try {
-				json.put("wagonDelete", 1);
+				json.put("wagonDelete1", 1);
 				server.broadcast(listClientsServer, json);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void cardWagon1(){
+		JSONObject json;
+		JSONArray jsonA;
+		Gson gson;
+		if (client != null) {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+			Wagon w1 = plateauJeu.getPaquet().piocheWagon();
+			pWagon.add(w1);
+			plateauView.setCardWagonInWagonDiscover1(w1);
+			try {
+				json.put("visibleWagon1", gson.toJson(pWagon));
+				json.put("id", id);
+				try {
+					client.sendJSON(json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			json = new JSONObject();
+			jsonA = new JSONArray();
+			gson = new Gson();
+			ArrayList<Wagon> pWagon = new ArrayList<Wagon>();
+			Wagon w1 = plateauJeu.getPaquet().piocheWagon();
+			pWagon.add(w1);
+			plateauView.setCardWagonInWagonDiscover1(w1);
+			try {
+				json.put("visibleWagon1", gson.toJson(pWagon));
+				try {
+					server.broadcast(listClientsServer, json);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -551,6 +613,35 @@ public class PlateauController extends Thread {
 			endTurn();
 			return null;
 		}
+		else if (json.has("wagonDelete1")) {
+			try {
+				int no = json.getInt("id");
+				json = new JSONObject();
+				json.put("wagonDelete", 1);
+				plateauView.deleteCardWagon1();
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if (json.has("visibleWagon1")) {
+			try {
+				int no = json.getInt("id");
+				gson = new Gson();
+				String visibleWagon1 = json.getString("visibleWagon1");
+				Type type = new TypeToken<List<Wagon>>() {
+				}.getType();
+				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
+				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
+				json = new JSONObject();
+				json.put("visibleWagon1", 1);
+				server.broadcastExceptOne(listClientsServer, json, no);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		return json;
 	}
@@ -625,10 +716,6 @@ public class PlateauController extends Thread {
 						}
 
 					}
-					break;
-				case "wagonDiscover":
-					plateauJeu.getPaquet().piocheWagon();
-
 					break;
 				default:
 					plateauView.printNotification("Auncune carte demandé. Veuillez recommencer");
@@ -1230,8 +1317,21 @@ public class PlateauController extends Thread {
 				e.printStackTrace();
 			}
 		}
-		if (json.has("wagonDelete")) {
+		if (json.has("wagonDelete1")) {
 			plateauView.deleteCardWagon1();
+		}
+		if (json.has("visibleWagon1")) {
+			Gson gson = new Gson();
+			try {
+				String visibleWagon1 = json.getString("visibleWagon1");
+				Type type = new TypeToken<List<Wagon>>() {
+				}.getType();
+				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
+				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		System.out.println("poubelle " + json.toString());
