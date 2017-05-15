@@ -636,8 +636,8 @@ public class PlateauController extends Thread {
 				}.getType();
 				List<Wagon> listFxId = gson.fromJson(visibleWagon1, type);
 				plateauView.setCardWagonInWagonDiscover1(listFxId.get(0));
-				json = new JSONObject();
-				json.put("visibleWagon1", listFxId.get(0));
+				//json = new JSONObject();
+				//json.put("visibleWagon1", listFxId.get(0));
 				server.broadcastExceptOne(listClientsServer, json, no);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
