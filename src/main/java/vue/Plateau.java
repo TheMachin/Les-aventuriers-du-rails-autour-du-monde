@@ -366,7 +366,6 @@ public class Plateau {
 		lbl.setOnMouseClicked(this::selectionCard);
 		this.HboxMain.getChildren().add(lbl);
 		this.carteW.put(lbl, w);
-		System.out.println(this.carteW.size());
 	}
 
 	public void setCardsBoatInMainOfPlayer(Boat b) {
@@ -376,7 +375,6 @@ public class Plateau {
 		lbl.setOnMouseClicked(this::selectionCard);
 		this.HboxMain.getChildren().add(lbl);
 		this.carteB.put(lbl, b);
-		System.out.println(this.carteB.size());
 	}
 
 	public void setCardsDestinationForChoice(Destination destination) {
@@ -415,7 +413,6 @@ public class Plateau {
 	  */
 	 @FXML
 	 private void takeHideBoatCard(MouseEvent e) {
-		System.out.println("clicked boat");
 		plateauControlle.piocheCards("bateau");		
 	 }
 	 
@@ -559,7 +556,6 @@ public class Plateau {
 		int i = 0;
 		List<Wagon> listW = new ArrayList<Wagon>();
 		List<Boat> listB = new ArrayList<Boat>();
-		System.out.println("label " + nb + " taille" + listLbl.size());
 		for (i = 0; i < nb; i++) {
 			if (listLbl.get(i) != null) {
 				Label lbl = listLbl.get(i);
@@ -939,7 +935,6 @@ public class Plateau {
 		if ((joker + carte + doubleBoat) >= r.getNbPion()
 				&& plateauControlle.checkIfEnoughPion(joker, carte + doubleBoat, plateauControlle.getIdPlayer())) {
 			if (plateauControlle.takeRoadWagonOrBoatOrPort(null, r, null, listFxId)) {
-				System.out.println("route prise");
 				mettreCarteDansDefausse(r.getNbPion(), listLbl);
 			}
 
@@ -1300,7 +1295,6 @@ public class Plateau {
 								color = c.getCouleur();
 							}
 							if (c.getCouleur().name() == color.name() && !c.isJoker()) {
-								System.out.println(c.getCouleur().name());
 								carte++;
 								listLbl.add((Label) HboxSelect.getChildren().get(k));
 								voie++;
@@ -1353,7 +1347,6 @@ public class Plateau {
 		if ((joker + carte) >= nbPion
 				&& plateauControlle.checkIfEnoughPion(carte + joker, 0, plateauControlle.getIdPlayer())) {
 			if (plateauControlle.takeRoadWagonOrBoatOrPort(r, null, null, listFxId)) {
-				System.out.println("route prise");
 				mettreCarteDansDefausse(nbPion, listLbl);
 			}
 
@@ -1549,12 +1542,10 @@ public class Plateau {
 			}
 
 		}
-		System.out.println(carteBoat + " " + carteWagon + " " + jokerWagon);
 		if ((carteBoat + carteWagon + jokerWagon >= 4) && (carteWagon <= 2) && (carteBoat <= 2) && (jokerWagon <= 4)
 				&& plateauControlle.checkIfEnoughPion(carteWagon + jokerWagon, carteBoat,
 						plateauControlle.getIdPlayer())) {
 			if (plateauControlle.takeRoadWagonOrBoatOrPort(null, null, v, listFxId)) {
-				System.out.println("route prise");
 				mettreCarteDansDefausse(4, listLbl);
 			}
 		} else {
@@ -1569,7 +1560,6 @@ public class Plateau {
 			@Override
 			public void handle(WindowEvent arg0) {
 				// TODO Auto-generated method stub
-				System.out.println("Le joueur effectue un rage-quit");
 				if(plateauControlle!=null){
 					plateauControlle.deconnexion();
 				}

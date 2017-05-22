@@ -144,6 +144,9 @@ public class Paquet implements Visitable{
 		this.pBoat = pBoat;
 	}
 	
+	/**
+	 * Initialise toutes les cartes et ville du jeu
+	 */
 	private void initializePaquet(){
 		int i=0;
 		//cartes wagon et bateau siglé port

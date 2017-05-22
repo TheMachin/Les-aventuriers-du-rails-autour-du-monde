@@ -201,7 +201,6 @@ public class Menu{
 	}
 	
 	public void setSelectedElementCombobox(int id, String value){
-		System.out.println("valeur retourne "+value);
 		if(id==0){
 			txtJ11.setText(value);
 		}else if(id==1){
@@ -391,7 +390,6 @@ public class Menu{
 	@FXML
 	private void handleCheckBoxReady(ActionEvent e){
 		boolean selected = checkReady.isSelected();
-		System.out.println(selected);
 		lblMsgError.setText("");
 		menuController.setReadyGame(selected);
 	}

@@ -40,6 +40,10 @@ public class Client extends Thread{
 		this.menuBoolean=true;
 	}
     
+    /**
+     * Initialise la connexion
+     * @return
+     */
     public boolean connexion(){
     	try {
 			socket = new Socket(ip, port);
@@ -56,6 +60,9 @@ public class Client extends Thread{
     	return ip.getHostName();
 	}
     
+    /**
+     * Fermeture du socket
+     */
     public void deconnection(){
     	try {
 			socket.close();
@@ -91,7 +98,6 @@ public class Client extends Thread{
         } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
              e.printStackTrace();
-             System.out.println(e.getMessage());
 
         }
         JSONObject json = null;
@@ -101,7 +107,6 @@ public class Client extends Thread{
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 		}
 
         return json;
@@ -144,11 +149,8 @@ public class Client extends Thread{
    		 
     		public void run() {
     			try {
-    				System.out.println("broadcast");
     				JSONObject json = receiveJSON();
-    				System.out.println("broadcast2");
     				sendJsonAtController(json);
-    				System.out.println("broadcast3");
     			} catch (IOException | JSONException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();

@@ -133,10 +133,6 @@ public class PlateauJeu implements Visitable{
 		   int cle = (int) it.next();
 		   Joueur joueur = getListJoueur().get(cle);
 		   joueur.calculScore();
-		   System.out.println(joueur.getScore());
-		   System.out.println(joueur.getBonus());
-		   System.out.println(joueur.getMalus());
-		   System.out.println(joueur.getName());
 		}
 	}
 	
@@ -185,7 +181,6 @@ public class PlateauJeu implements Visitable{
 	
 	public void endOfPlayerTurn(){
 		tour++;
-		System.out.println("tour de "+tour+ listJoueur.size());
 		if(tour>=listJoueur.size()){
 			tour=0;
 		}
@@ -209,7 +204,6 @@ public class PlateauJeu implements Visitable{
 				   //si il reste moins de 6 pions, la partie va se terminer quand tous les joueurs auront joué 2 tours chacun
 				   tourRestant=(getNbPlayerActif()*2)+1;
 				   endGame=true;
-				   System.out.println("tour restant = "+tourRestant);
 			   }
 			   tourRestant--;
 			   return true;
@@ -223,7 +217,6 @@ public class PlateauJeu implements Visitable{
 	 * @return boolean
 	 */
 	public boolean endGame(){
-		System.out.println(tourRestant+ " nb trourt restant");
 		if(tourRestant<=0){
 			return true;
 		}

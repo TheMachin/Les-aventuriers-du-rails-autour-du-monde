@@ -104,7 +104,12 @@ public class Pions implements Visitable{
 		this.routeMartime = routeMartime;
 	}
 	
-	
+	/**
+	 * Valide ou non le choix des pions
+	 * @param wagon
+	 * @param boat
+	 * @return
+	 */
 	public String choicePion(int wagon,int boat){
 		if(wagon>25){
 			return "Le nombre de pion wagon est limité à 25";
@@ -121,6 +126,14 @@ public class Pions implements Visitable{
 		return "ok";
 	}
 	
+	/**
+	 * Enregistre l'échange de pion et calcule le score
+	 * @param wagon
+	 * @param boat
+	 * @param wR
+	 * @param bR
+	 * @return
+	 */
 	public int exchangePion(int wagon, int boat, int wR, int bR){
 		int pointPerdu = Math.abs(this.nbWagon-wagon);
 		this.nbWagon=wagon;
@@ -153,7 +166,6 @@ public class Pions implements Visitable{
 		int i;
 		for(i=0;i<routeTerreste.size();i++){
 			RouteTerrestre r2 = routeTerreste.get(i);
-			System.out.println(r2.getV1().getName()+" "+r.getV1().getName()+" "+r2.getV2().getName()+" "+r.getV2().getName());
 			if(r2.getV1().getName().equals(r.getV1().getName())&&r2.getV2().getName().equals(r.getV2().getName())){
 				return true;
 			}
@@ -212,7 +224,6 @@ public class Pions implements Visitable{
 	public void lessWagonBoat(int boat, int wagon){
 		this.nbBoat=this.nbBoat-boat;
 		this.nbWagon=this.nbWagon-wagon;
-		System.out.println("boat "+nbBoat+" wagon "+nbWagon);
 	}
 	
 	public boolean checkCityIsConnectedToRoad(Ville v){
@@ -250,7 +261,6 @@ public class Pions implements Visitable{
 		ArrayList<Route> r2 = new ArrayList<Route>();
 		route.addAll(routeMartime);
 		route.addAll(routeTerreste);
-		System.out.println(route.size());
 		if(explore(route, v1, r2, v2)){
 			return true;
 		}else{
@@ -258,6 +268,14 @@ public class Pions implements Visitable{
 		}
 	} 
 	
+	/**
+	 * Parcours en profondeur pour vérifier si les deux villes sont reliés sur plusieurs routes
+	 * @param r
+	 * @param v
+	 * @param rMarque
+	 * @param dest
+	 * @return
+	 */
 	public boolean explore(ArrayList<Route> r,Ville v, ArrayList<Route> rMarque,Ville dest){
 		
 		ArrayList<Route> r2 = new ArrayList<Route>();

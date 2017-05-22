@@ -74,15 +74,16 @@ public class Server implements Runnable{
 	}
 
 
-
+	/**
+	 * Création du serveur
+	 * @param port
+	 */
 	public void etablirConnexionServer(int port){
 		try {
 			serverSocket = new ServerSocket(port);
-			System.out.println("server start avec succès");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("Server non start");
 		}
 	}
 	
@@ -118,12 +119,10 @@ public class Server implements Runnable{
 			}
 			MyThreadHandler r = new MyThreadHandler(socket,menu);
 			Thread t=new Thread(r);
-			System.out.println("lancement");
 			t.setDaemon(true);
 			t.start();
 			
 			menu.addNewPlayer(nbClient, r);
-			System.out.println("id mit");
 			threads.put(nbClient, t);
 		}
 	}
@@ -133,26 +132,22 @@ public class Server implements Runnable{
 	}
 	
 	public void broadcast(Map<Integer,MyThreadHandler> listClient,JSONObject json) throws IOException{
-		System.out.println("debut broadcast");
 		if(listClient!=null){
 			Set cles = listClient.keySet();
 			Iterator it = cles.iterator();
 			while (it.hasNext()){
 			   int cle = (int) it.next(); // tu peux typer plus finement ici
-			   System.out.println(cle+" braodcast");
 			   listClient.get(cle).sendJSON(json);
 			}
 		}
 	}
 	
 	public void broadcastExceptOne(Map<Integer,MyThreadHandler> listClient,JSONObject json, int no) throws IOException{
-		System.out.println("debut broadcast");
 		if(listClient!=null){
 			Set cles = listClient.keySet();
 			Iterator it = cles.iterator();
 			while (it.hasNext()){
 			   int cle = (int) it.next(); // tu peux typer plus finement ici
-			   System.out.println(cle+" braodcast");
 			   if(cle!=no){
 				   listClient.get(cle).sendJSON(json);
 			   }
@@ -207,8 +202,6 @@ public class Server implements Runnable{
         public void run() {
         	
             nbClient++;
-            System.out.println(no + " JSONClient(s) connected on port: " + socket.getPort()+ " "+nbClient);
-            System.out.println(noDispo.toString());
             if(noDispo.size()>=1){
         		no=noDispo.get(0);
         		if(no!=0){
@@ -276,9 +269,7 @@ public class Server implements Runnable{
 		}
 
         public void closeSocket() throws IOException {
-        	System.out.println("socket fermé");
         	if(no!=0){
-        		System.out.println(noDispo.toString());
         		if(menuBoolean){
         			menu.clientDeconnecter(no);
         		}else{
@@ -289,7 +280,6 @@ public class Server implements Runnable{
 
     			noDispo.add(no);
         		threads.remove(no);
-        		System.out.println(noDispo.toString());
         		socket.close();
         		
         	}else{
@@ -323,13 +313,10 @@ public class Server implements Runnable{
 
 
         public void sendJSON(JSONObject jsonObject) throws IOException {
-
              OutputStream out = socket.getOutputStream();
               ObjectOutputStream o = new ObjectOutputStream(out);
               o.writeObject(jsonObject.toString());
-             
               out.flush();
-              System.out.println("Sent to client: " + " " + jsonObject.toString());
         }
     }
 
